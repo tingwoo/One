@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ClearAllSwitch: View {
     
-    var clearAllFunc: () -> ()
+    var action: () -> ()
 
     @State var moveHeight = CGSize.zero
     @State var switchOn = false
@@ -77,7 +77,7 @@ struct ClearAllSwitch: View {
                     let dragHeight = value.translation.height >= 0 ? value.translation.height : 0
                     if (dragHeight >= self.limit() && -pullTime.timeIntervalSinceNow > 0.1) {
 //                        print("Cleared!")
-                        clearAllFunc()
+                        action()
                         hapticManager.notification(type: .success)
                         
 //                        print("Elapsed time: \(pullTime.timeIntervalSinceNow) seconds")
@@ -110,6 +110,6 @@ struct ClearAllSwitch: View {
 
 struct ClearAllSwitch_Previews: PreviewProvider {
     static var previews: some View {
-        ClearAllSwitch(clearAllFunc: {})
+        ClearAllSwitch(action: {})
     }
 }

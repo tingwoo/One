@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-//    @State var formula: [String] = []
     var formulaManager = FormulaManager()
     
     var body: some View {
@@ -20,7 +19,6 @@ struct ContentView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
         }
-//        Try2_1()
     }
 }
 

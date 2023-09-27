@@ -57,15 +57,15 @@ struct Keyboard: View {
                         ForEach(keyArrange[selectedIndex].indices, id: \.self) { row in
                             HStack(spacing: keySpacing) {
                                 ForEach(keyArrange[selectedIndex][row].indices, id: \.self) { item in
-                                    Key(insertFunc: self.formulaManager.insert, width: keyW(), height: keyH(), attr: keyList[keyArrange[selectedIndex][row][item] ?? 0], keyID: keyArrange[selectedIndex][row][item] ?? 0)
+                                    Key(action: {}, width: keyW(), height: keyH())
                                 }
                             }
                         }
                     }
                     VStack(spacing: keySpacing) {
-                        ClearAllSwitch(clearAllFunc: self.formulaManager.clearAll, switchW: keyW(), switchH: keyH(2))
-                        BackspaceKey(backspaceFunc: self.formulaManager.backspace, width: keyW(), height: keyH(2))
-                        EqualKey(width: keyW(), height: keyH(2))
+                        ClearAllSwitch(action: self.formulaManager.clearAll, switchW: keyW(), switchH: keyH(2))
+                        Key(action: {}, image: "delete.left", width: keyW(), height: keyH(2), color: Color("AccentKeys2"), textColor: .primary)
+                        Key(action: {}, image: "equal", width: keyW(), height: keyH(2), color: Color("AccentYellow"), textColor: .primary)
                     }
                 }
                 
