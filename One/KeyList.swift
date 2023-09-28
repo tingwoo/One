@@ -7,76 +7,51 @@
 
 import Foundation
 
-//===
-//var keyList: [[KeyAttr]] = [[KeyAttr(text: ""), KeyAttr(text: ""), KeyAttr(text: "7"), KeyAttr(text: "4"), KeyAttr(text: "1"), KeyAttr(text: "0")],
-//                            [KeyAttr(text: ""), KeyAttr(text: ""), KeyAttr(text: "8"), KeyAttr(text: "5"), KeyAttr(text: "2"), KeyAttr(text: ".")],
-//                            [KeyAttr(text: ""), KeyAttr(text: ""), KeyAttr(text: "9"), KeyAttr(text: "6"), KeyAttr(text: "3"), KeyAttr(text: "Ans")],
-//                            [KeyAttr(text: ""), KeyAttr(text: ""), KeyAttr(image: "divide"), KeyAttr(image: "multiply"), KeyAttr(image: "minus"), KeyAttr(image: "plus")]]
-//
-//var keyList2: [[KeyAttr]] = [[KeyAttr(text: "cos"), KeyAttr(text: "sin"), KeyAttr(text: "tan"), KeyAttr(text: "sec"), KeyAttr(text: "csc"), KeyAttr(text: "cot")],
-//                            [KeyAttr(text: "acos"), KeyAttr(text: "asin"), KeyAttr(text: "atan"), KeyAttr(text: "asec"), KeyAttr(text: "acsc"), KeyAttr(text: "acot")],
-//                            [KeyAttr(text: "cosh"), KeyAttr(text: "sinh"), KeyAttr(text: "tanh"), KeyAttr(text: "sech"), KeyAttr(text: "csch"), KeyAttr(text: "coth")],
-//                            [KeyAttr(text: "°"), KeyAttr(text: "\'"), KeyAttr(text: "\""), KeyAttr(text: ""), KeyAttr(text: ""), KeyAttr(text: "")]]
-//
-//func delete(formula: inout [String]) {
-//    if(!formula.isEmpty) {
-//        formula.removeLast()
-//    }
-//}
-//
-//var funcKeyList: [KeyAttr] = [KeyAttr(image: "delete.left", action: delete), KeyAttr(image: "equal")]
-//===
-
-//               ["", "", "8", "5", "2", "."],
-//               ["", "", "9", "6", "3", "Ans"],
-//               ["", "", "/", "*", "-", "+"]]
-
-
-var keyArrange: [[[Int?]]] = [[[nil, nil, nil, nil],
-                               [17, 18, 19, 20],
-                               [7  , 8  , 9  , 16 ],
-                               [4  , 5  , 6  , 15 ],
-                               [1  , 2  , 3  , 14 ],
-                               [10 , 11 , 12 , 13 ]],
+var keyArrange: [[[Int]]] = [[[0  , 0  , 0  , 0  ],
+                              [17 , 18 , 19 , 20 ],
+                              [7  , 8  , 9  , 16 ],
+                              [4  , 5  , 6  , 15 ],
+                              [1  , 2  , 3  , 14 ],
+                              [10 , 11 , 12 , 13 ]],
                               
-                              [[nil, nil, nil, nil],
-                               [nil, nil, nil, nil],
-                               [nil, nil, nil, nil],
-                               [nil, nil, nil, nil],
-                               [nil, nil, nil, nil],
-                               [nil, nil, nil, nil]],
+                              [[0, 0, 0, 0],
+                               [0, 0, 0, 0],
+                               [0, 0, 0, 0],
+                               [0, 0, 0, 0],
+                               [0, 0, 0, 0],
+                               [0, 0, 0, 0]],
                               
-                              [[nil, nil, nil, nil],
-                               [nil, nil, nil, nil],
-                               [nil, nil, nil, nil],
-                               [nil, nil, nil, nil],
-                               [nil, nil, nil, nil],
-                               [nil, nil, nil, nil]]]
+                              [[0, 0, 0, 0],
+                               [0, 0, 0, 0],
+                               [0, 0, 0, 0],
+                               [0, 0, 0, 0],
+                               [0, 0, 0, 0],
+                               [0, 0, 0, 0]]]
 
-var keyList: [KeyAttr] = [KeyAttr(),
-                          KeyAttr(text: "1"),
-                          KeyAttr(text: "2"),
-                          KeyAttr(text: "3"),
-                          KeyAttr(text: "4"),
-                          KeyAttr(text: "5"),
-                          KeyAttr(text: "6"),
-                          KeyAttr(text: "7"),
-                          KeyAttr(text: "8"),
-                          KeyAttr(text: "9"),
-                          KeyAttr(text: "0"),
-                          KeyAttr(text: "."),
-                          KeyAttr(text: "Ans"),
-                          KeyAttr(image: "plus", command: ["+"]),
-                          KeyAttr(image: "minus", command: ["-"]),
-                          KeyAttr(image: "multiply", command: ["*"]),
-                          KeyAttr(image: "divide", command: ["/"]),
-                          KeyAttr(text: "("),
-                          KeyAttr(text: ")"),
-                          KeyAttr(text: "( )", command: ["(", ")"]),
-                          KeyAttr(text: "frac", command: ["frac[", ",", "]"]),]
+var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
+                          KeyAttr(text: "1", command: [.one]),
+                          KeyAttr(text: "2", command: [.two]),
+                          KeyAttr(text: "3", command: [.three]),
+                          KeyAttr(text: "4", command: [.four]),
+                          KeyAttr(text: "5", command: [.five]),
+                          KeyAttr(text: "6", command: [.six]),
+                          KeyAttr(text: "7", command: [.seven]),
+                          KeyAttr(text: "8", command: [.eight]),
+                          KeyAttr(text: "9", command: [.nine]),
+                          KeyAttr(text: "0", command: [.zero]),
+                          KeyAttr(text: ".", command: [.point]),
+                          KeyAttr(text: "Ans", command: [.answer]),
+                          KeyAttr(image: "plus", command: [.plus]),
+                          KeyAttr(image: "minus", command: [.minus]),
+                          KeyAttr(image: "multiply", command: [.multiply]),
+                          KeyAttr(image: "divide", command: [.divide]),
+                          KeyAttr(text: "(", command: [.paren_l]),
+                          KeyAttr(text: ")", command: [.paren_r]),
+                          KeyAttr(text: "( )", command: [.paren_l, .paren_r]),
+                          KeyAttr(text: "frac", command: [.STA_frac, .PLH, .SEP, .PLH, .END_frac]),]
 
 
-//0 NIL
+//0 NULL
 //1 1
 //2 2
 //3 3

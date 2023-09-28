@@ -18,7 +18,7 @@ struct Keyboard: View {
     
     @State private var selectedIndex = 0
     
-    var formulaManager: FormulaManager
+    var formulaViewModel: FormulaViewModel
     
     let keyHeight: CGFloat = 45
     let keySpacing: CGFloat = 8.0
@@ -57,19 +57,27 @@ struct Keyboard: View {
                         ForEach(keyArrange[selectedIndex].indices, id: \.self) { row in
                             HStack(spacing: keySpacing) {
                                 ForEach(keyArrange[selectedIndex][row].indices, id: \.self) { item in
-                                    Key(action: {}, width: keyW(), height: keyH())
+                                    Key(
+                                        action: {formulaViewModel.insertElements(index: keyArrange[selectedIndex][row][item])},
+                                        text: keyList[keyArrange[selectedIndex][row][item]].text,
+                                        image: keyList[keyArrange[selectedIndex][row][item]].image,
+                                        width: keyW(),
+                                        height: keyH()
+                                    )
                                 }
                             }
                         }
                     }
+                    // keyList[keyArrange[selectedIndex][row]].command
+                    // keyList[keyArrange[selectedIndex][row]].cursorShift
                     VStack(spacing: keySpacing) {
-                        ClearAllSwitch(action: self.formulaManager.clearAll, switchW: keyW(), switchH: keyH(2))
+                        ClearAllSwitch(action: formulaViewModel.clear, switchW: keyW(), switchH: keyH(2))
                         Key(action: {}, image: "delete.left", width: keyW(), height: keyH(2), color: Color("AccentKeys2"), textColor: .primary)
                         Key(action: {}, image: "equal", width: keyW(), height: keyH(2), color: Color("AccentYellow"), textColor: .primary)
                     }
                 }
                 
-                ControlBar(shiftCursorFunc: self.formulaManager.shiftCursor, keyHeight: keyHeight * ctrlBarCoef, keySpacing: keySpacing)
+                ControlBar(shiftCursorFunc: formulaViewModel.shiftCursor, keyHeight: keyHeight * ctrlBarCoef, keySpacing: keySpacing)
 
                 Spacer()
             }
@@ -94,6 +102,6 @@ struct Keyboard: View {
 struct Keyboard_Previews: PreviewProvider {
     
     static var previews: some View {
-        Keyboard(formulaManager: FormulaManager())
+        Keyboard(formulaViewModel: FormulaViewModel())
     }
 }

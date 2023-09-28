@@ -11,7 +11,7 @@ struct Key: View {
     
     var action: () -> () = {}
     var text: String? = nil
-    var image: String? = "square"
+    var image: String? = nil
     var width: CGFloat = 50.0
     var height: CGFloat = 50.0
     var color: Color = Color("AccentKeys1")

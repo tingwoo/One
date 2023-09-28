@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    var formulaManager = FormulaManager()
+    var formulaViewModel = FormulaViewModel()
     
     var body: some View {
         ZStack {
             Color("AccentBackground").ignoresSafeArea()
             VStack(spacing: 15){
-                InputField(formulaManager: self.formulaManager)
-                Keyboard(formulaManager: self.formulaManager)
+                InputField(formulaViewModel: formulaViewModel)
+                Keyboard(formulaViewModel: formulaViewModel)
             }
             .edgesIgnoringSafeArea(.bottom)
         }
