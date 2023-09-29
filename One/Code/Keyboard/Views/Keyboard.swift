@@ -23,7 +23,7 @@ struct Keyboard: View {
     let keyHeight: CGFloat = 45
     let keySpacing: CGFloat = 8.0
     let sectionSpacing: CGFloat = 14.0
-    let pickerCoef: CGFloat = 0.8
+    let pickerCoef: CGFloat = 0.3
     let ctrlBarCoef: CGFloat = 1.2
     
     func keyW(_ cnt: CGFloat = 1.0) -> CGFloat {
@@ -41,16 +41,19 @@ struct Keyboard: View {
         VStack {
             VStack(spacing: sectionSpacing) {
                 
-                Picker(selection: $selectedIndex) {
-                    ForEach(keyboards.indices, id: \.self) { item in
-                        Image(systemName: keyboards[item])
-                    }
-                } label: {
-                    Text("選擇鍵盤")
+//                Picker(selection: $selectedIndex) {
+//                    ForEach(keyboards.indices, id: \.self) { item in
+//                        Image(systemName: keyboards[item])
+//                    }
+//                } label: {
+//                    Text("選擇鍵盤")
+//                }
+//                .pickerStyle(.segmented)
+//                .frame(width: UIScreen.main.bounds.width - keySpacing * 2, height: keyH() * pickerCoef)
+//                .padding(.horizontal)
+                if(keyboards.count > 1){
+                    KeyboardPicker(selection: $selectedIndex, numOfSegments: keyboards.count, height: keyHeight * pickerCoef, keySpacing: keySpacing)
                 }
-                .pickerStyle(.segmented)
-                .frame(width: UIScreen.main.bounds.width - keySpacing * 2, height: keyH() * pickerCoef)
-                .padding(.horizontal)
                 
                 HStack(spacing: keySpacing) {
                     VStack {
@@ -84,7 +87,8 @@ struct Keyboard: View {
             .padding(.top, sectionSpacing)
             .frame(
                 width: UIScreen.main.bounds.width,
-                height: keyH() * (6 + pickerCoef + ctrlBarCoef) + sectionSpacing * 3 + keySpacing * 5 + 50
+                height: keyH() * (6 + pickerCoef * (keyboards.count > 1 ? 1 : 0) + ctrlBarCoef)
+                + sectionSpacing * (keyboards.count > 1 ? 3 : 2) + keySpacing * 5 + 50
             )
             .background(
                 RoundedRectangle(
