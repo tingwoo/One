@@ -97,8 +97,8 @@ struct ClearAllSwitch: View {
         .frame(width: switchW, height: switchH)
         .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
             .fill(
-                .linearGradient(Gradient(colors: [Color(backColor)]), startPoint: UnitPoint(), endPoint: UnitPoint())
-                .shadow(.inner(color: Color(white: 0.2, opacity: 0.3), radius: 4, x: 0, y: 0))
+                Color(backColor)
+                    .shadow(.inner(color: Color(white: 0, opacity: 0.2), radius: 4, x: 0, y: 0))
             )
         )
         .animation(.easeInOut(duration: 0.15), value: backColor)

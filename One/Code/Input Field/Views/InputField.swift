@@ -18,15 +18,15 @@ struct InputField: View {
             }
             .background(RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(
-                    .white
-                    .shadow(.inner(color: Color(white: 0.2, opacity: 0.3), radius: 4, x: 0, y: 0))
+                    Color("AccentInputField")
+                    .shadow(.inner(color: Color(white: 0, opacity: 0.2), radius: 4, x: 0, y: 0))
                 )
             )
             
             VStack {
                 if (formulaViewModel.elements.count == 1){
                     HStack(spacing: 0) {
-                        Text("Problem")
+                        Text("Enter problem")
                             .font(.system(size: 30, weight: .medium))
                             .foregroundColor(.secondary)
                         Spacer()
