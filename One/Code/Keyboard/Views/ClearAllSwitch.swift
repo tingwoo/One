@@ -47,7 +47,7 @@ struct ClearAllSwitch: View {
             }
             .background(
                 RoundedRectangle(
-                    cornerRadius: 7,
+                    cornerRadius: 5,
                     style: .continuous
                 )
                 .fill(Color("AccentKeys1"))
@@ -95,11 +95,10 @@ struct ClearAllSwitch: View {
             Spacer()
         }
         .frame(width: switchW, height: switchH)
-        .background(Color(backColor))
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: 10,
-                style: .continuous
+        .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .fill(
+                .linearGradient(Gradient(colors: [Color(backColor)]), startPoint: UnitPoint(), endPoint: UnitPoint())
+                .shadow(.inner(color: Color(white: 0.2, opacity: 0.3), radius: 4, x: 0, y: 0))
             )
         )
         .animation(.easeInOut(duration: 0.15), value: backColor)

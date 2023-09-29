@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             Color("AccentBackground").ignoresSafeArea()
-            VStack(spacing: 15){
+            VStack(spacing: 12){
                 InputField(formulaViewModel: formulaViewModel)
                 Keyboard(formulaViewModel: formulaViewModel)
             }
