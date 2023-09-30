@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ControlBar: View {
     
-    
     var shiftCursorFunc: (Int) -> ()
     var keyHeight: CGFloat
     var keySpacing: CGFloat
@@ -21,42 +20,8 @@ struct ControlBar: View {
     
     var body: some View {
         HStack(spacing: keySpacing) {
-            Button(
-                action: {
-                    
-                }
-            ) {
-                Image(systemName: "gearshape")
-                    .font(.system(size: 25))
-                    .frame(width: keyW(), height: keyHeight)
-                    .background(
-                        RoundedRectangle(
-                            cornerRadius: 10,
-                            style: .continuous
-                        )
-                        .fill(background)
-                    )
-                    .foregroundColor(.primary)
-            }
-            
-            Button(
-                action: {
-                    
-                }
-            ) {
-                Image(systemName: "clock")
-                    .font(.system(size: 25))
-                    .frame(width: keyW(), height: keyHeight)
-                    .background(
-                        RoundedRectangle(
-                            cornerRadius: 10,
-                            style: .continuous
-                        )
-                        .fill(background)
-                    )
-                    .foregroundColor(.primary)
-            }
-            
+            Key(action: {}, image: "gearshape", width: keyW(), height: keyHeight, color: background, textColor: .primary)
+            Key(action: {}, image: "clock", width: keyW(), height: keyHeight, color: background, textColor: .primary)
             CursorWheel(shiftCursorFunc: self.shiftCursorFunc, width: keyW(3), height: keyHeight)
         }
     }

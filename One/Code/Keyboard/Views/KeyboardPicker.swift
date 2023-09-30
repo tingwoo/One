@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct KeyboardPicker: View {
-    
     @Binding var selection: Int
+    
     var numOfSegments: Int = 4
     var height: CGFloat = 15.0
     var keySpacing: CGFloat = 8.0
@@ -42,7 +42,6 @@ struct KeyboardPicker: View {
                 style: .continuous
             )
         )
-        .padding(.horizontal, keySpacing)
         .frame(height: height)
     }
 }

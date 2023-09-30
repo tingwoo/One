@@ -51,12 +51,14 @@ struct Keyboard: View {
 //                .pickerStyle(.segmented)
 //                .frame(width: UIScreen.main.bounds.width - keySpacing * 2, height: keyH() * pickerCoef)
 //                .padding(.horizontal)
-                if(keyboards.count > 1){
-                    KeyboardPicker(selection: $selectedIndex, numOfSegments: keyboards.count, height: keyHeight * pickerCoef, keySpacing: keySpacing)
-                }
                 
-                HStack(spacing: keySpacing) {
+                
+                HStack(alignment: .bottom, spacing: keySpacing) {
                     VStack {
+//                        if(keyboards.count > 1){
+//                            KeyboardPicker(selection: $selectedIndex, numOfSegments: keyboards.count, height: keyHeight * pickerCoef, keySpacing: keySpacing)
+//                        }
+                        
                         ForEach(keyArrange[selectedIndex].indices, id: \.self) { row in
                             HStack(spacing: keySpacing) {
                                 ForEach(keyArrange[selectedIndex][row].indices, id: \.self) { item in
@@ -71,8 +73,7 @@ struct Keyboard: View {
                             }
                         }
                     }
-                    // keyList[keyArrange[selectedIndex][row]].command
-                    // keyList[keyArrange[selectedIndex][row]].cursorShift
+                    
                     VStack(spacing: keySpacing) {
                         ClearAllSwitch(action: formulaViewModel.clear, switchW: keyW(), switchH: keyH(2))
                         Key(action: {}, image: "delete.left", width: keyW(), height: keyH(2), color: Color("AccentKeys2"), textColor: .primary)
@@ -84,11 +85,11 @@ struct Keyboard: View {
 
                 Spacer()
             }
-            .padding(.top, sectionSpacing)
+            .padding([.top, .horizontal], sectionSpacing)
             .frame(
                 width: UIScreen.main.bounds.width,
-                height: keyH() * (6 + pickerCoef * (keyboards.count > 1 ? 1 : 0) + ctrlBarCoef)
-                + sectionSpacing * (keyboards.count > 1 ? 3 : 2) + keySpacing * 5 + 50
+                height: keyH() * (6 + (keyboards.count > 1 ? pickerCoef : 0) + ctrlBarCoef)
+                + sectionSpacing * 2 + keySpacing * (5 + (keyboards.count > 1 ? 1 : 0)) + 50
             )
             .background(
                 RoundedRectangle(
