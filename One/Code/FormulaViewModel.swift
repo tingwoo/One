@@ -40,14 +40,16 @@ class FormulaViewModel: ObservableObject {
         let command = keyList[index].command
         let shift = keyList[index].cursorShift
         
-        if(elements[cursorLocation].name == .PLH) {
-            elementsParams[elements[cursorLocation].id] = nil
-            elements.remove(at: cursorLocation)
+        if(!command.isEmpty) {
+            if(elements[cursorLocation].name == .PLH) {
+                elementsParams[elements[cursorLocation].id] = nil
+                elements.remove(at: cursorLocation)
+            }
+            elements.insert(contentsOf: command.map({ElementModel(name: $0)}), at: cursorLocation)
+            cursorLocation += shift
+            updateCursorKey()
+            updateParams()
         }
-        elements.insert(contentsOf: command.map({ElementModel(name: $0)}), at: cursorLocation)
-        cursorLocation += shift
-        updateCursorKey()
-        updateParams()
     }
     
     func clear() {

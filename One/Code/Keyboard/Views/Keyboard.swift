@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-extension UISegmentedControl {
-  override open func didMoveToSuperview() {
-     super.didMoveToSuperview()
-     self.setContentHuggingPriority(.defaultLow, for: .vertical)
-   }
-}
-
 struct Keyboard: View {
     
     @State private var selectedIndex = 0
@@ -34,72 +27,56 @@ struct Keyboard: View {
         return keyHeight * cnt + keySpacing * (cnt - 1)
     }
     
-    let keyboards = ["textformat.123", "sum", "angle"]
+    let keyboardsCnt: Int = 2
 
 
     var body: some View {
-        VStack {
-            VStack(spacing: sectionSpacing) {
-                
-//                Picker(selection: $selectedIndex) {
-//                    ForEach(keyboards.indices, id: \.self) { item in
-//                        Image(systemName: keyboards[item])
-//                    }
-//                } label: {
-//                    Text("選擇鍵盤")
-//                }
-//                .pickerStyle(.segmented)
-//                .frame(width: UIScreen.main.bounds.width - keySpacing * 2, height: keyH() * pickerCoef)
-//                .padding(.horizontal)
-                
-                
-                HStack(alignment: .bottom, spacing: keySpacing) {
-                    VStack {
-//                        if(keyboards.count > 1){
-//                            KeyboardPicker(selection: $selectedIndex, numOfSegments: keyboards.count, height: keyHeight * pickerCoef, keySpacing: keySpacing)
-//                        }
-                        
-                        ForEach(keyArrange[selectedIndex].indices, id: \.self) { row in
-                            HStack(spacing: keySpacing) {
-                                ForEach(keyArrange[selectedIndex][row].indices, id: \.self) { item in
-                                    Key(
-                                        action: {formulaViewModel.insertElements(index: keyArrange[selectedIndex][row][item])},
-                                        text: keyList[keyArrange[selectedIndex][row][item]].text,
-                                        image: keyList[keyArrange[selectedIndex][row][item]].image,
-                                        width: keyW(),
-                                        height: keyH()
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    
-                    VStack(spacing: keySpacing) {
-                        ClearAllSwitch(action: formulaViewModel.clear, switchW: keyW(), switchH: keyH(2))
-                        Key(action: {}, image: "delete.left", width: keyW(), height: keyH(2), color: Color("AccentKeys2"), textColor: .primary)
-                        Key(action: {}, image: "equal", width: keyW(), height: keyH(2), color: Color("AccentYellow"), textColor: .primary)
-                    }
-                }
-                
-                ControlBar(shiftCursorFunc: formulaViewModel.shiftCursor, keyHeight: keyHeight * ctrlBarCoef, keySpacing: keySpacing)
-
-                Spacer()
-            }
-            .padding([.top, .horizontal], sectionSpacing)
-            .frame(
-                width: UIScreen.main.bounds.width,
-                height: keyH() * (6 + (keyboards.count > 1 ? pickerCoef : 0) + ctrlBarCoef)
-                + sectionSpacing * 2 + keySpacing * (5 + (keyboards.count > 1 ? 1 : 0)) + 50
-            )
-            .background(
-                RoundedRectangle(
-                    cornerRadius: 16,
-                    style: .continuous
+        VStack(spacing: sectionSpacing) {
+            HStack(alignment: .bottom, spacing: keySpacing) {
+                MainKeyboard(
+                    insertElements: formulaViewModel.insertElements,
+                    pickerHeight: keyHeight * pickerCoef,
+                    keyboardCount: keyboardsCnt
                 )
-                .fill(Color("AccentInputField"))
-                .shadow(radius: 2)
+                .frame(
+                    height: keyHeight * ((keyboardsCnt > 1 ? pickerCoef : 0) +  6)
+                          + keySpacing * ((keyboardsCnt > 1 ? 6 : 5))
+                )
+                
+                VStack(spacing: keySpacing) {
+                    ClearAllSwitch(action: formulaViewModel.clear, switchW: keyW(), switchH: keyH(2))
+                    Key(action: {}, image: "delete.left", width: keyW(), height: keyH(2), color: Color("AccentKeys2"), textColor: .primary)
+                    Key(action: {}, image: "equal", width: keyW(), height: keyH(2), color: Color("AccentYellow"), textColor: .primary)
+                }
+            }
+            
+            ControlBar(
+                shiftCursorFunc: formulaViewModel.shiftCursor,
+                keyW: keyW,
+                keyH: keyHeight * ctrlBarCoef,
+                keySpacing: keySpacing
             )
+
+            Spacer()
         }
+        .padding(.horizontal, keySpacing)
+        .padding(.top, sectionSpacing)
+        .frame(
+            width: UIScreen.main.bounds.width,
+            height: 
+                keyH() * (6 + ctrlBarCoef + (keyboardsCnt > 1 ? pickerCoef : 0))
+              + sectionSpacing * 2
+              + keySpacing * (5 + (keyboardsCnt > 1 ? 1 : 0))
+              + 50
+        )
+        .background(
+            RoundedRectangle(
+                cornerRadius: 16,
+                style: .continuous
+            )
+            .fill(Color("AccentInputField"))
+            .shadow(radius: 2)
+        )
         .ignoresSafeArea()
     }
 }

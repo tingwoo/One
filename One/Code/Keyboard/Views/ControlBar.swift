@@ -10,25 +10,22 @@ import SwiftUI
 struct ControlBar: View {
     
     var shiftCursorFunc: (Int) -> ()
-    var keyHeight: CGFloat
+    var keyW: (CGFloat) -> CGFloat
+    var keyH: CGFloat
     var keySpacing: CGFloat
     var background: Color = Color("AccentKeys1")
     
-    func keyW(_ cnt: CGFloat = 1.0) -> CGFloat {
-        return ((UIScreen.main.bounds.width - keySpacing * 6) / 5) * cnt + keySpacing * (cnt - 1)
-    }
-    
     var body: some View {
         HStack(spacing: keySpacing) {
-            Key(action: {}, image: "gearshape", width: keyW(), height: keyHeight, color: background, textColor: .primary)
-            Key(action: {}, image: "clock", width: keyW(), height: keyHeight, color: background, textColor: .primary)
-            CursorWheel(shiftCursorFunc: self.shiftCursorFunc, width: keyW(3), height: keyHeight)
+            Key(action: {}, image: "gearshape", width: keyW(1), height: keyH, color: background, textColor: .primary)
+            CursorWheel(shiftCursorFunc: self.shiftCursorFunc, width: keyW(3), height: keyH)
+            Key(action: {}, image: "clock", width: keyW(1), height: keyH, color: background, textColor: .primary)
         }
     }
 }
 
 struct ControlBar_Previews: PreviewProvider {
     static var previews: some View {
-        ControlBar(shiftCursorFunc: {i in}, keyHeight: 45, keySpacing: 8)
+        ControlBar(shiftCursorFunc: {i in}, keyW: {i in i * 70}, keyH: 50, keySpacing: 8)
     }
 }

@@ -220,12 +220,12 @@
 			isa = PBXGroup;
 			children = (
 				6C4A78E22AB08BCF00CD776C /* Keyboard.swift */,
+				6C5F6A662AC8975900BF75FA /* MainKeyboard.swift */,
+				6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */,
 				6C68D8E12AAC879400E8C901 /* Key.swift */,
 				6C4A78E62AB1E07300CD776C /* ClearAllSwitch.swift */,
 				6C17ADE52AB752AC009B74AD /* ControlBar.swift */,
 				6C17ADE82AB761ED009B74AD /* CursorWheel.swift */,
-				6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */,
-				6C5F6A662AC8975900BF75FA /* MainKeyboard.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
