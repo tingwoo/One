@@ -44,10 +44,12 @@ struct Keyboard: View {
                 )
                 
                 VStack(spacing: keySpacing) {
-                    ClearAllSwitch(action: formulaViewModel.clear, switchW: keyW(), switchH: keyH(2))
+                    ClearSwitch(action: formulaViewModel.clear)
+//                    ClearAllSwitch(action: formulaViewModel.clear, switchW: keyW(), switchH: keyH(2))
                     Key(action: {}, image: "delete.left", width: keyW(), height: keyH(2), color: Color("AccentKeys2"), textColor: .primary)
                     Key(action: {}, image: "equal", width: keyW(), height: keyH(2), color: Color("AccentYellow"), textColor: .primary)
                 }
+                .frame(width: keyW(), height: keyH(6))
             }
             
             ControlBar(
