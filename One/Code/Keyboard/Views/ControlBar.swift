@@ -17,9 +17,9 @@ struct ControlBar: View {
     
     var body: some View {
         HStack(spacing: keySpacing) {
-            Key(action: {}, image: "gearshape", width: keyW(1), height: keyH, color: background, textColor: .primary)
-            CursorWheel(shiftCursorFunc: self.shiftCursorFunc, width: keyW(3), height: keyH)
-            Key(action: {}, image: "clock", width: keyW(1), height: keyH, color: background, textColor: .primary)
+            Key(action: {shiftCursorFunc(-1)}, image: "chevron.left", width: keyW(1), height: keyH, color: background, textColor: .primary)
+            Key(action: {shiftCursorFunc(1)}, image: "chevron.right", width: keyW(1), height: keyH, color: background, textColor: .primary)
+            CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
         }
     }
 }
