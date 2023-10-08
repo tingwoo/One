@@ -50,10 +50,19 @@ struct Keyboard: View {
                     )
                     
                     VStack(spacing: keySpacing) {
-//                        ClearSwitch(action: formulaViewModel.clear)
-    //                    ClearAllSwitch(action: formulaViewModel.clear, switchW: keyW(), switchH: keyH(2))
-                        Key(action: {}, image: "delete.left", width: keyW(), height: keyH(2), color: Color("AccentKeys2"), textColor: .primary)
-                        Key(action: {}, image: "equal", width: keyW(), height: keyH(2), color: Color("AccentYellow"), textColor: .primary)
+                        Key(action: {}, color: Color("AccentKeys2")) {
+                            Image(systemName: "delete.left")
+                                .font(.system(size: 25))
+                        } shape: {
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        }
+                        
+                        Key(action: {}, color: Color("AccentYellow"), pressedColor:  .black) {
+                            Image(systemName: "equal")
+                                .font(.system(size: 25))
+                        } shape: {
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        }
                     }
                     .frame(width: keyW(), height: keyH(4))
                 }

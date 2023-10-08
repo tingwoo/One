@@ -11,37 +11,29 @@ struct funtionBar: View {
     
     var clearAction: () -> ()
     var height: CGFloat = 40
-    var width: CGFloat = 95
+    var moduleWidth: CGFloat = 95
     
     var body: some View {
         HStack {
             HStack {
-                
-                ZStack {
-                    Circle()
-                        .fill(Color("AccentKeys1"))
+                Key(action: {}, color: Color("AccentKeys1")) {
                     Image(systemName: "gearshape")
                         .font(.system(size: 20, weight: .medium))
-                }
+                } shape: { Circle() }
                 
                 Spacer()
                 
-                ZStack {
-                    Circle()
-                        .fill(Color("AccentKeys1"))
+                Key(action: {}, color: Color("AccentKeys1")) {
                     Image(systemName: "clock")
                         .font(.system(size: 20, weight: .medium))
-                }
+                } shape: { Circle() }
             }
-            .frame(width: width, height: height)
-//            .border(.black)
+            .frame(width: moduleWidth, height: height)
             
             Spacer()
             
             ClearSwitch(action: clearAction)
-                .frame(width: width, height: height)
-//                .border(.black)
-
+                .frame(width: moduleWidth, height: height)
         }
     }
 }

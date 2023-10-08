@@ -23,7 +23,7 @@ struct ClearSwitch: View {
     var gap: CGFloat = 0
     
     func limit(_ proxy: GeometryProxy) -> CGFloat{
-        return proxy.size.width - proxy.size.height
+        return (proxy.size.width - proxy.size.height) / 2.0
     }
     
     let hapticManager = HapticManager.instance
@@ -47,7 +47,7 @@ struct ClearSwitch: View {
                     withAnimation(.easeOut(duration: 0.15).delay(0)) { tapAnimDist = 15 }
                     withAnimation(.easeIn(duration: 0.15).delay(0.15)) { tapAnimDist = 0 }
                 }
-                .offset(x: gestureState.switchOn ? limit(proxy) : 0)
+                .offset(x: gestureState.switchOn ? limit(proxy) * 2 : 0)
                 .offset(x: tapAnimDist)
                 .gesture(
                     DragGesture().updating($gestureState) { (value, state, transaction) in

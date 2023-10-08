@@ -17,9 +17,27 @@ struct ControlBar: View {
     
     var body: some View {
         HStack(spacing: keySpacing) {
-            Key(action: {shiftCursorFunc(-1)}, image: "rectangle.grid.2x2", width: keyW(1), height: keyH, color: background, textColor: .primary)
-            Key(action: {shiftCursorFunc(-1)}, image: "chevron.left", width: keyW(1), height: keyH, color: background, textColor: .primary)
-            Key(action: {shiftCursorFunc(1)}, image: "chevron.right", width: keyW(1), height: keyH, color: background, textColor: .primary)
+            Key(action: {}, width: keyW(1), height: keyH) {
+                Image(systemName: "rectangle.grid.2x2")
+                    .font(.system(size: 25))
+            } shape: {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+            }
+            
+            Key(action: {shiftCursorFunc(-1)}, width: keyW(1), height: keyH) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 25))
+            } shape: {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+            }
+            
+            Key(action: {shiftCursorFunc(1)}, width: keyW(1), height: keyH) {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 25))
+            } shape: {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+            }
+            
             CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
         }
     }
