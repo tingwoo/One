@@ -12,52 +12,49 @@ struct ClearSwitch: View {
     
     var action: () -> ()
 
-    @GestureState var gestureState: (switchOn: Bool, moveHeight: CGFloat) = (false, 0)
-    @State var tapAnimHeight: CGFloat = 0
+    @GestureState var gestureState: (switchOn: Bool, moveWidth: CGFloat) = (false, 0)
+    @State var tapAnimDist: CGFloat = 0
     @State var backColor = "AccentKeys2"
     @State var pullTime: Date = Date()
     
 //    var switchW: CGFloat = 100
 //    var switchH: CGFloat = 150
-    var innerH: CGFloat = 38
-    var gap: CGFloat = 6
+//    var innerH: CGFloat = 38
+    var gap: CGFloat = 0
     
-    func limit(_ switchH: CGFloat) -> CGFloat{
-        return switchH - gap * 2 - innerH
+    func limit(_ proxy: GeometryProxy) -> CGFloat{
+        return proxy.size.width - proxy.size.height
     }
     
     let hapticManager = HapticManager.instance
 
     var body: some View {
         GeometryReader { proxy in
-            VStack {
+            HStack {
                 VStack {
                     Image(systemName: "trash")
                         .foregroundColor(.primary)
-                        .font(.system(size: 23))
+                        .font(.system(size: 20, weight: .medium))
                 }
-                .frame(maxWidth: .infinity, minHeight: innerH)
+                .frame(width: proxy.size.height - gap * 2, height: proxy.size.height - gap * 2)
                 .background(
-                    RoundedRectangle(
-                        cornerRadius: 5,
-                        style: .continuous
-                    )
-                    .fill(Color("AccentKeys1"))
-                    .shadow(radius: 5)
+                    Circle()
+                        .fill(Color("AccentKeys1"))
+                        .shadow(radius: 2)
                 )
                 .padding(gap)
                 .onTapGesture { location in
-                    withAnimation(.easeOut(duration: 0.15).delay(0)) { tapAnimHeight = 15 }
-                    withAnimation(.easeIn(duration: 0.15).delay(0.15)) { tapAnimHeight = 0 }
+                    withAnimation(.easeOut(duration: 0.15).delay(0)) { tapAnimDist = 15 }
+                    withAnimation(.easeIn(duration: 0.15).delay(0.15)) { tapAnimDist = 0 }
                 }
-                .offset(y: gestureState.switchOn ? limit(proxy.size.height) : 0)
-                .offset(y: tapAnimHeight)
+                .offset(x: gestureState.switchOn ? limit(proxy) : 0)
+                .offset(x: tapAnimDist)
                 .gesture(
                     DragGesture().updating($gestureState) { (value, state, transaction) in
-                        state.moveHeight = value.translation.height
-                        if (state.moveHeight >= limit(proxy.size.height) && !state.switchOn) {
+                        state.moveWidth = value.translation.width
+                        if (state.moveWidth >= limit(proxy) && !state.switchOn) {
                             state.switchOn = true
-                        } else if (state.moveHeight <= limit(proxy.size.height) && state.switchOn) {
+                        } else if (state.moveWidth <= limit(proxy) && state.switchOn) {
                             state.switchOn = false
                         }
                     }
@@ -69,7 +66,7 @@ struct ClearSwitch: View {
                         pullTime = Date()
                     } else {
                         backColor = "AccentKeys2"
-                        if(gestureState.moveHeight != 0 || -pullTime.timeIntervalSinceNow < 0.1) {
+                        if(gestureState.moveWidth != 0 || -pullTime.timeIntervalSinceNow < 0.1) {
                             hapticManager.impact(style: .soft)
                         } else {
                             hapticManager.notification(type: .success)
@@ -78,16 +75,22 @@ struct ClearSwitch: View {
                     }
                 })
                 .animation(.spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0), value: gestureState.switchOn)
+//                .animation(.easeInOut(duration: 0.5), value: gestureState.switchOn)
                 
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
+//            .background(RoundedRectangle(cornerRadius: 10, style: .continuous)
+//                .fill(
+//                    Color(backColor)
+//                        .shadow(.inner(color: Color(white: 0, opacity: 0.2), radius: 4, x: 0, y: 0))
+//                )
+//            )
+            .background(Capsule()
                 .fill(
                     Color(backColor)
                         .shadow(.inner(color: Color(white: 0, opacity: 0.2), radius: 4, x: 0, y: 0))
-                )
-            )
+                ))
             .animation(.easeInOut(duration: 0.15), value: backColor)
         }
     }
@@ -98,6 +101,6 @@ struct ClearSwitch_Previews: PreviewProvider {
         VStack {
             ClearSwitch(action: {})
         }
-        .frame(width: 100, height: 150)
+        .frame(width: 200, height: 80)
     }
 }

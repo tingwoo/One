@@ -13,7 +13,7 @@ struct MainKeyboard: View {
     
     var insertElements: (Int) -> () = {i in}
     
-    var pickerHeight: CGFloat = 15.0
+//    var pickerHeight: CGFloat = 15.0
     var keySpacing: CGFloat = 8.0
     var keyboardCount: Int = 3
     
@@ -30,12 +30,12 @@ struct MainKeyboard: View {
     
     var body: some View {
         Grid(horizontalSpacing: keySpacing, verticalSpacing: keySpacing) {
-            if(keyboardCount > 1) {
-                GridRow {
-                    KeyboardPicker(selection: $step, numOfSegments: keyboardCount, height: pickerHeight, keySpacing: keySpacing)
-                }
-                .gridCellColumns(4)
-            }
+//            if(keyboardCount > 1) {
+//                GridRow {
+//                    KeyboardPicker(selection: $step, numOfSegments: keyboardCount, height: pickerHeight, keySpacing: keySpacing)
+//                }
+//                .gridCellColumns(5)
+//            }
             
             ForEach(keyArrange[step].indices, id: \.self) { row in
                 GridRow {

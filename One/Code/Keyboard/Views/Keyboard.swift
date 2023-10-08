@@ -13,14 +13,15 @@ struct Keyboard: View {
     
     var formulaViewModel: FormulaViewModel
     
+    let fnBarHeight: CGFloat = 40
     let keyHeight: CGFloat = 45
-    let keySpacing: CGFloat = 8.0
+    let keySpacing: CGFloat = 7.0
     let sectionSpacing: CGFloat = 12.0
-    let pickerCoef: CGFloat = 0.35
+//    let pickerCoef: CGFloat = 0.35
     let ctrlBarCoef: CGFloat = 1.2
     
     func keyW(_ cnt: CGFloat = 1.0) -> CGFloat {
-        return ((UIScreen.main.bounds.width - keySpacing * 6) / 5) * cnt + keySpacing * (cnt - 1)
+        return ((UIScreen.main.bounds.width - keySpacing * 7) / 6) * cnt + keySpacing * (cnt - 1)
     }
     
     func keyH(_ cnt: CGFloat = 1.0) -> CGFloat {
@@ -33,25 +34,28 @@ struct Keyboard: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: sectionSpacing) {
+                funtionBar(
+                    clearAction: formulaViewModel.clear,
+                    height: fnBarHeight
+                )
+                
                 HStack(alignment: .bottom, spacing: keySpacing) {
                     MainKeyboard(
                         insertElements: formulaViewModel.insertElements,
-                        pickerHeight: keyHeight * pickerCoef,
                         keySpacing: keySpacing,
                         keyboardCount: keyboardsCnt
                     )
                     .frame(
-                        height: keyHeight * ((keyboardsCnt > 1 ? pickerCoef : 0) +  6)
-                              + keySpacing * ((keyboardsCnt > 1 ? 6 : 5))
+                        height: keyHeight * 4 + keySpacing * 3
                     )
                     
                     VStack(spacing: keySpacing) {
-                        ClearSwitch(action: formulaViewModel.clear)
+//                        ClearSwitch(action: formulaViewModel.clear)
     //                    ClearAllSwitch(action: formulaViewModel.clear, switchW: keyW(), switchH: keyH(2))
                         Key(action: {}, image: "delete.left", width: keyW(), height: keyH(2), color: Color("AccentKeys2"), textColor: .primary)
                         Key(action: {}, image: "equal", width: keyW(), height: keyH(2), color: Color("AccentYellow"), textColor: .primary)
                     }
-                    .frame(width: keyW(), height: keyH(6))
+                    .frame(width: keyW(), height: keyH(4))
                 }
                 
                 ControlBar(
@@ -62,7 +66,7 @@ struct Keyboard: View {
                 )
             }
             .padding(.horizontal, keySpacing)
-            .padding(.vertical, sectionSpacing)
+            .padding(.top, sectionSpacing)
 //            .border(.white)
             
             VStack {
@@ -74,10 +78,11 @@ struct Keyboard: View {
         .frame(
             width: UIScreen.main.bounds.width,
             height: 
-                keyH() * (6 + ctrlBarCoef + (keyboardsCnt > 1 ? pickerCoef : 0))
+                fnBarHeight
+              + keyH() * (4 + ctrlBarCoef)
               + sectionSpacing * 3
-              + keySpacing * (5 + (keyboardsCnt > 1 ? 1 : 0))
-              + 40
+              + keySpacing * 3
+              + 50
         )
         .background(
             RoundedRectangle(
