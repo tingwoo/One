@@ -50,4 +50,34 @@ enum ElementName: String {
     case SEP
     
     case END
+    
+    func getDimensions() -> ExpressionDim {
+        switch self {
+        case .null:
+            return ExpressionDim()
+        
+        case .one, .two, .three, .four, .five, .six, .seven, .eight, .nine, .zero:
+            return ExpressionDim(width: 15, height: 30)
+        case .point:
+            return ExpressionDim(width: 10, height: 30)
+            
+        case .answer:
+            return ExpressionDim(width: 30, height: 30)
+            
+        case .plus, .minus, .multiply, .divide:
+            return ExpressionDim(width: 25, height: 30)
+            
+        case .paren_l, .paren_r:
+            return ExpressionDim(width: 15, height: 30)
+            
+        case .PLH:
+            return ExpressionDim(width: 25, height: 30)
+            
+        case .END:
+            return ExpressionDim()
+
+        default:
+            return ExpressionDim()
+        }
+    }
 }

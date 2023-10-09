@@ -16,15 +16,15 @@ class FormulaViewModel: ObservableObject {
     var cursorLocation: Int
     @Published var cursorKey: UUID
     
-    var floorGap: CGFloat = 30
+    var floorGap: CGFloat = 30 //
     
-    var textElements: Set<ElementName> = [.zero, .one, .two, .three, .four, .five, .six, .seven, .eight, .nine, .point, .paren_l, .paren_r]
-    var textGap: CGFloat = 15
+//    var textElements: Set<ElementName> = [.zero, .one, .two, .three, .four, .five, .six, .seven, .eight, .nine, .point, .paren_l, .paren_r] //
+//    var textGap: CGFloat = 15 //
+//
+//    var symbolElements: Set<ElementName> = [.plus, .minus, .multiply, .divide, .PLH] //
+//    var symbolGap: CGFloat = 25 //
 
-    var symbolElements: Set<ElementName> = [.plus, .minus, .multiply, .divide, .PLH]
-    var symbolGap: CGFloat = 25
-
-    var fractionGap: CGFloat = 4
+    var fractionGap: CGFloat = 4 //
     
     var hapticManager = HapticManager.instance
     
@@ -92,11 +92,17 @@ class FormulaViewModel: ObservableObject {
     }
     
     func updateParams() {
-        let (_, _, tmp, _) = self.parse(start: 0, end: elements.count)
-        self.wholeOffsetY = -tmp + floorGap / 2.0
+        let tmp = self.parse(start: 0, end: elements.count)
+        self.wholeOffsetY = -tmp.minY
     }
     
-    func parse(start: Int, end: Int, startPos: CGPoint = CGPoint(x: 0, y: 0)) -> (w: CGFloat, h: CGFloat, minY: CGFloat, maxY: CGFloat) {
+    // Input:
+    // Parse section                     -- start: Int, end: Int
+    // Font scale                        -- fontScale: CGFloat
+    
+    // Output:
+    // Dimensions of the expression in the segment -- _: ExpressionDim
+    func parse(start: Int, end: Int, startPos: CGPoint = CGPoint(x: 0, y: 0)) -> ExpressionDim {
         var i = start
         var pos = startPos
         var minY: CGFloat = 0
@@ -104,24 +110,47 @@ class FormulaViewModel: ObservableObject {
         
         while(i < end) {
             if(elements[i].name != .STA_frac){
+                /* If the element is a character */
                 
-                if(textElements.contains(elements[i].name)) {
-                    pos.x += textGap / 2.0
-                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-                    pos.x += textGap / 2.0
-                    
-                } else if(symbolElements.contains(elements[i].name)) {
-                    pos.x += symbolGap / 2.0
-                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-                    pos.x += symbolGap / 2.0
-                    
-                } else if(elements[i].name == .END) {
-                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-                } else {
-                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-                }
+                // Calculate the position offset of the character
+                pos.x += elements[i].name.getDimensions().halfWidth()
+                elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+                pos.x += elements[i].name.getDimensions().halfWidth()
+                
+                // Update maxY and minY
+                minY = min(minY, elements[i].name.getDimensions().minY)
+                maxY = max(maxY, elements[i].name.getDimensions().maxY)
+                
+//                if(textElements.contains(elements[i].name)) {
+//                    pos.x += textGap / 2.0
+//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                    pos.x += textGap / 2.0
+//                    
+//                } else if(symbolElements.contains(elements[i].name)) {
+//                    pos.x += symbolGap / 2.0
+//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                    pos.x += symbolGap / 2.0
+//                    
+//                } else if(elements[i].name == .END) {
+//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                } else {
+//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                }
                 
             } else if(elements[i].name == .STA_frac) {
+                /* If the element is the start of a function */
+                
+                // Find each sub-expressions in the function
+                
+                // Calculate the dimensions of each sub-expressions by calling parse() recursively
+                
+                // Calculate the position offset of each sub-expressions and apply
+                
+                // Calculate the position offset of the whole function expression
+                
+                // Update maxY and minY
+                
+                // Update pos
                 
                 pos.x += fractionGap / 2.0
                 elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
@@ -149,34 +178,34 @@ class FormulaViewModel: ObservableObject {
                 guard let fracMid = fracMid else { fatalError("fracMid is nil") }
                 guard let fracEnd = fracEnd else { fatalError("fracEnd is nil") }
                 
-                let numWH: (w: CGFloat, h: CGFloat, _, maxY: CGFloat) = self.parse(start: i+1, end: fracMid, startPos: CGPoint(x: pos.x, y: 0))
-                elementsParams[elements[fracMid].id] = ElementParamsModel(name: elements[fracMid].name, pos: CGPoint(x: pos.x + numWH.w, y: pos.y))
+                let numWH: ExpressionDim = self.parse(start: i+1, end: fracMid, startPos: CGPoint(x: pos.x, y: 0))
+                elementsParams[elements[fracMid].id] = ElementParamsModel(name: elements[fracMid].name, pos: CGPoint(x: pos.x + numWH.width, y: pos.y))
                 for k in (i+1)...fracMid {
-                    elementsParams[elements[k].id]?.pos.y -= (numWH.maxY + floorGap / 2.0)
-                    minY = min(minY, elementsParams[elements[k].id]!.pos.y)
+                    elementsParams[elements[k].id]?.pos.y -= numWH.maxY
                 }
+                minY = min(minY, -numWH.height)
                 
                 
-                let denWH: (w: CGFloat, h: CGFloat, minY: CGFloat, _) = self.parse(start: fracMid+1, end: fracEnd, startPos: CGPoint(x: pos.x, y: 0))
-                elementsParams[elements[fracEnd].id] = ElementParamsModel(name: elements[fracEnd].name, pos: CGPoint(x: pos.x + denWH.w, y: pos.y))
+                let denWH: ExpressionDim = self.parse(start: fracMid+1, end: fracEnd, startPos: CGPoint(x: pos.x, y: 0))
+                elementsParams[elements[fracEnd].id] = ElementParamsModel(name: elements[fracEnd].name, pos: CGPoint(x: pos.x + denWH.width, y: pos.y))
                 for k in (fracMid+1)...fracEnd {
-                    elementsParams[elements[k].id]?.pos.y -= (denWH.minY - floorGap / 2.0)
-                    maxY = max(maxY, elementsParams[elements[k].id]!.pos.y)
+                    elementsParams[elements[k].id]?.pos.y -= denWH.minY
                 }
+                maxY = max(maxY, denWH.height)
                 
                 
-                if(numWH.w >= denWH.w) {
+                if(numWH.width >= denWH.width) {
                     for k in (fracMid+1)...fracEnd {
-                        elementsParams[elements[k].id]!.pos.x += (numWH.w - denWH.w) / 2.0
+                        elementsParams[elements[k].id]!.pos.x += (numWH.width - denWH.width) / 2.0
                     }
                 } else {
                     for k in (i+1)...fracMid {
-                        elementsParams[elements[k].id]!.pos.x += (denWH.w - numWH.w) / 2.0
+                        elementsParams[elements[k].id]!.pos.x += (denWH.width - numWH.width) / 2.0
                     }
                 }
                 
-                pos.x += max(numWH.w, denWH.w) + fractionGap / 2.0
-                elementsParams[elements[i].id]!.param = max(numWH.w, denWH.w)
+                pos.x += max(numWH.width, denWH.width) + fractionGap / 2.0
+                elementsParams[elements[i].id]!.param = max(numWH.width, denWH.width)
                 elementsParams[elements[i].id]!.pos.x += elementsParams[elements[i].id]!.param! / 2.0
                 
                 i = fracEnd
@@ -185,6 +214,6 @@ class FormulaViewModel: ObservableObject {
             i += 1
         }
         
-        return (w: pos.x - startPos.x, h: maxY - minY + floorGap, minY: minY, maxY: maxY)
+        return ExpressionDim(width: pos.x - startPos.x, height: maxY - minY, minY: minY, maxY: maxY)
     }
 }
