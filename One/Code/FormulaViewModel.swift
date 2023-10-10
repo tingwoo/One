@@ -26,8 +26,8 @@ class FormulaViewModel: ObservableObject {
 
     var fractionGap: CGFloat = 4 //
     
+    var manual = ElementManual.instance
     var hapticManager = HapticManager.instance
-    
     
     init() {
         let firstElement = ElementModel(name: .END)
@@ -113,13 +113,13 @@ class FormulaViewModel: ObservableObject {
                 /* If the element is a character */
                 
                 // Calculate the position offset of the character
-                pos.x += elements[i].name.getDimensions().halfWidth()
+                pos.x += manual.getDimensions(elements[i].name).halfWidth()
                 elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-                pos.x += elements[i].name.getDimensions().halfWidth()
+                pos.x += manual.getDimensions(elements[i].name).halfWidth()
                 
                 // Update maxY and minY
-                minY = min(minY, elements[i].name.getDimensions().minY)
-                maxY = max(maxY, elements[i].name.getDimensions().maxY)
+                minY = min(minY, manual.getDimensions(elements[i].name).minY)
+                maxY = max(maxY, manual.getDimensions(elements[i].name).maxY)
                 
 //                if(textElements.contains(elements[i].name)) {
 //                    pos.x += textGap / 2.0

@@ -12,72 +12,163 @@ struct ElementModel: Identifiable {
     var name: ElementName
 }
 
-struct ElementParamsModel: Equatable {
+struct ElementParamsModel: Equatable { // ElementDisplayModel
     var name: ElementName
     var pos: CGPoint
     var param: CGFloat? = nil
 }
 
-enum ElementName: String {
+enum ElementType {
+    case character
+    case symbol
+    case func_start
+    case func_end
+    case placeholder
+    case other
+}
+    
+enum ElementName {
     case null
     
-    case one = "1"
-    case two = "2"
-    case three = "3"
-    case four = "4"
-    case five = "5"
-    case six = "6"
-    case seven = "7"
-    case eight = "8"
-    case nine = "9"
-    case zero = "0"
-    case point = "."
+    case one
+    case two
+    case three
+    case four
+    case five
+    case six
+    case seven
+    case eight
+    case nine
+    case zero
+    case point
     
-    case answer = "Ans"
+    case answer
     
-    case plus = "plus"
-    case minus = "minus"
-    case multiply = "multiply"
-    case divide = "divide"
+    case plus
+    case minus
+    case multiply
+    case divide
     
-    case paren_l = "("
-    case paren_r = ")"
+    case paren_l
+    case paren_r
     
     case STA_frac
     case END_frac
     
-    case PLH = "square.dashed"
+    case PLH
     case SEP
     
     case END
-    
-    func getDimensions() -> ExpressionDim {
-        switch self {
-        case .null:
-            return ExpressionDim()
-        
-        case .one, .two, .three, .four, .five, .six, .seven, .eight, .nine, .zero:
-            return ExpressionDim(width: 15, height: 30)
-        case .point:
-            return ExpressionDim(width: 10, height: 30)
-            
-        case .answer:
-            return ExpressionDim(width: 30, height: 30)
-            
-        case .plus, .minus, .multiply, .divide:
-            return ExpressionDim(width: 25, height: 30)
-            
-        case .paren_l, .paren_r:
-            return ExpressionDim(width: 15, height: 30)
-            
-        case .PLH:
-            return ExpressionDim(width: 25, height: 30)
-            
-        case .END:
-            return ExpressionDim()
-
-        default:
-            return ExpressionDim()
-        }
-    }
 }
+
+
+class ElementManual {
+    static let instance = ElementManual()
+    
+    func getType(_ name: ElementName) -> ElementType {
+        if let type = list[name]?.type {
+            return type
+        }
+        return .other
+    }
+    
+    func getString(_ name: ElementName) -> String {
+        if let string = list[name]?.string {
+            return string
+        }
+        return ""
+    }
+    
+    func getDimensions(_ name: ElementName) -> ExpressionDim {
+        if let dim = list[name]?.dimension {
+            return dim
+        }
+        return ExpressionDim()
+    }
+    
+    
+    let list : [ElementName: ElementProperty] = [
+        .null:
+            ElementProperty(type: .other),
+        
+        .one:
+            ElementProperty(type: .character,
+                            string: "1",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .two:
+            ElementProperty(type: .character,
+                            string: "2",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .three:
+            ElementProperty(type: .character,
+                            string: "3",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .four:
+            ElementProperty(type: .character,
+                            string: "4",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .five:
+            ElementProperty(type: .character,
+                            string: "5",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .six:
+            ElementProperty(type: .character,
+                            string: "6",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .seven:
+            ElementProperty(type: .character,
+                            string: "7",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .eight:
+            ElementProperty(type: .character,
+                            string: "8",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .nine:
+            ElementProperty(type: .character,
+                            string: "9",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .zero:
+            ElementProperty(type: .character,
+                            string: "0",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .point:
+            ElementProperty(type: .character,
+                            string: ".",
+                            dimension: ExpressionDim(width: 10, height: 30)),
+        .answer:
+            ElementProperty(type: .character,
+                            string: "Ans",
+                            dimension: ExpressionDim(width: 52, height: 30)),
+        .plus:
+            ElementProperty(type: .symbol,
+                            string: "plus",
+                            dimension: ExpressionDim(width: 25, height: 30)),
+        .minus:
+            ElementProperty(type: .symbol,
+                            string: "minus",
+                            dimension: ExpressionDim(width: 25, height: 30)),
+        .multiply:
+            ElementProperty(type: .symbol,
+                            string: "multiply",
+                            dimension: ExpressionDim(width: 25, height: 30)),
+        .divide:
+            ElementProperty(type: .symbol,
+                            string: "divide",
+                            dimension: ExpressionDim(width: 25, height: 30)),
+        .paren_l:
+            ElementProperty(type: .character,
+                            string: "(",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .paren_r:
+            ElementProperty(type: .character,
+                            string: ")",
+                            dimension: ExpressionDim(width: 15, height: 30)),
+        .PLH:
+            ElementProperty(type: .placeholder,
+                            dimension: ExpressionDim(width: 25, height: 30)),
+        .END:
+            ElementProperty(type: .other)
+
+    ]
+}
+    
