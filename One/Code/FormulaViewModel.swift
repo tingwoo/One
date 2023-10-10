@@ -9,28 +9,20 @@ import Foundation
 
 class FormulaViewModel: ObservableObject {
 
-    @Published var elements: [ElementModel]
-    @Published var elementsParams = [UUID: ElementParamsModel]()
+    @Published var elements: [ElementWithID]
+    @Published var elementsDisplay = [UUID: ElementDisplayModel]()
     @Published var wholeOffsetY: CGFloat = 0
     
     var cursorLocation: Int
     @Published var cursorKey: UUID
-    
-    var floorGap: CGFloat = 30 //
-    
-//    var textElements: Set<ElementName> = [.zero, .one, .two, .three, .four, .five, .six, .seven, .eight, .nine, .point, .paren_l, .paren_r] //
-//    var textGap: CGFloat = 15 //
-//
-//    var symbolElements: Set<ElementName> = [.plus, .minus, .multiply, .divide, .PLH] //
-//    var symbolGap: CGFloat = 25 //
 
     var fractionGap: CGFloat = 4 //
     
-    var manual = ElementManual.instance
+//    var manual = ElementManual.instance
     var hapticManager = HapticManager.instance
     
     init() {
-        let firstElement = ElementModel(name: .END)
+        let firstElement = ElementWithID(element: .END)
         elements = [firstElement]
         cursorLocation = 0
         cursorKey = firstElement.id
@@ -41,11 +33,11 @@ class FormulaViewModel: ObservableObject {
         let shift = keyList[index].cursorShift
         
         if(!command.isEmpty) {
-            if(elements[cursorLocation].name == .PLH) {
-                elementsParams[elements[cursorLocation].id] = nil
+            if(elements[cursorLocation].element == .PLH) {
+                elementsDisplay[elements[cursorLocation].id] = nil
                 elements.remove(at: cursorLocation)
             }
-            elements.insert(contentsOf: command.map({ElementModel(name: $0)}), at: cursorLocation)
+            elements.insert(contentsOf: command.map({ElementWithID(element: $0)}), at: cursorLocation)
             cursorLocation += shift
             updateCursorKey()
             updateParams()
@@ -54,9 +46,9 @@ class FormulaViewModel: ObservableObject {
     
     func clear() {
         elements.removeAll()
-        elementsParams.removeAll()
+        elementsDisplay.removeAll()
         
-        elements.append(ElementModel(name: .END))
+        elements.append(ElementWithID(element: .END))
         cursorLocation = 0
         updateCursorKey()
         updateParams()
@@ -70,7 +62,7 @@ class FormulaViewModel: ObservableObject {
     func shiftL() {
         if(cursorLocation - 1 >= 0){
             cursorLocation -= 1
-            if(cursorLocation - 1 >= 0 && elements[cursorLocation - 1].name == .PLH) {
+            if(cursorLocation - 1 >= 0 && elements[cursorLocation - 1].element == .PLH) {
                 cursorLocation -= 1
             }
             cursorLocation == 0 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
@@ -80,7 +72,7 @@ class FormulaViewModel: ObservableObject {
     func shiftR() {
         if(cursorLocation + 1 < elements.count){
             cursorLocation += 1
-            if(elements[cursorLocation - 1].name == .PLH){
+            if(elements[cursorLocation - 1].element == .PLH){
                 cursorLocation += 1
             }
             cursorLocation == elements.count - 1 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
@@ -109,17 +101,17 @@ class FormulaViewModel: ObservableObject {
         var maxY: CGFloat = 0
         
         while(i < end) {
-            if(elements[i].name != .STA_frac){
+            if(elements[i].element.type != .func_start){
                 /* If the element is a character */
                 
                 // Calculate the position offset of the character
-                pos.x += manual.getDimensions(elements[i].name).halfWidth()
-                elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-                pos.x += manual.getDimensions(elements[i].name).halfWidth()
+                pos.x += elements[i].element.dimension.halfWidth()
+                elementsDisplay[elements[i].id] = ElementDisplayModel(element: elements[i].element, pos: pos)
+                pos.x += elements[i].element.dimension.halfWidth()
                 
                 // Update maxY and minY
-                minY = min(minY, manual.getDimensions(elements[i].name).minY)
-                maxY = max(maxY, manual.getDimensions(elements[i].name).maxY)
+                minY = min(minY, elements[i].element.dimension.minY)
+                maxY = max(maxY, elements[i].element.dimension.maxY)
                 
 //                if(textElements.contains(elements[i].name)) {
 //                    pos.x += textGap / 2.0
@@ -137,7 +129,7 @@ class FormulaViewModel: ObservableObject {
 //                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
 //                }
                 
-            } else if(elements[i].name == .STA_frac) {
+            } else if(elements[i].element.type == .func_start) {
                 /* If the element is the start of a function */
                 
                 // Find each sub-expressions in the function
@@ -153,7 +145,7 @@ class FormulaViewModel: ObservableObject {
                 // Update pos
                 
                 pos.x += fractionGap / 2.0
-                elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+                elementsDisplay[elements[i].id] = ElementDisplayModel(element: elements[i].element, pos: pos)
                 
                 var j: Int = i + 1
                 var cnt: Int = 0
@@ -161,14 +153,14 @@ class FormulaViewModel: ObservableObject {
                 var fracEnd: Int? = nil
                 
                 while(j < end) {
-                    if(elements[j].name == .SEP && cnt == 0) {
+                    if(elements[j].element == .SEP && cnt == 0) {
                         fracMid = j
-                    } else if(elements[j].name == .END_frac && cnt == 0) {
+                    } else if(elements[j].element == .END_frac && cnt == 0) {
                         fracEnd = j
                         break
-                    } else if(elements[j].name == .STA_frac) {
+                    } else if(elements[j].element == .STA_frac) {
                         cnt += 1
-                    } else if(elements[j].name == .END_frac) {
+                    } else if(elements[j].element == .END_frac) {
                         cnt -= 1
                     }
                     
@@ -179,34 +171,34 @@ class FormulaViewModel: ObservableObject {
                 guard let fracEnd = fracEnd else { fatalError("fracEnd is nil") }
                 
                 let numWH: ExpressionDim = self.parse(start: i+1, end: fracMid, startPos: CGPoint(x: pos.x, y: 0))
-                elementsParams[elements[fracMid].id] = ElementParamsModel(name: elements[fracMid].name, pos: CGPoint(x: pos.x + numWH.width, y: pos.y))
+                elementsDisplay[elements[fracMid].id] = ElementDisplayModel(element: elements[fracMid].element, pos: CGPoint(x: pos.x + numWH.width, y: pos.y))
                 for k in (i+1)...fracMid {
-                    elementsParams[elements[k].id]?.pos.y -= numWH.maxY
+                    elementsDisplay[elements[k].id]?.pos.y -= numWH.maxY
                 }
                 minY = min(minY, -numWH.height)
                 
                 
                 let denWH: ExpressionDim = self.parse(start: fracMid+1, end: fracEnd, startPos: CGPoint(x: pos.x, y: 0))
-                elementsParams[elements[fracEnd].id] = ElementParamsModel(name: elements[fracEnd].name, pos: CGPoint(x: pos.x + denWH.width, y: pos.y))
+                elementsDisplay[elements[fracEnd].id] = ElementDisplayModel(element: elements[fracEnd].element, pos: CGPoint(x: pos.x + denWH.width, y: pos.y))
                 for k in (fracMid+1)...fracEnd {
-                    elementsParams[elements[k].id]?.pos.y -= denWH.minY
+                    elementsDisplay[elements[k].id]?.pos.y -= denWH.minY
                 }
                 maxY = max(maxY, denWH.height)
                 
                 
                 if(numWH.width >= denWH.width) {
                     for k in (fracMid+1)...fracEnd {
-                        elementsParams[elements[k].id]!.pos.x += (numWH.width - denWH.width) / 2.0
+                        elementsDisplay[elements[k].id]!.pos.x += (numWH.width - denWH.width) / 2.0
                     }
                 } else {
                     for k in (i+1)...fracMid {
-                        elementsParams[elements[k].id]!.pos.x += (denWH.width - numWH.width) / 2.0
+                        elementsDisplay[elements[k].id]!.pos.x += (denWH.width - numWH.width) / 2.0
                     }
                 }
                 
                 pos.x += max(numWH.width, denWH.width) + fractionGap / 2.0
-                elementsParams[elements[i].id]!.param = max(numWH.width, denWH.width)
-                elementsParams[elements[i].id]!.pos.x += elementsParams[elements[i].id]!.param! / 2.0
+                elementsDisplay[elements[i].id]!.param = max(numWH.width, denWH.width)
+                elementsDisplay[elements[i].id]!.pos.x += elementsDisplay[elements[i].id]!.param! / 2.0
                 
                 i = fracEnd
             }

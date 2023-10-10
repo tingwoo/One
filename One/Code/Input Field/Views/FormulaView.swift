@@ -10,41 +10,40 @@ import SwiftUI
 struct FormulaView: View {
     
     var cursorKey: UUID
-    var elementsParams: [UUID: ElementParamsModel]
-    
-    var manual = ElementManual.instance
+    var elementDisplay: [UUID: ElementDisplayModel]
     
     var body: some View {
         ZStack {
-            ForEach(Array(elementsParams.keys), id: \.self) { key in
+            ForEach(Array(elementDisplay.keys), id: \.self) { key in
                 let show: Bool = (cursorKey == key)
                 
-                if let params = elementsParams[key] {
+                if let params = elementDisplay[key] {
                     
-                    let type = manual.getType(params.name)
+                    let type = params.element.type
                     
                     // change to switch statement in the future
-                    if(params.name == .STA_frac){ //
+                    if(params.element == .STA_frac){ //
                         Rectangle()
                             .frame(width: params.param, height: 2)
                             .modifier(CursorModifier(show))
-                            .modifier(ElementAnimation(value: elementsParams))
+                            .modifier(ElementAnimation(value: elementDisplay))
                             .position(params.pos)
                         
-                    } else if(type == .character) {
-                        Text(manual.getString(params.name))
+                    }
+                    else if(type == .character) {
+                        Text(params.element.string)
                             .font(.custom("CMUConcrete-Roman", size: 30))
                             .fontWeight(.regular)
                             .modifier(CursorModifier(show))
-                            .modifier(ElementAnimation(value: elementsParams))
+                            .modifier(ElementAnimation(value: elementDisplay))
                             .position(params.pos)
                         
                     } else if(type == .symbol) {
-                        Image(systemName: manual.getString(params.name))
+                        Image(systemName: params.element.string)
                             .font(.custom("CMUConcrete-Roman", size: 20))
                             .fontWeight(.regular)
                             .modifier(CursorModifier(show))
-                            .modifier(ElementAnimation(value: elementsParams))
+                            .modifier(ElementAnimation(value: elementDisplay))
                             .position(params.pos)
                         
                     } else if(type == .placeholder) {
@@ -52,7 +51,7 @@ struct FormulaView: View {
                             .font(.system(size: 20, weight: .regular))
                             .foregroundColor(show ? .blue : .primary)
                             .position(params.pos)
-                            .modifier(ElementAnimation(value: elementsParams))
+                            .modifier(ElementAnimation(value: elementDisplay))
                         
                     } else {
                         Color.clear.frame(width: 1, height: 1)

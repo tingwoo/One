@@ -33,7 +33,7 @@ struct InputField: View {
                     }
                     .padding()
                 }else{
-                    FormulaView(cursorKey: formulaViewModel.cursorKey, elementsParams: formulaViewModel.elementsParams)
+                    FormulaView(cursorKey: formulaViewModel.cursorKey, elementDisplay: formulaViewModel.elementsDisplay)
                         .padding()
                         .offset(x: 0, y: formulaViewModel.wholeOffsetY)
                 }

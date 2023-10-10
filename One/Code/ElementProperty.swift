@@ -7,21 +7,27 @@
 
 import Foundation
 
-struct ElementProperty {
+struct ElementProperty { //
     var type: ElementType
     var string: String = ""
     var dimension: ExpressionDim = ExpressionDim()
 }
 
-class Element {
+class Element: Equatable, Identifiable {
+    let id: UUID
     let type: ElementType
     let string: String
     let dimension: ExpressionDim
     
     init(type: ElementType, string: String = "", dimension: ExpressionDim = ExpressionDim()) {
+        self.id = UUID()
         self.type = type
         self.string = string
         self.dimension = dimension
+    }
+    
+    static func ==(lhs: Element, rhs: Element) -> Bool {
+        return lhs.id == rhs.id
     }
     
     static let null = Element(type: .other)
