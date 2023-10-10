@@ -1,11 +1,20 @@
 //
-//  ExpressionDim.swift
+//  ElementModelProperties.swift
 //  One
 //
 //  Created by Tingwu on 2023/10/9.
 //
 
 import Foundation
+
+enum ElementType {
+    case character
+    case symbol
+    case func_start
+    case func_end
+    case placeholder
+    case other
+}
 
 struct ExpressionDim {
     var width: CGFloat

@@ -10,7 +10,7 @@ import SwiftUI
 struct FormulaView: View {
     
     var cursorKey: UUID
-    var elementDisplay: [UUID: ElementDisplayModel]
+    var elementDisplay: [UUID: ElementDisplay]
     
     var body: some View {
         ZStack {

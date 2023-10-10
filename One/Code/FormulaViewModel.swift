@@ -10,7 +10,7 @@ import Foundation
 class FormulaViewModel: ObservableObject {
 
     @Published var elements: [ElementWithID]
-    @Published var elementsDisplay = [UUID: ElementDisplayModel]()
+    @Published var elementsDisplay = [UUID: ElementDisplay]()
     @Published var wholeOffsetY: CGFloat = 0
     
     var cursorLocation: Int
@@ -106,7 +106,7 @@ class FormulaViewModel: ObservableObject {
                 
                 // Calculate the position offset of the character
                 pos.x += elements[i].element.dimension.halfWidth()
-                elementsDisplay[elements[i].id] = ElementDisplayModel(element: elements[i].element, pos: pos)
+                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos)
                 pos.x += elements[i].element.dimension.halfWidth()
                 
                 // Update maxY and minY
@@ -145,7 +145,7 @@ class FormulaViewModel: ObservableObject {
                 // Update pos
                 
                 pos.x += fractionGap / 2.0
-                elementsDisplay[elements[i].id] = ElementDisplayModel(element: elements[i].element, pos: pos)
+                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos)
                 
                 var j: Int = i + 1
                 var cnt: Int = 0
@@ -171,7 +171,7 @@ class FormulaViewModel: ObservableObject {
                 guard let fracEnd = fracEnd else { fatalError("fracEnd is nil") }
                 
                 let numWH: ExpressionDim = self.parse(start: i+1, end: fracMid, startPos: CGPoint(x: pos.x, y: 0))
-                elementsDisplay[elements[fracMid].id] = ElementDisplayModel(element: elements[fracMid].element, pos: CGPoint(x: pos.x + numWH.width, y: pos.y))
+                elementsDisplay[elements[fracMid].id] = ElementDisplay(element: elements[fracMid].element, pos: CGPoint(x: pos.x + numWH.width, y: pos.y))
                 for k in (i+1)...fracMid {
                     elementsDisplay[elements[k].id]?.pos.y -= numWH.maxY
                 }
@@ -179,7 +179,7 @@ class FormulaViewModel: ObservableObject {
                 
                 
                 let denWH: ExpressionDim = self.parse(start: fracMid+1, end: fracEnd, startPos: CGPoint(x: pos.x, y: 0))
-                elementsDisplay[elements[fracEnd].id] = ElementDisplayModel(element: elements[fracEnd].element, pos: CGPoint(x: pos.x + denWH.width, y: pos.y))
+                elementsDisplay[elements[fracEnd].id] = ElementDisplay(element: elements[fracEnd].element, pos: CGPoint(x: pos.x + denWH.width, y: pos.y))
                 for k in (fracMid+1)...fracEnd {
                     elementsDisplay[elements[k].id]?.pos.y -= denWH.minY
                 }

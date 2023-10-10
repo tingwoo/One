@@ -2,173 +2,75 @@
 //  ElementModel.swift
 //  One
 //
-//  Created by Tingwu on 2023/9/28.
+//  Created by Tingwu on 2023/10/10.
 //
 
 import Foundation
 
-struct ElementWithID: Identifiable {
-    var id = UUID() // change to normal integers?
-    var element: Element
-}
-
-struct ElementDisplayModel: Equatable {
-    var element: Element
-    var pos: CGPoint
-    var param: CGFloat? = nil
-}
-
-enum ElementType {
-    case character
-    case symbol
-    case func_start
-    case func_end
-    case placeholder
-    case other
-}
+class Element: Equatable, Identifiable {
+    let id: UUID
+    let type: ElementType
+    let string: String
+    let dimension: ExpressionDim
     
-//enum ElementName { //
-//    case null
-//    
-//    case one
-//    case two
-//    case three
-//    case four
-//    case five
-//    case six
-//    case seven
-//    case eight
-//    case nine
-//    case zero
-//    case point
-//    
-//    case answer
-//    
-//    case plus
-//    case minus
-//    case multiply
-//    case divide
-//    
-//    case paren_l
-//    case paren_r
-//    
-//    case STA_frac
-//    case END_frac
-//    
-//    case PLH
-//    case SEP
-//    
-//    case END
-//}
-
-
-//class ElementManual { //
-//    static let instance = ElementManual()
-//    
-//    func getType(_ name: ElementName) -> ElementType {
-//        if let type = list[name]?.type {
-//            return type
-//        }
-//        return .other
-//    }
-//    
-//    func getString(_ name: ElementName) -> String {
-//        if let string = list[name]?.string {
-//            return string
-//        }
-//        return ""
-//    }
-//    
-//    func getDimensions(_ name: ElementName) -> ExpressionDim {
-//        if let dim = list[name]?.dimension {
-//            return dim
-//        }
-//        return ExpressionDim()
-//    }
-//    
-//    
-//    let list : [ElementName: ElementProperty] = [
-//        .null:
-//            ElementProperty(type: .other),
-//        
-//        .one:
-//            ElementProperty(type: .character,
-//                            string: "1",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .two:
-//            ElementProperty(type: .character,
-//                            string: "2",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .three:
-//            ElementProperty(type: .character,
-//                            string: "3",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .four:
-//            ElementProperty(type: .character,
-//                            string: "4",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .five:
-//            ElementProperty(type: .character,
-//                            string: "5",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .six:
-//            ElementProperty(type: .character,
-//                            string: "6",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .seven:
-//            ElementProperty(type: .character,
-//                            string: "7",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .eight:
-//            ElementProperty(type: .character,
-//                            string: "8",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .nine:
-//            ElementProperty(type: .character,
-//                            string: "9",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .zero:
-//            ElementProperty(type: .character,
-//                            string: "0",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .point:
-//            ElementProperty(type: .character,
-//                            string: ".",
-//                            dimension: ExpressionDim(width: 10, height: 30)),
-//        .answer:
-//            ElementProperty(type: .character,
-//                            string: "Ans",
-//                            dimension: ExpressionDim(width: 52, height: 30)),
-//        .plus:
-//            ElementProperty(type: .symbol,
-//                            string: "plus",
-//                            dimension: ExpressionDim(width: 25, height: 30)),
-//        .minus:
-//            ElementProperty(type: .symbol,
-//                            string: "minus",
-//                            dimension: ExpressionDim(width: 25, height: 30)),
-//        .multiply:
-//            ElementProperty(type: .symbol,
-//                            string: "multiply",
-//                            dimension: ExpressionDim(width: 25, height: 30)),
-//        .divide:
-//            ElementProperty(type: .symbol,
-//                            string: "divide",
-//                            dimension: ExpressionDim(width: 25, height: 30)),
-//        .paren_l:
-//            ElementProperty(type: .character,
-//                            string: "(",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .paren_r:
-//            ElementProperty(type: .character,
-//                            string: ")",
-//                            dimension: ExpressionDim(width: 15, height: 30)),
-//        .PLH:
-//            ElementProperty(type: .placeholder,
-//                            dimension: ExpressionDim(width: 25, height: 30)),
-//        .END:
-//            ElementProperty(type: .other)
-//
-//    ]
-//}
+    init(type: ElementType, string: String = "", dimension: ExpressionDim = ExpressionDim()) {
+        self.id = UUID()
+        self.type = type
+        self.string = string
+        self.dimension = dimension
+    }
     
+    static func ==(lhs: Element, rhs: Element) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    static let null = Element(type: .other)
+    
+    static let one = 
+    Element(type: .character, string: "1", dimension: ExpressionDim(width: 15, height: 30))
+    static let two =
+    Element(type: one.type, string: "2", dimension: one.dimension)
+    static let three = 
+    Element(type: one.type, string: "3", dimension: one.dimension)
+    static let four = 
+    Element(type: one.type, string: "4", dimension: one.dimension)
+    static let five = 
+    Element(type: one.type, string: "5", dimension: one.dimension)
+    static let six = 
+    Element(type: one.type, string: "6", dimension: one.dimension)
+    static let seven = 
+    Element(type: one.type, string: "7", dimension: one.dimension)
+    static let eight = 
+    Element(type: one.type, string: "8", dimension: one.dimension)
+    static let nine = 
+    Element(type: one.type, string: "9", dimension: one.dimension)
+    static let zero = 
+    Element(type: one.type, string: "0", dimension: one.dimension)
+    
+    static let point =
+    Element(type: .character, string: ".", dimension: ExpressionDim(width: 10, height: 30))
+    
+    static let answer =
+    Element(type: .character, string: "Ans", dimension: ExpressionDim(width: 52, height: 30))
+    
+    static let plus =
+    Element(type: .symbol, string: "plus", dimension: ExpressionDim(width: 25, height: 30))
+    static let minus =
+    Element(type: plus.type, string: "minus",    dimension: plus.dimension)
+    static let multiply =
+    Element(type: plus.type, string: "multiply", dimension: plus.dimension)
+    static let divide =
+    Element(type: plus.type, string: "divide",   dimension: plus.dimension)
+    
+    static let paren_l =
+    Element(type: .character, string: "(", dimension: ExpressionDim(width: 15, height: 30))
+    static let paren_r =
+    Element(type: paren_l.type, string: ")", dimension: paren_l.dimension)
+    
+    static let STA_frac = Element(type: .func_start)
+    static let END_frac = Element(type: .func_end)
+    
+    static let PLH = Element(type: .placeholder, dimension: ExpressionDim(width: 25, height: 30))
+    static let SEP = Element(type: .other)
+    static let END = Element(type: .other)
+}
