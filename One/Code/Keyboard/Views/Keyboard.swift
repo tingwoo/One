@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct Keyboard: View {
-    
-    @State private var selectedIndex = 0
-    
+
     var formulaViewModel: FormulaViewModel
     
     let fnBarHeight: CGFloat = 40

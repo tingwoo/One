@@ -11,7 +11,7 @@ struct funtionBar: View {
     
     var clearAction: () -> ()
     var height: CGFloat = 40
-    var moduleWidth: CGFloat = 95
+    var moduleWidth: CGFloat = 90
     
     var body: some View {
         HStack {
