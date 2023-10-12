@@ -13,11 +13,25 @@ class Element: Equatable, Identifiable {
     let string: String
     let dimension: ExpressionDim
     
-    init(type: ElementType, string: String = "", dimension: ExpressionDim = ExpressionDim()) {
+    let getOverallDimensions: (inout [ExpressionDim]) -> ExpressionDim
+    let getSubPositions: (inout [ExpressionDim]) -> [CGPoint]
+    let getSubScales: (Int, CGFloat) -> CGFloat
+    
+    private init(
+        type: ElementType,
+        string: String = "",
+        dimension: ExpressionDim = ExpressionDim(),
+        getOverallDimensions: @escaping (inout [ExpressionDim]) -> ExpressionDim = {array in return ExpressionDim()},
+        getSubPositions: @escaping (inout [ExpressionDim]) -> [CGPoint] = {array in return []},
+        getSubScales: @escaping (Int, CGFloat) -> CGFloat = {index, scale in return 1}
+    ) {
         self.id = UUID()
         self.type = type
         self.string = string
         self.dimension = dimension
+        self.getOverallDimensions = getOverallDimensions
+        self.getSubPositions = getSubPositions
+        self.getSubScales = getSubScales
     }
     
     static func ==(lhs: Element, rhs: Element) -> Bool {
@@ -67,10 +81,73 @@ class Element: Equatable, Identifiable {
     static let paren_r =
     Element(type: paren_l.type, string: ")", dimension: paren_l.dimension)
     
-    static let STA_frac = Element(type: .func_start)
+    static let STA_frac
+    = Element(
+        type: .func_start,
+        dimension: ExpressionDim(width: 4, height: 0),
+        getOverallDimensions: { dims in
+            // 0: numerator
+            // 1: denominator
+            return ExpressionDim(
+                width: max(dims[0].width, dims[1].width),
+                height: dims[0].height + dims[1].height,
+                minY: -dims[0].height,
+                maxY: dims[1].height
+            )
+        },
+        getSubPositions: { dims in
+            var tmp: Bool = dims[0].width >= dims[1].width
+            var diff: CGFloat = abs(dims[0].width - dims[1].width) / 2.0
+            
+            return [
+                CGPoint(x: tmp ? 0 : diff, y: -dims[0].maxY),
+                CGPoint(x: tmp ? diff : 0, y: -dims[1].minY)
+            ]
+        },
+        getSubScales: { index, scale in
+            return scaleIteration(scale, coef: 0.9)
+        }
+    )
     static let END_frac = Element(type: .func_end)
+    
+    static let STA_radical
+    = Element(
+        type: .func_start,
+        dimension: ExpressionDim(width: 4, height: 0),
+        getOverallDimensions: { dims in
+            // 0: index
+            // 1: radicand
+            let h = (dims[0].height < dims[1].height) ? dims[0].height / 2.0 + dims[1].height : dims[1].height / 2.0 + dims[0].height
+            return ExpressionDim(
+                width: dims[0].width + dims[1].width + 5,
+                height: h,
+                minY: dims[1].maxY / 2.0 - h,
+                maxY: dims[1].maxY
+            )
+        },
+        getSubPositions: { dims in
+            let tmp = -dims[1].minY + dims[0].maxY
+            return [
+                CGPoint(
+                    x: 0,
+                    y: ((dims[0].height < dims[1].height) ? (dims[0].height / 2.0 - tmp) : (dims[1].height / 2.0 - tmp))
+                ),
+                CGPoint(x: dims[0].width + 5, y: 0)
+            ]
+        },
+        getSubScales: { index, scale in
+            return (index == 0 ? scaleIteration(scale, coef: 0.6) : scale)
+        }
+    )
+    static let END_radical = Element(type: .func_end)
     
     static let PLH = Element(type: .placeholder, dimension: ExpressionDim(width: 25, height: 30))
     static let SEP = Element(type: .other)
     static let END = Element(type: .other)
+}
+
+func scaleIteration(_ value: CGFloat, coef: CGFloat, convergeTo: CGFloat = 0.4) -> CGFloat {
+    let a = (coef - convergeTo) / (1 - convergeTo)
+    let b = coef - a
+    return a * value + b
 }

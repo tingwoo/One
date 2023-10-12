@@ -15,7 +15,8 @@ struct ElementWithID: Identifiable {
 struct ElementDisplay: Equatable {
     var element: Element
     var pos: CGPoint
-    var param: CGFloat? = nil
+    var scale: CGFloat
+    var spare: CGFloat? = nil
 }
     
 //enum ElementName { //

@@ -84,17 +84,21 @@ class FormulaViewModel: ObservableObject {
     }
     
     func updateParams() {
-        let tmp = self.parse(start: 0, end: elements.count)
+        let tmp = self.parse(start: 0, end: elements.count, scale: 1)
         self.wholeOffsetY = -tmp.minY
+    }
+    
+    func nextScale(_ currentScale: CGFloat) -> CGFloat { //
+        return 0.1 + currentScale * 0.8
     }
     
     // Input:
     // Parse section                     -- start: Int, end: Int
-    // Font scale                        -- fontScale: CGFloat
+    // Font scale                        -- scale: CGFloat
     
     // Output:
     // Dimensions of the expression in the segment -- _: ExpressionDim
-    func parse(start: Int, end: Int, startPos: CGPoint = CGPoint(x: 0, y: 0)) -> ExpressionDim {
+    func parse(start: Int, end: Int, startPos: CGPoint = CGPoint(x: 0, y: 0), scale: CGFloat) -> ExpressionDim {
         var i = start
         var pos = startPos
         var minY: CGFloat = 0
@@ -105,13 +109,13 @@ class FormulaViewModel: ObservableObject {
                 /* If the element is a character */
                 
                 // Calculate the position offset of the character
-                pos.x += elements[i].element.dimension.halfWidth()
-                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos)
-                pos.x += elements[i].element.dimension.halfWidth()
+                pos.x += elements[i].element.dimension.halfWidth() * scale
+                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos, scale: scale)
+                pos.x += elements[i].element.dimension.halfWidth() * scale
                 
                 // Update maxY and minY
-                minY = min(minY, elements[i].element.dimension.minY)
-                maxY = max(maxY, elements[i].element.dimension.maxY)
+                minY = min(minY, elements[i].element.dimension.minY * scale)
+                maxY = max(maxY, elements[i].element.dimension.maxY * scale)
                 
 //                if(textElements.contains(elements[i].name)) {
 //                    pos.x += textGap / 2.0
@@ -132,75 +136,119 @@ class FormulaViewModel: ObservableObject {
             } else if(elements[i].element.type == .func_start) {
                 /* If the element is the start of a function */
                 
-                // Find each sub-expressions in the function
+                pos.x += elements[i].element.dimension.halfWidth() * scale
+                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos, scale: scale)
                 
-                // Calculate the dimensions of each sub-expressions by calling parse() recursively
-                
-                // Calculate the position offset of each sub-expressions and apply
-                
-                // Calculate the position offset of the whole function expression
-                
-                // Update maxY and minY
-                
-                // Update pos
-                
-                pos.x += fractionGap / 2.0
-                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos)
-                
-                var j: Int = i + 1
-                var cnt: Int = 0
-                var fracMid: Int? = nil
-                var fracEnd: Int? = nil
+                // Find each sub-expression sections in the function
+                var j = i + 1
+                var cnt = 0
+                var sepList: [Int] = [i]
                 
                 while(j < end) {
                     if(elements[j].element == .SEP && cnt == 0) {
-                        fracMid = j
-                    } else if(elements[j].element == .END_frac && cnt == 0) {
-                        fracEnd = j
-                        break
-                    } else if(elements[j].element == .STA_frac) {
+                        sepList.append(j)
+                    } else if(elements[j].element.type == .func_start) {
                         cnt += 1
-                    } else if(elements[j].element == .END_frac) {
+                    } else if(elements[j].element.type == .func_end) {
+                        if(cnt == 0) {
+                            sepList.append(j)
+                            break
+                        }
                         cnt -= 1
                     }
-                    
                     j += 1
                 }
                 
-                guard let fracMid = fracMid else { fatalError("fracMid is nil") }
-                guard let fracEnd = fracEnd else { fatalError("fracEnd is nil") }
+                // Calculate the dimensions of each sub-expressions by calling parse() recursively
+                var subDimensions: [ExpressionDim] = Array(0..<(sepList.count - 1)).map(
+                    {parse(
+                        start: sepList[$0] + 1,
+                        end: sepList[$0+1] + 1,
+                        startPos: CGPoint(x: pos.x, y: 0),
+                        scale: elements[i].element.getSubScales($0, scale)
+                    )}
+                )
                 
-                let numWH: ExpressionDim = self.parse(start: i+1, end: fracMid, startPos: CGPoint(x: pos.x, y: 0))
-                elementsDisplay[elements[fracMid].id] = ElementDisplay(element: elements[fracMid].element, pos: CGPoint(x: pos.x + numWH.width, y: pos.y))
-                for k in (i+1)...fracMid {
-                    elementsDisplay[elements[k].id]?.pos.y -= numWH.maxY
-                }
-                minY = min(minY, -numWH.height)
-                
-                
-                let denWH: ExpressionDim = self.parse(start: fracMid+1, end: fracEnd, startPos: CGPoint(x: pos.x, y: 0))
-                elementsDisplay[elements[fracEnd].id] = ElementDisplay(element: elements[fracEnd].element, pos: CGPoint(x: pos.x + denWH.width, y: pos.y))
-                for k in (fracMid+1)...fracEnd {
-                    elementsDisplay[elements[k].id]?.pos.y -= denWH.minY
-                }
-                maxY = max(maxY, denWH.height)
-                
-                
-                if(numWH.width >= denWH.width) {
-                    for k in (fracMid+1)...fracEnd {
-                        elementsDisplay[elements[k].id]!.pos.x += (numWH.width - denWH.width) / 2.0
-                    }
-                } else {
-                    for k in (i+1)...fracMid {
-                        elementsDisplay[elements[k].id]!.pos.x += (denWH.width - numWH.width) / 2.0
+                // Calculate the position offset of each sub-expressions and apply
+                let subPositions: [CGPoint] = elements[i].element.getSubPositions(&subDimensions)
+                for k in 0..<(sepList.count - 1) {
+                    for l in (sepList[k] + 1)..<(sepList[k+1] + 1) {
+                        elementsDisplay[elements[l].id]?.pos += subPositions[k]
                     }
                 }
                 
-                pos.x += max(numWH.width, denWH.width) + fractionGap / 2.0
-                elementsDisplay[elements[i].id]!.param = max(numWH.width, denWH.width)
-                elementsDisplay[elements[i].id]!.pos.x += elementsDisplay[elements[i].id]!.param! / 2.0
+                // Calculate the overall dimensions the whole function expression
+                let overallDimensions: ExpressionDim = elements[i].element.getOverallDimensions(&subDimensions)
                 
-                i = fracEnd
+                // Update maxY and minY
+                minY = min(minY, overallDimensions.minY)
+                maxY = max(maxY, overallDimensions.maxY)
+                
+                // Update pos
+                pos.x += overallDimensions.width
+                pos.x += elements[i].element.dimension.halfWidth() * scale
+                
+                // Skip rest of the function
+                i = sepList.last!
+                
+                
+//                pos.x += fractionGap / 2.0
+//                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos, scale: scale)
+//                
+//                var j: Int = i + 1
+//                var cnt: Int = 0
+//                var fracMid: Int? = nil
+//                var fracEnd: Int? = nil
+//                
+//                while(j < end) {
+//                    if(elements[j].element == .SEP && cnt == 0) {
+//                        fracMid = j
+//                    } else if(elements[j].element == .END_frac && cnt == 0) {
+//                        fracEnd = j
+//                        break
+//                    } else if(elements[j].element == .STA_frac) {
+//                        cnt += 1
+//                    } else if(elements[j].element == .END_frac) {
+//                        cnt -= 1
+//                    }
+//                    
+//                    j += 1
+//                }
+//                
+//                guard let fracMid = fracMid else { fatalError("fracMid is nil") }
+//                guard let fracEnd = fracEnd else { fatalError("fracEnd is nil") }
+//                
+//                let numWH: ExpressionDim = self.parse(start: i+1, end: fracMid, startPos: CGPoint(x: pos.x, y: 0), scale: nextScale(scale))
+//                elementsDisplay[elements[fracMid].id] = ElementDisplay(element: elements[fracMid].element, pos: CGPoint(x: pos.x + numWH.width, y: pos.y), scale: nextScale(scale))
+//                for k in (i+1)...fracMid {
+//                    elementsDisplay[elements[k].id]?.pos.y -= numWH.maxY
+//                }
+//                minY = min(minY, -numWH.height)
+//                
+//                
+//                let denWH: ExpressionDim = self.parse(start: fracMid+1, end: fracEnd, startPos: CGPoint(x: pos.x, y: 0), scale: nextScale(scale))
+//                elementsDisplay[elements[fracEnd].id] = ElementDisplay(element: elements[fracEnd].element, pos: CGPoint(x: pos.x + denWH.width, y: pos.y), scale: nextScale(scale))
+//                for k in (fracMid+1)...fracEnd {
+//                    elementsDisplay[elements[k].id]?.pos.y -= denWH.minY
+//                }
+//                maxY = max(maxY, denWH.height)
+//                
+//                
+//                if(numWH.width >= denWH.width) {
+//                    for k in (fracMid+1)...fracEnd {
+//                        elementsDisplay[elements[k].id]!.pos.x += (numWH.width - denWH.width) / 2.0
+//                    }
+//                } else {
+//                    for k in (i+1)...fracMid {
+//                        elementsDisplay[elements[k].id]!.pos.x += (denWH.width - numWH.width) / 2.0
+//                    }
+//                }
+//                
+//                pos.x += max(numWH.width, denWH.width) + fractionGap / 2.0
+//                elementsDisplay[elements[i].id]!.spare = max(numWH.width, denWH.width)
+//                elementsDisplay[elements[i].id]!.pos.x += elementsDisplay[elements[i].id]!.spare! / 2.0
+//                
+//                i = fracEnd
             }
             
             i += 1

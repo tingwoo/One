@@ -27,6 +27,7 @@
 		6CB5D51B2AD2DFCD00E098A2 /* funtionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB5D51A2AD2DFCD00E098A2 /* funtionBar.swift */; };
 		6CB5D51D2AD2FDE800E098A2 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB5D51C2AD2FDE800E098A2 /* Key.swift */; };
 		6CC9D22A2AD42CBB00EB108B /* ElementModelProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9D2292AD42CBB00EB108B /* ElementModelProperties.swift */; };
+		6CCCA68D2AD8487800111EA4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCCA68C2AD8487800111EA4 /* Extensions.swift */; };
 		6CCED06E2AC5679F008A96C8 /* FormulaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED06D2AC5679F008A96C8 /* FormulaView.swift */; };
 		6CCED0702AC56801008A96C8 /* FormulaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED06F2AC56801008A96C8 /* FormulaViewModel.swift */; };
 		6CCED0722AC568DB008A96C8 /* FormulaModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED0712AC568DB008A96C8 /* FormulaModels.swift */; };
@@ -58,6 +59,7 @@
 		6CB5D51A2AD2DFCD00E098A2 /* funtionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funtionBar.swift; sourceTree = "<group>"; };
 		6CB5D51C2AD2FDE800E098A2 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		6CC9D2292AD42CBB00EB108B /* ElementModelProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementModelProperties.swift; sourceTree = "<group>"; };
+		6CCCA68C2AD8487800111EA4 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		6CCED06D2AC5679F008A96C8 /* FormulaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaView.swift; sourceTree = "<group>"; };
 		6CCED06F2AC56801008A96C8 /* FormulaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaViewModel.swift; sourceTree = "<group>"; };
 		6CCED0712AC568DB008A96C8 /* FormulaModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaModels.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				6C4A78E82AB310E400CD776C /* HapticManager.swift */,
+				6CCCA68C2AD8487800111EA4 /* Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CCCA68D2AD8487800111EA4 /* Extensions.swift in Sources */,
 				6C5F6A672AC8975900BF75FA /* MainKeyboard.swift in Sources */,
 				6CCED0762AC58F35008A96C8 /* ElementAnimation.swift in Sources */,
 				6C64BE242AD5411800D27401 /* ElementModel.swift in Sources */,

@@ -11,10 +11,12 @@ import SwiftUI
 struct CursorModifier: ViewModifier {
     @State private var isOn: Bool
     var show: Bool
+    var scale: CGFloat
     
-    init(_ show: Bool) {
+    init(show: Bool, scale: CGFloat) {
         self.isOn = true
         self.show = show
+        self.scale = scale
     }
     
     func body(content: Content) -> some View {
@@ -22,7 +24,7 @@ struct CursorModifier: ViewModifier {
             content
                 .overlay(
                     Rectangle()
-                        .frame(width: 2, height: 25, alignment: .leading)
+                        .frame(width: 2, height: 25 * scale, alignment: .leading)
                         .foregroundColor(Color.blue)
                         .offset(x: -1, y: 0)
                         .opacity(isOn ? 1.0 : 0.0)

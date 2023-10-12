@@ -8,7 +8,7 @@
 import Foundation
 
 var keyArrange: [[[Int]]] = [[
-                              [17, 7,  8,  9,   16],
+                              [21, 7,  8,  9,   16],
                               [18, 4,  5,  6,   15],
                               [19, 1,  2,  3,   14],
                               [20, 10, 11, 12,  13]],
@@ -44,8 +44,9 @@ var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(text: ")", command: [.paren_r]),
                           KeyAttr(text: "( )", command: [.paren_l, .paren_r]),
                           KeyAttr(text: "frac", command: [.STA_frac, .PLH, .SEP, .PLH, .END_frac]),
+                          KeyAttr(text: "root", command: [.STA_radical, .PLH, .SEP, .PLH, .END_radical]),
                           //test
-                          KeyAttr(text: "sin", command: [], cursorShift: 0), //21
+//                          KeyAttr(text: "sin", command: [], cursorShift: 0), //21
                           KeyAttr(text: "asin", command: [], cursorShift: 0),
                           KeyAttr(text: "sinh", command: [], cursorShift: 0),
                           KeyAttr(text: "cos", command: [], cursorShift: 0),
