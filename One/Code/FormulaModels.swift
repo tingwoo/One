@@ -16,7 +16,7 @@ struct ElementDisplay: Equatable {
     var element: Element
     var pos: CGPoint
     var scale: CGFloat
-    var spare: CGFloat? = nil
+    var params: [CGFloat] = []
 }
     
 //enum ElementName { //

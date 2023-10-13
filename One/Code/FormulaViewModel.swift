@@ -88,10 +88,6 @@ class FormulaViewModel: ObservableObject {
         self.wholeOffsetY = -tmp.minY
     }
     
-    func nextScale(_ currentScale: CGFloat) -> CGFloat { //
-        return 0.1 + currentScale * 0.8
-    }
-    
     // Input:
     // Parse section                     -- start: Int, end: Int
     // Font scale                        -- scale: CGFloat
@@ -136,8 +132,9 @@ class FormulaViewModel: ObservableObject {
             } else if(elements[i].element.type == .func_start) {
                 /* If the element is the start of a function */
                 
-                pos.x += elements[i].element.dimension.halfWidth() * scale
-                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos, scale: scale)
+                
+                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos, scale: scale) //
+                pos.x += elements[i].element.functionGap.left * scale
                 
                 // Find each sub-expression sections in the function
                 var j = i + 1
@@ -161,12 +158,12 @@ class FormulaViewModel: ObservableObject {
                 
                 // Calculate the dimensions of each sub-expressions by calling parse() recursively
                 var subDimensions: [ExpressionDim] = Array(0..<(sepList.count - 1)).map(
-                    {parse(
+                    { parse(
                         start: sepList[$0] + 1,
                         end: sepList[$0+1] + 1,
                         startPos: CGPoint(x: pos.x, y: 0),
                         scale: elements[i].element.getSubScales($0, scale)
-                    )}
+                    ) }
                 )
                 
                 // Calculate the position offset of each sub-expressions and apply
@@ -180,13 +177,16 @@ class FormulaViewModel: ObservableObject {
                 // Calculate the overall dimensions the whole function expression
                 let overallDimensions: ExpressionDim = elements[i].element.getOverallDimensions(&subDimensions)
                 
+                
+                elementsDisplay[elements[i].id]?.params = elements[i].element.getFuncViewParams(&subDimensions)
+                
                 // Update maxY and minY
                 minY = min(minY, overallDimensions.minY)
                 maxY = max(maxY, overallDimensions.maxY)
                 
                 // Update pos
                 pos.x += overallDimensions.width
-                pos.x += elements[i].element.dimension.halfWidth() * scale
+                pos.x += elements[i].element.functionGap.right * scale
                 
                 // Skip rest of the function
                 i = sepList.last!
