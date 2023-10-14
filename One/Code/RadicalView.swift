@@ -14,6 +14,18 @@ struct RadicalView: View {
     var xOffset: CGFloat
     var yOffset: CGFloat
     
+//    func pointSet(index: Int) -> AnimatablePair<CGFloat, CGFloat> {
+//        if(index == 0) {
+//            return AnimatablePair(-min(5, height / 4.0), height - min(5, height / 4.0))
+//        } else if(index == 1) {
+//            return AnimatablePair(0, height)
+//        } else if(index == 2) {
+//            return AnimatablePair(0, 0)
+//        } else {
+//            return AnimatablePair(width, 0)
+//        }
+//    }
+    
     var body: some View {
         VStack(spacing: 0) {
             if(yOffset > 0) {
@@ -29,12 +41,7 @@ struct RadicalView: View {
                     .frame(width: xOffset, height: height)
 //                    .border(.blue)
                 
-                Path { path in
-                    path.move(to: CGPoint(x: -min(5, height / 4.0), y: height - min(5, height / 4.0)))
-                    path.addLine(to: CGPoint(x: 0, y: height))
-                    path.addLine(to: CGPoint(x: 0, y: 0))
-                    path.addLine(to: CGPoint(x: width, y: 0))
-                }
+                RadicalShape()
                 .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round))
                 .frame(width: width, height: height)
             }
@@ -45,11 +52,25 @@ struct RadicalView: View {
                 
         }
 //        .border(.blue)
-//        .modifier(ElementAnimation(value: width))
-//        .modifier(ElementAnimation(value: height))
-//        .modifier(ElementAnimation(value: xOffset))
+    }
+    
+    
+    struct RadicalShape: Shape {
+        func path(in rect: CGRect) -> Path {
+            return Path { path in
+                let width = rect.width
+                let height = rect.height
+                path.move(to: CGPoint(x: -min(5, height / 4.0) - 1, y: height - min(5, height / 4.0)))
+                path.addLine(to: CGPoint(x: -1, y: height))
+                path.addLine(to: CGPoint(x: 0, y: height))
+                path.addLine(to: CGPoint(x: 0, y: 0))
+                path.addLine(to: CGPoint(x: width, y: 0))
+            }
+        }
     }
 }
+
+
 
 #Preview {
     RadicalView(leftGap: 0, width: 70, height: 30, xOffset: 50, yOffset: 0)

@@ -118,10 +118,10 @@ class Element: Equatable, Identifiable {
             return scaleIteration(scale, coef: 0.9)
         },
         getFuncViewParams: { dims in
+            // 0: divider length
             return [max(dims[0].width, dims[1].width)]
         },
         functionView: { params in
-            // 0: divider length
             AnyView(FractionView(leftGap: 2, length: params[0]))
         }
 //        functionView2
@@ -159,12 +159,13 @@ class Element: Equatable, Identifiable {
             return (index == 0 ? scaleIteration(scale, coef: 0.6) : scale)
         },
         getFuncViewParams: { dims in
+            // 0: width
+            // 1: height
+            // 2: x offset
+            // 3: y offset
             return [dims[1].width + 4, dims[1].height, dims[0].width + 4, dims[1].maxY - dims[1].height / 2.0]
         },
         functionView: { params in
-            // 0: width
-            // 1: height
-            // 2: index width
             AnyView(RadicalView(leftGap: 0, width: params[0], height: params[1], xOffset: params[2], yOffset: params[3]))
         }
     )
