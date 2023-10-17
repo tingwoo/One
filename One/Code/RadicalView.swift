@@ -13,6 +13,7 @@ struct RadicalView: View {
     var height: CGFloat
     var xOffset: CGFloat
     var yOffset: CGFloat
+    var scale: CGFloat
     
 //    func pointSet(index: Int) -> AnimatablePair<CGFloat, CGFloat> {
 //        if(index == 0) {
@@ -32,7 +33,7 @@ struct RadicalView: View {
                 Color.clear.frame(width: 1, height: yOffset * 2)
 //                    .border(.black)
             }
-            HStack(spacing: 0) {
+            HStack(alignment: .top, spacing: 0) {
                 Color.clear
                     .frame(width: leftGap * 2 + width + xOffset, height: height)
 //                    .border(.blue)
@@ -42,8 +43,8 @@ struct RadicalView: View {
 //                    .border(.blue)
                 
                 RadicalShape()
-                .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round))
-                .frame(width: width, height: height)
+                .stroke(style: StrokeStyle(lineWidth: 2 * scale, lineCap: .round))
+                .frame(width: width, height: height - 4 * scale)
             }
             if(yOffset < 0) {
                 Color.clear.frame(width: 1, height: -yOffset * 2)
@@ -73,5 +74,5 @@ struct RadicalView: View {
 
 
 #Preview {
-    RadicalView(leftGap: 0, width: 70, height: 30, xOffset: 50, yOffset: 0)
+    RadicalView(leftGap: 0, width: 70, height: 30, xOffset: 50, yOffset: 0, scale: 1)
 }

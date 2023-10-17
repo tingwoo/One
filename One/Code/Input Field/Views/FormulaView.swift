@@ -29,7 +29,7 @@ struct FormulaView: View {
 //                            .modifier(ElementAnimation(value: elementDisplay))
 //                            .position(params.pos)
                         Color.clear.frame(width: 1, height: 1)
-                            .overlay(content: {displayProps.element.functionView(displayProps.params)} )
+                            .overlay(content: {displayProps.element.functionView(displayProps.params, displayProps.scale)} )
                             .modifier(CursorModifier(show: show, scale: displayProps.scale))
                             .modifier(ElementAnimation(value: elementDisplay))
                             .position(displayProps.pos)

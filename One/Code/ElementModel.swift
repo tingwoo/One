@@ -19,7 +19,7 @@ class Element: Equatable, Identifiable {
     let getSubPositions:      (inout [ExpressionDim]) -> [CGPoint]
     let getSubScales:         (Int, CGFloat) -> CGFloat
     let getFuncViewParams:    (inout [ExpressionDim]) -> [CGFloat]
-    let functionView:         ([CGFloat]) -> AnyView
+    let functionView:         ([CGFloat], CGFloat) -> AnyView
     
     private init(
         type: ElementType,
@@ -30,7 +30,7 @@ class Element: Equatable, Identifiable {
         getSubPositions:      @escaping (inout [ExpressionDim]) -> [CGPoint] = {array in return []},
         getSubScales:         @escaping (Int, CGFloat) -> CGFloat = {index, scale in return 1},
         getFuncViewParams:    @escaping (inout [ExpressionDim]) -> [CGFloat] = {array in return []},
-        functionView:         @escaping ([CGFloat]) -> AnyView = {array in AnyView(EmptyView())}
+        functionView:         @escaping ([CGFloat], CGFloat) -> AnyView = {array, scale in AnyView(EmptyView())}
     ) {
         self.id = UUID()
         self.type = type
@@ -121,8 +121,8 @@ class Element: Equatable, Identifiable {
             // 0: divider length
             return [max(dims[0].width, dims[1].width)]
         },
-        functionView: { params in
-            AnyView(FractionView(leftGap: 2, length: params[0]))
+        functionView: { params, scale in
+            AnyView(FractionView(leftGap: 2, length: params[0], scale: scale))
         }
 //        functionView2
     )
@@ -165,8 +165,8 @@ class Element: Equatable, Identifiable {
             // 3: y offset
             return [dims[1].width + 4, dims[1].height, dims[0].width + 4, dims[1].maxY - dims[1].height / 2.0]
         },
-        functionView: { params in
-            AnyView(RadicalView(leftGap: 0, width: params[0], height: params[1], xOffset: params[2], yOffset: params[3]))
+        functionView: { params, scale in
+            AnyView(RadicalView(leftGap: 0, width: params[0], height: params[1], xOffset: params[2], yOffset: params[3], scale: scale))
         }
     )
     static let END_radical = Element(type: .func_end)
@@ -185,11 +185,12 @@ func scaleIteration(_ value: CGFloat, coef: CGFloat, convergeTo: CGFloat = 0.4) 
 struct FractionView: View {
     var leftGap: CGFloat
     var length: CGFloat
+    var scale: CGFloat
     
     var body: some View {
         HStack(spacing: 0) {
             Color.clear.frame(width: leftGap * 2 + length, height: 2)
-            Rectangle().frame(width: length, height: 2)
+            Rectangle().frame(width: length, height: 2 * scale)
         }
     }
 }
