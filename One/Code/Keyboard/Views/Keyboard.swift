@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Keyboard: View {
+    
+    @EnvironmentObject var inputFieldLooks: InputFieldLooks
 
     var formulaViewModel: FormulaViewModel
     
@@ -55,7 +57,7 @@ struct Keyboard: View {
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
                         }
                         
-                        Key(action: {}, color: Color("AccentYellow"), pressedColor:  .black) {
+                        Key(action: { inputFieldLooks.showAnswerField(true) }, color: Color("AccentYellow"), pressedColor:  .black) {
                             Image(systemName: "equal")
                                 .font(.system(size: 25))
                         } shape: {
@@ -106,6 +108,6 @@ struct Keyboard: View {
 struct Keyboard_Previews: PreviewProvider {
     
     static var previews: some View {
-        Keyboard(formulaViewModel: FormulaViewModel())
+        Keyboard(formulaViewModel: FormulaViewModel()).environmentObject(InputFieldLooks())
     }
 }

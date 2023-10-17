@@ -13,6 +13,7 @@ enum ElementType {
     case func_start
     case func_end
     case placeholder
+    case bracket
     case other
 }
 

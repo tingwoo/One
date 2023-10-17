@@ -34,8 +34,13 @@ struct FormulaView: View {
                             .modifier(ElementAnimation(value: elementDisplay))
                             .position(displayProps.pos)
                             
-                    }
-                    else if(type == .character) {
+//                    } else if(type == .bracket) {
+//                        displayProps.element.functionView(displayProps.params, displayProps.scale)
+//                            .modifier(CursorModifier(show: show, scale: displayProps.scale))
+//                            .modifier(ElementAnimation(value: elementDisplay))
+//                            .position(displayProps.pos)
+                        
+                    } else if(type == .character) {
                         Text(displayProps.element.string)
                             .font(.custom("CMUConcrete-Roman", size: 30 * displayProps.scale))
                             .fontWeight(.regular)

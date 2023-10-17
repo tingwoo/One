@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-class InputFieldLooks: ObservableObject {
-    @Published var redBorder: Bool = false
-}
-
 struct ContentView: View {
     var formulaViewModel = FormulaViewModel()
     @StateObject var inputFieldLooks = InputFieldLooks()
