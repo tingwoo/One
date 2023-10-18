@@ -14,7 +14,7 @@ struct Key<Content: View, Background: Shape>: View {
     var width: CGFloat? = nil
     var height: CGFloat? = nil
     var color: Color = Color("AccentKeys1")
-    var pressedColor: Color = .primary
+//    var pressedColor: Color = .primary
     
     @ViewBuilder let content: Content
     @ViewBuilder let shape: Background
@@ -24,11 +24,9 @@ struct Key<Content: View, Background: Shape>: View {
             shape
                 .fill(color)
             content
-            shape
-                .fill(pressedColor)
-                .opacity(pressed ? 0.2 : 0)
         }
         .frame(width: width, height: height)
+        .brightness(pressed ? -0.1 : 0)
         .onTapGesture {
             action()
         }

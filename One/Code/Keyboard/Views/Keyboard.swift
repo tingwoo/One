@@ -57,7 +57,7 @@ struct Keyboard: View {
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
                         }
                         
-                        Key(action: { inputFieldLooks.showAnswerField(true) }, color: Color("AccentYellow"), pressedColor:  .black) {
+                        Key(action: { inputFieldLooks.showAnswerField(true) }, color: Color("AccentYellow")) {
                             Image(systemName: "equal")
                                 .font(.system(size: 25))
                         } shape: {
