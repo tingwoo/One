@@ -9,11 +9,14 @@ import SwiftUI
 
 struct Key<Content: View, Background: Shape>: View {
     @State private var pressed = false
+    @Environment(\.colorScheme) var colorScheme
     
     var action: () -> () = {}
     var width: CGFloat? = nil
     var height: CGFloat? = nil
     var color: Color = Color("AccentKeys1")
+    var darkAdjust: CGFloat = 0.06
+    var defaultAdjust: CGFloat = -0.06
 //    var pressedColor: Color = .primary
     
     @ViewBuilder let content: Content
@@ -26,7 +29,7 @@ struct Key<Content: View, Background: Shape>: View {
             content
         }
         .frame(width: width, height: height)
-        .brightness(pressed ? -0.1 : 0)
+        .brightness(pressed ? (colorScheme == .dark ? darkAdjust : defaultAdjust) : 0)
         .onTapGesture {
             action()
         }

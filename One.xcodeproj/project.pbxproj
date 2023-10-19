@@ -20,13 +20,14 @@
 		6C4A78E72AB1E07300CD776C /* ClearAllSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A78E62AB1E07300CD776C /* ClearAllSwitch.swift */; };
 		6C4A78E92AB310E400CD776C /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A78E82AB310E400CD776C /* HapticManager.swift */; };
 		6C4B9C882AC74D120037A49E /* KeyboardPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */; };
-		6C5F6A672AC8975900BF75FA /* MainKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F6A662AC8975900BF75FA /* MainKeyboard.swift */; };
+		6C5F6A672AC8975900BF75FA /* MainKeyboard_old.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F6A662AC8975900BF75FA /* MainKeyboard_old.swift */; };
 		6C64BE242AD5411800D27401 /* ElementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C64BE232AD5411800D27401 /* ElementModel.swift */; };
 		6C68D8E62AAF74B500E8C901 /* KeyAttr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C68D8E52AAF74B500E8C901 /* KeyAttr.swift */; };
 		6C68D8E92AAF752200E8C901 /* KeyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C68D8E82AAF752200E8C901 /* KeyList.swift */; };
 		6CA0DDD22AD9A78F00D26009 /* RadicalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA0DDD12AD9A78F00D26009 /* RadicalView.swift */; };
 		6CB5D51B2AD2DFCD00E098A2 /* funtionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB5D51A2AD2DFCD00E098A2 /* funtionBar.swift */; };
 		6CB5D51D2AD2FDE800E098A2 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB5D51C2AD2FDE800E098A2 /* Key.swift */; };
+		6CC4DDE42AE0FD60007E4625 /* MainKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC4DDE32AE0FD60007E4625 /* MainKeyboard.swift */; };
 		6CC9D22A2AD42CBB00EB108B /* ElementModelProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9D2292AD42CBB00EB108B /* ElementModelProperties.swift */; };
 		6CCCA68D2AD8487800111EA4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCCA68C2AD8487800111EA4 /* Extensions.swift */; };
 		6CCED06E2AC5679F008A96C8 /* FormulaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED06D2AC5679F008A96C8 /* FormulaView.swift */; };
@@ -36,7 +37,7 @@
 		6CCED0762AC58F35008A96C8 /* ElementAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED0752AC58F35008A96C8 /* ElementAnimation.swift */; };
 		6CDF76D42ADEBC36000654AE /* BracketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D32ADEBC36000654AE /* BracketView.swift */; };
 		6CDF76D72ADED981000654AE /* InputFieldLooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D62ADED981000654AE /* InputFieldLooks.swift */; };
-		6CDF76D92AE02CEC000654AE /* KeyWithOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D82AE02CEC000654AE /* KeyWithOptions.swift */; };
+		6CDF76D92AE02CEC000654AE /* KeyWithMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D82AE02CEC000654AE /* KeyWithMenu.swift */; };
 		6CFB7D532ABA1AD6004EEB33 /* cmunobx.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CFB7D522ABA1AD6004EEB33 /* cmunobx.ttf */; };
 /* End PBXBuildFile section */
 
@@ -56,13 +57,14 @@
 		6C4A78E62AB1E07300CD776C /* ClearAllSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearAllSwitch.swift; sourceTree = "<group>"; };
 		6C4A78E82AB310E400CD776C /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPicker.swift; sourceTree = "<group>"; };
-		6C5F6A662AC8975900BF75FA /* MainKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainKeyboard.swift; sourceTree = "<group>"; };
+		6C5F6A662AC8975900BF75FA /* MainKeyboard_old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainKeyboard_old.swift; sourceTree = "<group>"; };
 		6C64BE232AD5411800D27401 /* ElementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementModel.swift; sourceTree = "<group>"; };
 		6C68D8E52AAF74B500E8C901 /* KeyAttr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAttr.swift; sourceTree = "<group>"; };
 		6C68D8E82AAF752200E8C901 /* KeyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyList.swift; sourceTree = "<group>"; };
 		6CA0DDD12AD9A78F00D26009 /* RadicalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadicalView.swift; sourceTree = "<group>"; };
 		6CB5D51A2AD2DFCD00E098A2 /* funtionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funtionBar.swift; sourceTree = "<group>"; };
 		6CB5D51C2AD2FDE800E098A2 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		6CC4DDE32AE0FD60007E4625 /* MainKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainKeyboard.swift; sourceTree = "<group>"; };
 		6CC9D2292AD42CBB00EB108B /* ElementModelProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementModelProperties.swift; sourceTree = "<group>"; };
 		6CCCA68C2AD8487800111EA4 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		6CCED06D2AC5679F008A96C8 /* FormulaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaView.swift; sourceTree = "<group>"; };
@@ -72,7 +74,7 @@
 		6CCED0752AC58F35008A96C8 /* ElementAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementAnimation.swift; sourceTree = "<group>"; };
 		6CDF76D32ADEBC36000654AE /* BracketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BracketView.swift; sourceTree = "<group>"; };
 		6CDF76D62ADED981000654AE /* InputFieldLooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldLooks.swift; sourceTree = "<group>"; };
-		6CDF76D82AE02CEC000654AE /* KeyWithOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWithOptions.swift; sourceTree = "<group>"; };
+		6CDF76D82AE02CEC000654AE /* KeyWithMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWithMenu.swift; sourceTree = "<group>"; };
 		6CFB7D522ABA1AD6004EEB33 /* cmunobx.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cmunobx.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,6 +115,7 @@
 				6C68D8E52AAF74B500E8C901 /* KeyAttr.swift */,
 				6C17ADEC2ABA0AAF009B74AD /* Info.plist */,
 				6C0D90EE2AA6F60F00C5D0E6 /* Preview Content */,
+				6CC4DDE52AE189F3007E4625 /* Old */,
 			);
 			path = One;
 			sourceTree = "<group>";
@@ -129,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				6CCED06B2AC4791A008A96C8 /* Views */,
-				6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */,
 			);
 			path = Keyboard;
 			sourceTree = "<group>";
@@ -152,6 +154,16 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		6CC4DDE52AE189F3007E4625 /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				6C5F6A662AC8975900BF75FA /* MainKeyboard_old.swift */,
+				6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */,
+				6C4A78E62AB1E07300CD776C /* ClearAllSwitch.swift */,
+			);
+			path = Old;
+			sourceTree = "<group>";
+		};
 		6CCED05F2AC44043008A96C8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,9 +176,8 @@
 		6CCED0602AC4405D008A96C8 /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				6CCED06F2AC56801008A96C8 /* FormulaViewModel.swift */,
-				6CDF76D82AE02CEC000654AE /* KeyWithOptions.swift */,
 				6CDF76D62ADED981000654AE /* InputFieldLooks.swift */,
+				6CCED06F2AC56801008A96C8 /* FormulaViewModel.swift */,
 				6CCED0712AC568DB008A96C8 /* FormulaModels.swift */,
 				6C64BE232AD5411800D27401 /* ElementModel.swift */,
 				6CC9D2292AD42CBB00EB108B /* ElementModelProperties.swift */,
@@ -242,11 +253,11 @@
 			isa = PBXGroup;
 			children = (
 				6CB5D51C2AD2FDE800E098A2 /* Key.swift */,
-				6C4A78E62AB1E07300CD776C /* ClearAllSwitch.swift */,
 				6C4A78E22AB08BCF00CD776C /* Keyboard.swift */,
 				6CB5D51A2AD2DFCD00E098A2 /* funtionBar.swift */,
 				6C1BA2E82ACDADC00071BA1B /* ClearSwitch.swift */,
-				6C5F6A662AC8975900BF75FA /* MainKeyboard.swift */,
+				6CC4DDE32AE0FD60007E4625 /* MainKeyboard.swift */,
+				6CDF76D82AE02CEC000654AE /* KeyWithMenu.swift */,
 				6C17ADE52AB752AC009B74AD /* ControlBar.swift */,
 				6C17ADE82AB761ED009B74AD /* CursorWheel.swift */,
 			);
@@ -335,7 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CCCA68D2AD8487800111EA4 /* Extensions.swift in Sources */,
-				6C5F6A672AC8975900BF75FA /* MainKeyboard.swift in Sources */,
+				6C5F6A672AC8975900BF75FA /* MainKeyboard_old.swift in Sources */,
 				6CCED0762AC58F35008A96C8 /* ElementAnimation.swift in Sources */,
 				6C64BE242AD5411800D27401 /* ElementModel.swift in Sources */,
 				6CCED0702AC56801008A96C8 /* FormulaViewModel.swift in Sources */,
@@ -352,13 +363,14 @@
 				6C0D90EB2AA6F60E00C5D0E6 /* ContentView.swift in Sources */,
 				6CCED06E2AC5679F008A96C8 /* FormulaView.swift in Sources */,
 				6C0D90E92AA6F60E00C5D0E6 /* OneApp.swift in Sources */,
+				6CC4DDE42AE0FD60007E4625 /* MainKeyboard.swift in Sources */,
 				6C4A78E72AB1E07300CD776C /* ClearAllSwitch.swift in Sources */,
 				6C17ADE92AB761ED009B74AD /* CursorWheel.swift in Sources */,
 				6CB5D51D2AD2FDE800E098A2 /* Key.swift in Sources */,
 				6C4A78E92AB310E400CD776C /* HapticManager.swift in Sources */,
 				6C1BA2E92ACDADC00071BA1B /* ClearSwitch.swift in Sources */,
 				6CCED0722AC568DB008A96C8 /* FormulaModels.swift in Sources */,
-				6CDF76D92AE02CEC000654AE /* KeyWithOptions.swift in Sources */,
+				6CDF76D92AE02CEC000654AE /* KeyWithMenu.swift in Sources */,
 				6C4A78E12AB08B3F00CD776C /* InputField.swift in Sources */,
 				6CDF76D42ADEBC36000654AE /* BracketView.swift in Sources */,
 			);

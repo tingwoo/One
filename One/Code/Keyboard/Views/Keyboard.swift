@@ -28,8 +28,7 @@ struct Keyboard: View {
         return keyHeight * cnt + keySpacing * (cnt - 1)
     }
     
-    let keyboardsCnt: Int = 2
-
+//    let keyboardsCnt: Int = 2
 
     var body: some View {
         VStack(spacing: 0) {
@@ -39,11 +38,12 @@ struct Keyboard: View {
                     height: fnBarHeight
                 )
                 
-                HStack(alignment: .bottom, spacing: keySpacing) {
+                HStack(alignment: .bottom, spacing: keySpacing / 2.0) {  // 1/2: because of the expanded touch area of keys
                     MainKeyboard(
-                        insertElements: formulaViewModel.insertElements,
+                        insertElements: {i in formulaViewModel.insertElements(index: i)},
                         keySpacing: keySpacing,
-                        keyboardCount: keyboardsCnt
+                        keyH: keyH(),
+                        keyW: keyW()
                     )
                     .frame(
                         height: keyHeight * 4 + keySpacing * 3
@@ -57,7 +57,7 @@ struct Keyboard: View {
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
                         }
                         
-                        Key(action: { inputFieldLooks.showAnswerField(true) }, color: Color("AccentYellow")) {
+                        Key(action: { inputFieldLooks.showAnswerField(true) }, color: Color("AccentYellow"), darkAdjust: -0.1, defaultAdjust: -0.1) {
                             Image(systemName: "equal")
                                 .font(.system(size: 25))
                         } shape: {
@@ -66,6 +66,7 @@ struct Keyboard: View {
                     }
                     .frame(width: keyW(), height: keyH(4))
                 }
+                .offset(x: -keySpacing / 4.0) // because of the expanded touch area of keys
                 
                 ControlBar(
                     shiftCursorFunc: formulaViewModel.shiftCursor,

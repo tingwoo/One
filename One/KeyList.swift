@@ -7,21 +7,27 @@
 
 import Foundation
 
-var keyArrange: [[[Int]]] = [[
-                              [21, 7,  8,  9,   16],
-                              [18, 4,  5,  6,   15],
-                              [19, 1,  2,  3,   14],
-                              [20, 10, 11, 12,  13]],
-                              
-                              [[0, 21, 22, 23, 0],
-                               [0, 24, 25, 26, 0],
-                               [0, 27, 28, 29, 0],
-                               [0, 30, 31, 32, 0]],
-                              
-                              [[0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0]]]
+struct keySet {
+    var main: Int
+    var optionsL: [Int]
+    var optionsR: [Int]
+    
+    init(_ main: Int = 0, optionsL: [Int] = [], optionsR: [Int] = []) {
+        self.main = main
+        self.optionsL = optionsL
+        self.optionsR = optionsR
+    }
+}
+
+var keyboardLayout: [[[keySet]]] = [[[keySet(19, optionsR: [17, 18]), keySet(7),  keySet(8),  keySet(9),  keySet(16)],
+                                          [keySet(18), keySet(4),  keySet(5),  keySet(6),  keySet(15)],
+                                          [keySet(21, optionsR: [22, 23]), keySet(1),  keySet(2),  keySet(3),  keySet(14)],
+                                          [keySet(20), keySet(10), keySet(11), keySet(12), keySet(13)]],
+                                          
+                                          [[keySet(), keySet(),  keySet(),  keySet(),  keySet()],
+                                           [keySet(), keySet(),  keySet(),  keySet(),  keySet()],
+                                           [keySet(), keySet(),  keySet(),  keySet(),  keySet()],
+                                           [keySet(), keySet(),  keySet(),  keySet(),  keySet()]]]
 
 var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(text: "1", command: [.one]),
@@ -45,6 +51,8 @@ var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(text: "( )", command: [.paren_l, .paren_r]),
                           KeyAttr(text: "frac", command: [.STA_frac, .PLH, .SEP, .PLH, .END_frac]),
                           KeyAttr(text: "root", command: [.STA_radical, .PLH, .SEP, .PLH, .END_radical]),
+                          KeyAttr(text: "sqrt", command: [.STA_radical, .two, .SEP, .PLH, .END_radical], cursorShift: 3),
+                          KeyAttr(text: "cbrt", command: [.STA_radical, .three, .SEP, .PLH, .END_radical], cursorShift: 3),
                           //test
 //                          KeyAttr(text: "sin", command: [], cursorShift: 0), //21
                           KeyAttr(text: "asin", command: [], cursorShift: 0),
