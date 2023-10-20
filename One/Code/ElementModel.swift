@@ -172,7 +172,7 @@ class Element: Equatable, Identifiable {
     static let END_radical = Element(type: .func_end)
     
     static let PLH = Element(type: .placeholder, dimension: ExpressionDim(width: 25, height: 30))
-    static let SEP = Element(type: .other)
+    static let SEP = Element(type: .separator)
     static let END = Element(type: .other)
 }
 

@@ -10,7 +10,7 @@ import SwiftUI
 struct MainKeyboard: View {
     @State var selection: Int = 0
     
-    var insertElements: (Int) -> () = {i in}
+    var typeIn: (Int) -> () = {i in}
     var keySpacing: CGFloat = 8.0
     var keyH: CGFloat = 45
     var keyW: CGFloat = 60
@@ -22,7 +22,7 @@ struct MainKeyboard: View {
                 GridRow {
                     ForEach(keyboardLayout[selection][row].indices, id: \.self) { item in
                         KeyWithMenu(
-                            insertElements: insertElements,
+                            typeIn: typeIn,
                             gap: keySpacing,
                             keyW: keyW,
                             keyH: keyH,

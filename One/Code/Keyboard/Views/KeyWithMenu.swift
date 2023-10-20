@@ -61,7 +61,7 @@ struct KeyWithMenu: View {
     @State private var selectionRecord: Int? = nil
     @Environment(\.colorScheme) var colorScheme
     
-    var insertElements: (Int) -> () = {i in}
+    var typeIn: (Int) -> () = {i in}
     
     var gap: CGFloat = 10
     var keyW: CGFloat = 70
@@ -230,10 +230,10 @@ struct KeyWithMenu: View {
         .onChange(of: dragState.isActive) { active in
             if (!active) {
                 if let s = selectionRecord {
-                    insertElements(indexToKeyId(s))
+                    typeIn(indexToKeyId(s))
                     selectionRecord = nil
                 } else {
-                    insertElements(main)
+                    typeIn(main)
                 }
             }
         }

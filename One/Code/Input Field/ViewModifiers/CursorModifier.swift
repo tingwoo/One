@@ -9,15 +9,9 @@ import Foundation
 import SwiftUI
 
 struct CursorModifier: ViewModifier {
-    @State private var isOn: Bool
+    @State private var isOn: Bool = true
     var show: Bool
     var scale: CGFloat
-    
-    init(show: Bool, scale: CGFloat) {
-        self.isOn = true
-        self.show = show
-        self.scale = scale
-    }
     
     func body(content: Content) -> some View {
         if(show) {

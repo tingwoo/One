@@ -28,20 +28,89 @@ class FormulaViewModel: ObservableObject {
         cursorKey = firstElement.id
     }
     
-    func insertElements(index: Int) {
+    func typeIn(_ index: Int) {
         let command = keyList[index].command
         let shift = keyList[index].cursorShift
         
         if(!command.isEmpty) {
             if(elements[cursorLocation].element == .PLH) {
-                elementsDisplay[elements[cursorLocation].id] = nil
-                elements.remove(at: cursorLocation)
+                removeElement(at: cursorLocation)
             }
             elements.insert(contentsOf: command.map({ElementWithID(element: $0)}), at: cursorLocation)
             cursorLocation += shift
             updateCursorKey()
             updateParams()
         }
+    }
+    
+    private func insertElement(_ element: Element, at: Int) {
+        if((0...elements.count).contains(at)) {
+            elements.insert(ElementWithID(element: element), at: at)
+        }
+    }
+    
+    private func removeElement(at: Int) {
+        if(elements.indices.contains(at)) {
+            elementsDisplay[elements[at].id] = nil
+            elements.remove(at: at)
+        }
+    }
+    
+    func backspace() {
+        func insertPlh(at: Int) {
+            if(at > 0){
+                let needPlhCases: [(ElementType, ElementType)] = [(.func_start, .separator), (.separator, .separator), (.separator, .func_end), (.func_start, .func_end)]
+                let currentCase: (ElementType, ElementType) = (elements[at - 1].element.type, elements[at].element.type)
+                if(needPlhCases.contains(where: { pair in return pair == currentCase })) {
+                    insertElement(.PLH, at: at)
+                }
+            }
+        }
+        
+        if(cursorLocation - 1 < 0) { return }
+        
+        var deletedSomething = false
+        self.shiftCursor(-1, withHaptics: false)
+        
+        switch elements[cursorLocation].element.type {
+            
+        case .placeholder, .separator, .func_end:
+            break
+            
+        case .func_start:
+            var i: Int = cursorLocation + 1
+            var isEmpty: Bool = true
+            
+            while(elements[i].element.type != .func_end) {
+                if(elements[i].element.type != .placeholder && elements[i].element.type != .separator){
+                    isEmpty = false
+                    break
+                }
+                i += 1
+            }
+            
+            if(isEmpty) { // function is empty
+                while(elements[cursorLocation].element.type != .func_end) {
+                    removeElement(at: cursorLocation)
+                }
+                removeElement(at: cursorLocation)
+                deletedSomething = true
+                insertPlh(at: cursorLocation)
+            }
+            
+        default:
+            removeElement(at: cursorLocation)
+            deletedSomething = true
+            insertPlh(at: cursorLocation)
+        }
+        
+        if(!deletedSomething) {
+            backspace()
+            return
+        }
+    
+        updateCursorKey()
+        updateParams()
     }
     
     func clear() {
@@ -54,28 +123,32 @@ class FormulaViewModel: ObservableObject {
         updateParams()
     }
     
-    func shiftCursor(_ step: Int) {
-        step > 0 ? shiftR() : shiftL()
+    func shiftCursor(_ step: Int, withHaptics: Bool) {
+        step > 0 ? shiftR(withHaptics) : shiftL(withHaptics)
         updateCursorKey()
     }
     
-    func shiftL() {
+    private func shiftL(_ withHaptics: Bool) {
         if(cursorLocation - 1 >= 0){
             cursorLocation -= 1
             if(cursorLocation - 1 >= 0 && elements[cursorLocation - 1].element == .PLH) {
                 cursorLocation -= 1
             }
-            cursorLocation == 0 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
+            if(withHaptics) {
+                cursorLocation == 0 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
+            }
         }
     }
     
-    func shiftR() {
+    private func shiftR(_ withHaptics: Bool) {
         if(cursorLocation + 1 < elements.count){
             cursorLocation += 1
             if(elements[cursorLocation - 1].element == .PLH){
                 cursorLocation += 1
             }
-            cursorLocation == elements.count - 1 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
+            if(withHaptics) {
+                cursorLocation == elements.count - 1 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
+            }
         }
     }
     
@@ -142,7 +215,7 @@ class FormulaViewModel: ObservableObject {
                 var sepList: [Int] = [i]
                 
                 while(j < end) {
-                    if(elements[j].element == .SEP && cnt == 0) {
+                    if(elements[j].element.type == .separator && cnt == 0) {
                         sepList.append(j)
                     } else if(elements[j].element.type == .func_start) {
                         cnt += 1

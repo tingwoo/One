@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ControlBar: View {
     
-    var shiftCursorFunc: (Int) -> ()
+    var shiftCursorFunc: (Int, Bool) -> ()
     var keyW: (CGFloat) -> CGFloat
     var keyH: CGFloat
     var keySpacing: CGFloat
@@ -24,14 +24,14 @@ struct ControlBar: View {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
             
-            Key(action: {shiftCursorFunc(-1)}, width: keyW(1), height: keyH) {
+            Key(action: {shiftCursorFunc(-1, true)}, width: keyW(1), height: keyH) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 25))
             } shape: {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
             
-            Key(action: {shiftCursorFunc(1)}, width: keyW(1), height: keyH) {
+            Key(action: {shiftCursorFunc(1, true)}, width: keyW(1), height: keyH) {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 25))
             } shape: {
@@ -45,6 +45,6 @@ struct ControlBar: View {
 
 struct ControlBar_Previews: PreviewProvider {
     static var previews: some View {
-        ControlBar(shiftCursorFunc: {i in}, keyW: {i in i * 55}, keyH: 50, keySpacing: 8)
+        ControlBar(shiftCursorFunc: {i, b in}, keyW: {i in i * 55}, keyH: 50, keySpacing: 8)
     }
 }

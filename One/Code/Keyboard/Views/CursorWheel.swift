@@ -33,7 +33,7 @@ struct CursorWheel: View {
     @State private var dragDistanceUpdating: CGFloat = 0
     @State private var dragStepRecord: Int = 0
     
-    var shiftCursorFunc: (Int) -> ()
+    var shiftCursorFunc: (Int, Bool) -> ()
     
     var width: CGFloat = 200
     var height: CGFloat = 60
@@ -113,7 +113,7 @@ struct CursorWheel: View {
                     let step = actualMoveDistance().step
                     
                     if(self.dragStepRecord != step){
-                        self.dragStepRecord > step ? self.shiftCursorFunc(-1) : self.shiftCursorFunc(1)
+                        self.dragStepRecord > step ? self.shiftCursorFunc(-1, true) : self.shiftCursorFunc(1, true)
                         self.dragStepRecord = step
                     }
                 }.onEnded { value in
@@ -152,6 +152,6 @@ struct CursorWheel: View {
 
 struct CursorWheel_Previews: PreviewProvider {
     static var previews: some View {
-        CursorWheel(shiftCursorFunc: {i in})
+        CursorWheel(shiftCursorFunc: {i, b in})
     }
 }

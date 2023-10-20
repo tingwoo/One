@@ -40,7 +40,7 @@ struct Keyboard: View {
                 
                 HStack(alignment: .bottom, spacing: keySpacing / 2.0) {  // 1/2: because of the expanded touch area of keys
                     MainKeyboard(
-                        insertElements: {i in formulaViewModel.insertElements(index: i)},
+                        typeIn: {i in formulaViewModel.typeIn(i)},
                         keySpacing: keySpacing,
                         keyH: keyH(),
                         keyW: keyW()
@@ -50,7 +50,7 @@ struct Keyboard: View {
                     )
                     
                     VStack(spacing: keySpacing) {
-                        Key(action: {}, color: Color("AccentKeys2")) {
+                        Key(action: { formulaViewModel.backspace() }, color: Color("AccentKeys2")) {
                             Image(systemName: "delete.left")
                                 .font(.system(size: 25))
                         } shape: {
