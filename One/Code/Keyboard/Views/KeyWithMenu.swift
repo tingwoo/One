@@ -215,12 +215,12 @@ struct KeyWithMenu: View {
                 .brightness(dragState.isActive ? (colorScheme == .dark ? 0.06 : -0.06) : 0)
                 
             
-            // Show if there's a long-press menu
+            // Menu indicator
             if(!dragState.isActive && !isSingleKey) {
                 Circle()
                     .fill(Color("AccentKeys2"))
                     .frame(width: 6, height: 6)
-                    .offset(x: keyW / 2.0 - 10, y: -keyH / 2.0 + 10)
+                    .offset(x: keyW / 2.0 - 8, y: -keyH / 2.0 + 8)
             }
         }
         .gesture(longPressDrag)

@@ -158,7 +158,6 @@
 			isa = PBXGroup;
 			children = (
 				6C5F6A662AC8975900BF75FA /* MainKeyboard_old.swift */,
-				6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */,
 				6C4A78E62AB1E07300CD776C /* ClearAllSwitch.swift */,
 			);
 			path = Old;
@@ -255,6 +254,7 @@
 				6CB5D51C2AD2FDE800E098A2 /* Key.swift */,
 				6C4A78E22AB08BCF00CD776C /* Keyboard.swift */,
 				6CB5D51A2AD2DFCD00E098A2 /* funtionBar.swift */,
+				6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */,
 				6C1BA2E82ACDADC00071BA1B /* ClearSwitch.swift */,
 				6CC4DDE32AE0FD60007E4625 /* MainKeyboard.swift */,
 				6CDF76D82AE02CEC000654AE /* KeyWithMenu.swift */,

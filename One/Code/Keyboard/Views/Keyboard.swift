@@ -10,7 +10,8 @@ import SwiftUI
 struct Keyboard: View {
     
     @EnvironmentObject var inputFieldLooks: InputFieldLooks
-
+    @State var keyboardSelection = 0
+    
     var formulaViewModel: FormulaViewModel
     
     let fnBarHeight: CGFloat = 40
@@ -19,6 +20,8 @@ struct Keyboard: View {
     let sectionSpacing: CGFloat = 12.0
 //    let pickerCoef: CGFloat = 0.35
     let ctrlBarCoef: CGFloat = 1.2
+    
+    let keyboardCount: Int = 2
     
     func keyW(_ cnt: CGFloat = 1.0) -> CGFloat {
         return ((UIScreen.main.bounds.width - keySpacing * 7) / 6) * cnt + keySpacing * (cnt - 1)
@@ -34,12 +37,15 @@ struct Keyboard: View {
         VStack(spacing: 0) {
             VStack(spacing: sectionSpacing) {
                 funtionBar(
+                    keyboardSelection: $keyboardSelection,
+                    keyboardCount: keyboardCount,
                     clearAction: formulaViewModel.clear,
                     height: fnBarHeight
                 )
                 
                 HStack(alignment: .bottom, spacing: keySpacing / 2.0) {  // 1/2: because of the expanded touch area of keys
                     MainKeyboard(
+                        selection: keyboardSelection,
                         typeIn: {i in formulaViewModel.typeIn(i)},
                         keySpacing: keySpacing,
                         keyH: keyH(),

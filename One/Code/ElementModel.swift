@@ -171,6 +171,12 @@ class Element: Equatable, Identifiable {
     )
     static let END_radical = Element(type: .func_end)
     
+    static let pi =
+    Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30))
+    
+    static let percent =
+    Element(type: .character, string: "%", dimension: ExpressionDim(width: 25, height: 30))
+    
     static let PLH = Element(type: .placeholder, dimension: ExpressionDim(width: 25, height: 30))
     static let SEP = Element(type: .separator)
     static let END = Element(type: .other)

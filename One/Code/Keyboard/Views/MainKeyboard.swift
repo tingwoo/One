@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainKeyboard: View {
-    @State var selection: Int = 0
+    var selection: Int = 0
     
     var typeIn: (Int) -> () = {i in}
     var keySpacing: CGFloat = 8.0
