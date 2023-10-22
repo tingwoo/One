@@ -42,7 +42,7 @@ struct ClearSwitch: View {
                 .background(
                     Circle()
                         .fill(Color("AccentKeys1"))
-                        .shadow(radius: 2)
+                        .shadow(radius: 1)
                 )
                 .padding(gap)
                 .onTapGesture { location in

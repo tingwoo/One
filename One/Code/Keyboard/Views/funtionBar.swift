@@ -48,9 +48,16 @@ struct funtionBar: View {
             ClearSwitch(action: clearAction)
                 .frame(width: moduleWidth, height: height)
         }
+//        .padding(3)
+//        .background(Capsule()
+//            .fill(Color("AccentInputField")
+//                .shadow(.inner(color: Color(white: 0, opacity: 0.2), radius: 2))
+//            )
+//        )
     }
 }
 
 #Preview {
     funtionBar(keyboardSelection: .constant(0), clearAction: {})
+        .environmentObject(InputFieldLooks())
 }

@@ -17,7 +17,7 @@ struct Keyboard: View {
     let fnBarHeight: CGFloat = 40
     let keyHeight: CGFloat = 45
     let keySpacing: CGFloat = 7.0
-    let sectionSpacing: CGFloat = 12.0
+    let sectionSpacing: CGFloat = 9.0
 //    let pickerCoef: CGFloat = 0.35
     let ctrlBarCoef: CGFloat = 1.2
     
@@ -43,7 +43,7 @@ struct Keyboard: View {
                     height: fnBarHeight
                 )
                 
-                HStack(alignment: .bottom, spacing: keySpacing / 2.0) {  // 1/2: because of the expanded touch area of keys
+                HStack(alignment: .center, spacing: keySpacing / 2.0) {  // 1/2: because of the expanded touch area of keys
                     MainKeyboard(
                         selection: keyboardSelection,
                         typeIn: {i in formulaViewModel.typeIn(i)},
@@ -52,7 +52,7 @@ struct Keyboard: View {
                         keyW: keyW()
                     )
                     .frame(
-                        height: keyHeight * 4 + keySpacing * 3
+                        height: keyHeight * 4 + keySpacing * 4
                     )
                     
                     VStack(spacing: keySpacing) {
@@ -97,8 +97,8 @@ struct Keyboard: View {
                 fnBarHeight
               + keyH() * (4 + ctrlBarCoef)
               + sectionSpacing * 3
-              + keySpacing * 3
-              + 50
+              + keySpacing * 4
+              + 40
         )
         .background(
             RoundedRectangle(

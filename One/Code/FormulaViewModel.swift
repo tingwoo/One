@@ -67,46 +67,46 @@ class FormulaViewModel: ObservableObject {
             }
         }
         
-        if(cursorLocation - 1 < 0) { return }
-        
         var deletedSomething = false
-        self.shiftCursor(-1, withHaptics: false)
         
-        switch elements[cursorLocation].element.type {
-            
-        case .placeholder, .separator, .func_end:
-            break
-            
-        case .func_start:
-            var i: Int = cursorLocation + 1
-            var isEmpty: Bool = true
-            
-            while(elements[i].element.type != .func_end) {
-                if(elements[i].element.type != .placeholder && elements[i].element.type != .separator){
-                    isEmpty = false
-                    break
-                }
-                i += 1
+        while (!deletedSomething){
+            if(cursorLocation - 1 < 0) {
+                return
             }
             
-            if(isEmpty) { // function is empty
-                while(elements[cursorLocation].element.type != .func_end) {
-                    removeElement(at: cursorLocation)
+            self.shiftCursor(-1, withHaptics: false)
+            
+            switch elements[cursorLocation].element.type {
+                
+            case .placeholder, .separator, .func_end:
+                break
+                
+            case .func_start:
+                var i: Int = cursorLocation + 1
+                var isEmpty: Bool = true
+                
+                while(elements[i].element.type != .func_end) {
+                    if(elements[i].element.type != .placeholder && elements[i].element.type != .separator){
+                        isEmpty = false
+                        break
+                    }
+                    i += 1
                 }
+                
+                if(isEmpty) { // function is empty
+                    while(elements[cursorLocation].element.type != .func_end) {
+                        removeElement(at: cursorLocation)
+                    }
+                    removeElement(at: cursorLocation)
+                    deletedSomething = true
+                    insertPlh(at: cursorLocation)
+                }
+                
+            default:
                 removeElement(at: cursorLocation)
                 deletedSomething = true
                 insertPlh(at: cursorLocation)
             }
-            
-        default:
-            removeElement(at: cursorLocation)
-            deletedSomething = true
-            insertPlh(at: cursorLocation)
-        }
-        
-        if(!deletedSomething) {
-            backspace()
-            return
         }
     
         updateCursorKey()
