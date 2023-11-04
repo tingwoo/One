@@ -11,6 +11,7 @@ struct FormulaView: View {
     
     var cursorKey: UUID
     var elementDisplay: [UUID: ElementDisplay]
+    var updateCursor: (Int) -> ()
     
     var body: some View {
         ZStack {
@@ -31,7 +32,7 @@ struct FormulaView: View {
                         Color.clear.frame(width: 1, height: 1)
                             .overlay(content: {displayProps.element.functionView(displayProps.params, displayProps.scale)} )
                             .modifier(CursorModifier(show: show, scale: displayProps.scale))
-                            .modifier(ElementAnimation(value: elementDisplay))
+                            .modifier(AnimationModifier(value: elementDisplay))
                             .position(displayProps.pos)
                             
 //                    } else if(type == .bracket) {
@@ -44,16 +45,19 @@ struct FormulaView: View {
                         Text(displayProps.element.string)
                             .font(.custom("CMUConcrete-Roman", size: 30 * displayProps.scale))
                             .fontWeight(.regular)
+                            .modifier(AnimationModifier(value: elementDisplay))
                             .modifier(CursorModifier(show: show, scale: displayProps.scale))
-                            .modifier(ElementAnimation(value: elementDisplay))
+                            .modifier(TapModifier(index: displayProps.index, dimension: displayProps.element.dimension, scale: displayProps.scale, updateCursor: updateCursor))
                             .position(displayProps.pos)
+                            
                         
                     } else if(type == .symbol) {
                         Image(systemName: displayProps.element.string)
                             .font(.custom("CMUConcrete-Roman", size: 20 * displayProps.scale))
                             .fontWeight(.regular)
+                            .modifier(AnimationModifier(value: elementDisplay))
                             .modifier(CursorModifier(show: show, scale: displayProps.scale))
-                            .modifier(ElementAnimation(value: elementDisplay))
+                            .modifier(TapModifier(index: displayProps.index, dimension: displayProps.element.dimension, scale: displayProps.scale, updateCursor: updateCursor))
                             .position(displayProps.pos)
                         
                     } else if(type == .placeholder) {
@@ -61,7 +65,10 @@ struct FormulaView: View {
                             .font(.system(size: 20 * displayProps.scale, weight: .regular))
                             .foregroundColor(show ? .blue : .primary)
                             .position(displayProps.pos)
-                            .modifier(ElementAnimation(value: elementDisplay))
+                            .modifier(AnimationModifier(value: elementDisplay))
+                            .onTapGesture {
+                                updateCursor(displayProps.index)
+                            }
                         
                     } else {
                         Color.clear.frame(width: 1, height: 1)
@@ -72,6 +79,7 @@ struct FormulaView: View {
                 }
             }
         }
+//        .background(.red)
     }
 }
 

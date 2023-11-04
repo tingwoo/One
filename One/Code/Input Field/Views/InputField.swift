@@ -13,6 +13,7 @@ struct InputField: View {
     
     let cornerRadius: CGFloat = 16
     let gap: CGFloat = 6
+    let contentPadding: CGFloat = 20
     
     var body: some View {
         ZStack {
@@ -45,11 +46,15 @@ struct InputField: View {
                                 .foregroundColor(.secondary)
                             Spacer()
                         }
-                        .padding()
+                        .padding(contentPadding)
                     }else{
-                        FormulaView(cursorKey: formulaViewModel.cursorKey, elementDisplay: formulaViewModel.elementsDisplay)
-                            .padding()
-                            .offset(x: 0, y: formulaViewModel.wholeOffsetY)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            FormulaView(cursorKey: formulaViewModel.cursorKey, elementDisplay: formulaViewModel.elementsDisplay, updateCursor: formulaViewModel.updateCursor)
+                                .padding(contentPadding)
+                                .frame(width: formulaViewModel.wholeWidth + contentPadding * 2)
+                                .offset(x: 0, y: formulaViewModel.wholeOffsetY)
+                                
+                        }
                     }
                     Spacer()
                 }

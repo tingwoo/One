@@ -12,6 +12,7 @@ class FormulaViewModel: ObservableObject {
     @Published var elements: [ElementWithID]
     @Published var elementsDisplay = [UUID: ElementDisplay]()
     @Published var wholeOffsetY: CGFloat = 0
+    @Published var wholeWidth: CGFloat = 0
     
     var cursorLocation: Int
     @Published var cursorKey: UUID
@@ -152,6 +153,13 @@ class FormulaViewModel: ObservableObject {
         }
     }
     
+    func updateCursor(index: Int) {
+        if(index >= 0 && index < elements.count) {
+            cursorLocation = index
+            updateCursorKey()
+        }
+    }
+    
     func updateCursorKey() {
         cursorKey = elements[cursorLocation].id
     }
@@ -159,6 +167,7 @@ class FormulaViewModel: ObservableObject {
     func updateParams() {
         let tmp = self.parse(start: 0, end: elements.count, scale: 1)
         self.wholeOffsetY = -tmp.minY
+        self.wholeWidth = tmp.width
     }
     
     // Input:
@@ -179,7 +188,7 @@ class FormulaViewModel: ObservableObject {
                 
                 // Calculate the position offset of the character
                 pos.x += elements[i].element.dimension.halfWidth() * scale
-                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos, scale: scale)
+                elementsDisplay[elements[i].id] = ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale)
                 pos.x += elements[i].element.dimension.halfWidth() * scale
                 
                 // Update maxY and minY
@@ -206,7 +215,7 @@ class FormulaViewModel: ObservableObject {
                 /* If the element is the start of a function */
                 
                 
-                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos, scale: scale) //
+                elementsDisplay[elements[i].id] = ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale) //
                 pos.x += elements[i].element.functionGap.left * scale
                 
                 // Find each sub-expression sections in the function

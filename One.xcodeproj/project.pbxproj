@@ -34,10 +34,11 @@
 		6CCED0702AC56801008A96C8 /* FormulaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED06F2AC56801008A96C8 /* FormulaViewModel.swift */; };
 		6CCED0722AC568DB008A96C8 /* FormulaModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED0712AC568DB008A96C8 /* FormulaModels.swift */; };
 		6CCED0742AC587CC008A96C8 /* CursorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED0732AC587CC008A96C8 /* CursorModifier.swift */; };
-		6CCED0762AC58F35008A96C8 /* ElementAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED0752AC58F35008A96C8 /* ElementAnimation.swift */; };
+		6CCED0762AC58F35008A96C8 /* AnimationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCED0752AC58F35008A96C8 /* AnimationModifier.swift */; };
 		6CDF76D42ADEBC36000654AE /* BracketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D32ADEBC36000654AE /* BracketView.swift */; };
 		6CDF76D72ADED981000654AE /* InputFieldLooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D62ADED981000654AE /* InputFieldLooks.swift */; };
 		6CDF76D92AE02CEC000654AE /* KeyWithMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D82AE02CEC000654AE /* KeyWithMenu.swift */; };
+		6CF06CD62AF6B5FF007341D3 /* TapModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF06CD52AF6B5FF007341D3 /* TapModifier.swift */; };
 		6CFB7D532ABA1AD6004EEB33 /* cmunobx.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CFB7D522ABA1AD6004EEB33 /* cmunobx.ttf */; };
 /* End PBXBuildFile section */
 
@@ -71,10 +72,11 @@
 		6CCED06F2AC56801008A96C8 /* FormulaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaViewModel.swift; sourceTree = "<group>"; };
 		6CCED0712AC568DB008A96C8 /* FormulaModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaModels.swift; sourceTree = "<group>"; };
 		6CCED0732AC587CC008A96C8 /* CursorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorModifier.swift; sourceTree = "<group>"; };
-		6CCED0752AC58F35008A96C8 /* ElementAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementAnimation.swift; sourceTree = "<group>"; };
+		6CCED0752AC58F35008A96C8 /* AnimationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationModifier.swift; sourceTree = "<group>"; };
 		6CDF76D32ADEBC36000654AE /* BracketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BracketView.swift; sourceTree = "<group>"; };
 		6CDF76D62ADED981000654AE /* InputFieldLooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldLooks.swift; sourceTree = "<group>"; };
 		6CDF76D82AE02CEC000654AE /* KeyWithMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWithMenu.swift; sourceTree = "<group>"; };
+		6CF06CD52AF6B5FF007341D3 /* TapModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapModifier.swift; sourceTree = "<group>"; };
 		6CFB7D522ABA1AD6004EEB33 /* cmunobx.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cmunobx.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -140,7 +142,8 @@
 			isa = PBXGroup;
 			children = (
 				6CCED0732AC587CC008A96C8 /* CursorModifier.swift */,
-				6CCED0752AC58F35008A96C8 /* ElementAnimation.swift */,
+				6CCED0752AC58F35008A96C8 /* AnimationModifier.swift */,
+				6CF06CD52AF6B5FF007341D3 /* TapModifier.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -347,7 +350,7 @@
 			files = (
 				6CCCA68D2AD8487800111EA4 /* Extensions.swift in Sources */,
 				6C5F6A672AC8975900BF75FA /* MainKeyboard_old.swift in Sources */,
-				6CCED0762AC58F35008A96C8 /* ElementAnimation.swift in Sources */,
+				6CCED0762AC58F35008A96C8 /* AnimationModifier.swift in Sources */,
 				6C64BE242AD5411800D27401 /* ElementModel.swift in Sources */,
 				6CCED0702AC56801008A96C8 /* FormulaViewModel.swift in Sources */,
 				6C17ADE62AB752AC009B74AD /* ControlBar.swift in Sources */,
@@ -362,6 +365,7 @@
 				6C4B9C882AC74D120037A49E /* KeyboardPicker.swift in Sources */,
 				6C0D90EB2AA6F60E00C5D0E6 /* ContentView.swift in Sources */,
 				6CCED06E2AC5679F008A96C8 /* FormulaView.swift in Sources */,
+				6CF06CD62AF6B5FF007341D3 /* TapModifier.swift in Sources */,
 				6C0D90E92AA6F60E00C5D0E6 /* OneApp.swift in Sources */,
 				6CC4DDE42AE0FD60007E4625 /* MainKeyboard.swift in Sources */,
 				6C4A78E72AB1E07300CD776C /* ClearAllSwitch.swift in Sources */,

@@ -13,6 +13,7 @@ struct ElementWithID: Identifiable {
 }
 
 struct ElementDisplay: Equatable {
+    var index: Int
     var element: Element
     var pos: CGPoint
     var scale: CGFloat
