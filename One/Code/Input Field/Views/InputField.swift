@@ -48,6 +48,24 @@ struct InputField: View {
                         }
                         .padding(contentPadding)
                     }else{
+//                        ScrollableView($scrollOffset, animationDuration: 0.5, showsScrollIndicator: true, axis: .horizontal/*, forceRefresh: true*/) {
+//                            HStack {
+//                                ForEach(1..<10) { i in
+//                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+//                                        .fill(Color.red)
+//                                        .frame(width: 50, height: 50)
+//                                        
+//                                }
+//                            }
+//                                
+//                        }
+//                        .border(.red)
+//                        .overlay {
+//                            FormulaView(cursorKey: formulaViewModel.cursorKey, elementDisplay: formulaViewModel.elementsDisplay, updateCursor: formulaViewModel.updateCursor)
+//                                .padding(contentPadding)
+//                                .frame(width: formulaViewModel.wholeWidth + contentPadding * 2)
+//                                .offset(x: -scrollOffset.x, y: formulaViewModel.wholeOffsetY)
+//                        }
                         ScrollView(.horizontal, showsIndicators: false) {
                             FormulaView(cursorKey: formulaViewModel.cursorKey, elementDisplay: formulaViewModel.elementsDisplay, updateCursor: formulaViewModel.updateCursor)
                                 .padding(contentPadding)
@@ -80,6 +98,7 @@ struct InputField: View {
                         )
                     }
                     .padding(10)
+                    .rotation3DEffect(.degrees(inputFieldLooks.answerFieldRotateAngle), axis: (x: -1 , y: 0, z: 0), perspective: 0.5)
                     .offset(x: 0, y: (inputFieldLooks.answerFieldAppears ? 0 : 150))
                 }
             }
