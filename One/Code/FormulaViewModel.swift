@@ -10,24 +10,42 @@ import Foundation
 class FormulaViewModel: ObservableObject {
 
     @Published var elements: [ElementWithID]
-    @Published var elementsDisplay = [UUID: ElementDisplay]()
+    @Published var elementsDisplayDict = ElementDisplayDict()
+    
     @Published var wholeOffsetY: CGFloat = 0
     @Published var wholeWidth: CGFloat = 0
     
-    var cursorLocation: Int
-    @Published var cursorKey: UUID
+    @Published var cursorLocation: Int = 0
+    @Published var cursorKey: Int? = nil
 
     var fractionGap: CGFloat = 4 //
-    
-//    var manual = ElementManual.instance
+
     var hapticManager = HapticManager.instance
+    
+//    static let example = FormulaViewModel(elements: [ElementWithID(element: .one), ElementWithID(element: .END)])
+    
+//    static let example = FormulaViewModel(elements: [ElementWithID(element: .one), 
+//                                                     ElementWithID(element: .plus),
+//                                                     ElementWithID(element: .two),
+//                                                     ElementWithID(element: .multiply),
+//                                                     ElementWithID(element: .S_frac),
+//                                                     ElementWithID(element: .five),
+//                                                     ElementWithID(element: .SEP),
+//                                                     ElementWithID(element: .seven),
+//                                                     ElementWithID(element: .E_frac),
+//                                                     ElementWithID(element: .END)])
     
     init() {
         let firstElement = ElementWithID(element: .END)
         elements = [firstElement]
         cursorLocation = 0
-        cursorKey = firstElement.id
     }
+    
+//    init(elements: [ElementWithID]) {
+//        self.elements = elements
+//        keysArray = elements.map({$0.id})
+//        cursorLocation = 0
+//    }
     
     func typeIn(_ index: Int) {
         let command = keyList[index].command
@@ -38,9 +56,11 @@ class FormulaViewModel: ObservableObject {
                 removeElement(at: cursorLocation)
             }
             elements.insert(contentsOf: command.map({ElementWithID(element: $0)}), at: cursorLocation)
+            
+            updateParams()
+            
             cursorLocation += shift
             updateCursorKey()
-            updateParams()
         }
     }
     
@@ -52,8 +72,10 @@ class FormulaViewModel: ObservableObject {
     
     private func removeElement(at: Int) {
         if(elements.indices.contains(at)) {
-            elementsDisplay[elements[at].id] = nil
-            elements.remove(at: at)
+            if let id = elements[at].id {
+                elementsDisplayDict.erase(id)
+                elements.remove(at: at)
+            }
         }
     }
     
@@ -116,7 +138,7 @@ class FormulaViewModel: ObservableObject {
     
     func clear() {
         elements.removeAll()
-        elementsDisplay.removeAll()
+        elementsDisplayDict.eraseAll()
         
         elements.append(ElementWithID(element: .END))
         cursorLocation = 0
@@ -168,6 +190,21 @@ class FormulaViewModel: ObservableObject {
         let tmp = self.parse(start: 0, end: elements.count, scale: 1)
         self.wholeOffsetY = -tmp.minY
         self.wholeWidth = tmp.width
+        
+        // print dictionary
+//        let list = elementsDisplayDict.array.map({
+//            if let e = $0 {
+//                return "(" + e.element.string + ", \t\tindex: \(e.index), \t\(e.pos))"
+//            } else {
+//                return "nil"
+//            }
+//        })
+//        
+//        for str in list {
+//            print(str)
+//        }
+//        
+//        print("")
     }
     
     // Input:
@@ -187,9 +224,9 @@ class FormulaViewModel: ObservableObject {
                 /* If the element is a character */
                 
                 // Calculate the position offset of the character
-                pos.x += elements[i].element.dimension.halfWidth() * scale
-                elementsDisplay[elements[i].id] = ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale)
-                pos.x += elements[i].element.dimension.halfWidth() * scale
+//                pos.x += elements[i].element.dimension.halfWidth() * scale
+                elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale))
+                pos.x += elements[i].element.dimension.width * scale
                 
                 // Update maxY and minY
                 minY = min(minY, elements[i].element.dimension.minY * scale)
@@ -214,9 +251,8 @@ class FormulaViewModel: ObservableObject {
             } else if(elements[i].element.type == .func_start) {
                 /* If the element is the start of a function */
                 
-                
-                elementsDisplay[elements[i].id] = ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale) //
                 pos.x += elements[i].element.functionGap.left * scale
+                elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale))
                 
                 // Find each sub-expression sections in the function
                 var j = i + 1
@@ -249,18 +285,17 @@ class FormulaViewModel: ObservableObject {
                 )
                 
                 // Calculate the position offset of each sub-expressions and apply
-                let subPositions: [CGPoint] = elements[i].element.getSubPositions(&subDimensions)
+                let subPositions: [CGPoint] = elements[i].element.getSubPositions(dims: &subDimensions, scale: scale)
                 for k in 0..<(sepList.count - 1) {
                     for l in (sepList[k] + 1)..<(sepList[k+1] + 1) {
-                        elementsDisplay[elements[l].id]?.pos += subPositions[k]
+                        elementsDisplayDict.array[elements[l].id!]?.pos += subPositions[k]
                     }
                 }
                 
                 // Calculate the overall dimensions the whole function expression
-                let overallDimensions: ExpressionDim = elements[i].element.getOverallDimensions(&subDimensions)
+                let overallDimensions: ExpressionDim = elements[i].element.getOverallDimensions(dims: &subDimensions, scale: scale)
                 
-                
-                elementsDisplay[elements[i].id]?.params = elements[i].element.getFuncViewParams(&subDimensions)
+                elementsDisplayDict.array[elements[i].id!]?.params = elements[i].element.getFuncViewParams(dims: &subDimensions, scale: scale)
                 
                 // Update maxY and minY
                 minY = min(minY, overallDimensions.minY)
@@ -272,70 +307,66 @@ class FormulaViewModel: ObservableObject {
                 
                 // Skip rest of the function
                 i = sepList.last!
-                
-                
-//                pos.x += fractionGap / 2.0
-//                elementsDisplay[elements[i].id] = ElementDisplay(element: elements[i].element, pos: pos, scale: scale)
-//                
-//                var j: Int = i + 1
-//                var cnt: Int = 0
-//                var fracMid: Int? = nil
-//                var fracEnd: Int? = nil
-//                
-//                while(j < end) {
-//                    if(elements[j].element == .SEP && cnt == 0) {
-//                        fracMid = j
-//                    } else if(elements[j].element == .END_frac && cnt == 0) {
-//                        fracEnd = j
-//                        break
-//                    } else if(elements[j].element == .STA_frac) {
-//                        cnt += 1
-//                    } else if(elements[j].element == .END_frac) {
-//                        cnt -= 1
-//                    }
-//                    
-//                    j += 1
-//                }
-//                
-//                guard let fracMid = fracMid else { fatalError("fracMid is nil") }
-//                guard let fracEnd = fracEnd else { fatalError("fracEnd is nil") }
-//                
-//                let numWH: ExpressionDim = self.parse(start: i+1, end: fracMid, startPos: CGPoint(x: pos.x, y: 0), scale: nextScale(scale))
-//                elementsDisplay[elements[fracMid].id] = ElementDisplay(element: elements[fracMid].element, pos: CGPoint(x: pos.x + numWH.width, y: pos.y), scale: nextScale(scale))
-//                for k in (i+1)...fracMid {
-//                    elementsDisplay[elements[k].id]?.pos.y -= numWH.maxY
-//                }
-//                minY = min(minY, -numWH.height)
-//                
-//                
-//                let denWH: ExpressionDim = self.parse(start: fracMid+1, end: fracEnd, startPos: CGPoint(x: pos.x, y: 0), scale: nextScale(scale))
-//                elementsDisplay[elements[fracEnd].id] = ElementDisplay(element: elements[fracEnd].element, pos: CGPoint(x: pos.x + denWH.width, y: pos.y), scale: nextScale(scale))
-//                for k in (fracMid+1)...fracEnd {
-//                    elementsDisplay[elements[k].id]?.pos.y -= denWH.minY
-//                }
-//                maxY = max(maxY, denWH.height)
-//                
-//                
-//                if(numWH.width >= denWH.width) {
-//                    for k in (fracMid+1)...fracEnd {
-//                        elementsDisplay[elements[k].id]!.pos.x += (numWH.width - denWH.width) / 2.0
-//                    }
-//                } else {
-//                    for k in (i+1)...fracMid {
-//                        elementsDisplay[elements[k].id]!.pos.x += (denWH.width - numWH.width) / 2.0
-//                    }
-//                }
-//                
-//                pos.x += max(numWH.width, denWH.width) + fractionGap / 2.0
-//                elementsDisplay[elements[i].id]!.spare = max(numWH.width, denWH.width)
-//                elementsDisplay[elements[i].id]!.pos.x += elementsDisplay[elements[i].id]!.spare! / 2.0
-//                
-//                i = fracEnd
             }
             
             i += 1
         }
         
         return ExpressionDim(width: pos.x - startPos.x, height: maxY - minY, minY: minY, maxY: maxY)
+    }
+}
+
+class ElementDisplayDict: Equatable, ObservableObject {
+    var array: [ElementDisplay?] = [nil]
+    private(set) var nextID: Int = 0
+    
+    private(set) var length: Int = 1
+    private var numberOfElements: Int = 0
+    private var numberOfNils : Int {
+        length - numberOfElements
+    }
+    
+    static func == (lhs: ElementDisplayDict, rhs: ElementDisplayDict) -> Bool {
+        return lhs.array == rhs.array
+    }
+    
+    func write(_ elementID: inout Int?, _ ed: ElementDisplay) {
+        if(elementID == nil){
+            
+            elementID = nextID
+            array[nextID] = ed
+            numberOfElements += 1
+            if(numberOfNils == 0) {
+                array.append(nil)
+                length += 1
+                nextID = length - 1
+            } else {
+                var i = nextID + 1
+                while(array[i] != nil) { i += 1 }
+                nextID = i
+            }
+            
+        } else {
+            
+            array[elementID!] = ed
+            
+        }
+    }
+    
+    func erase(_ index: Int) {
+        if(index >= 0 && index < length) {
+            
+            array[index] = nil
+            nextID = min(nextID, index)
+            numberOfElements -= 1
+            
+        }
+    }
+    
+    func eraseAll() {
+        array = [nil]
+        nextID = 0
+        length = 1
+        numberOfElements = 0
     }
 }

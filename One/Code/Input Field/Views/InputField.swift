@@ -12,8 +12,17 @@ struct InputField: View {
     @EnvironmentObject var inputFieldLooks: InputFieldLooks
     
     let cornerRadius: CGFloat = 16
-    let gap: CGFloat = 6
+    let fieldPadding: CGFloat = 12
+    let shrinkGap: CGFloat = 6
     let contentPadding: CGFloat = 20
+    
+    var fieldWidth: CGFloat {
+        UIScreen.main.bounds.width - fieldPadding * 2
+    }
+    
+    var shrinkRatio: CGFloat {
+        return (fieldWidth - shrinkGap * 2) / fieldWidth
+    }
     
     var body: some View {
         ZStack {
@@ -25,7 +34,7 @@ struct InputField: View {
             }
             .background(
                 RoundedRectangle(
-                    cornerRadius: inputFieldLooks.redBorder ? cornerRadius - gap : cornerRadius,
+                    cornerRadius: inputFieldLooks.redBorder ? cornerRadius - shrinkGap : cornerRadius,
                     style: .continuous
                 )
                 .fill(
@@ -33,7 +42,7 @@ struct InputField: View {
                     .shadow(.inner(color: Color(white: 0, opacity: 0.2), radius: 4))
                 )
             )
-            .padding(inputFieldLooks.redBorder ? gap : 0)
+            .padding(inputFieldLooks.redBorder ? shrinkGap : 0)
             
             
             ZStack {
@@ -48,36 +57,9 @@ struct InputField: View {
                         }
                         .padding(contentPadding)
                     }else{
-//                        ScrollableView($scrollOffset, animationDuration: 0.5, showsScrollIndicator: true, axis: .horizontal/*, forceRefresh: true*/) {
-//                            HStack {
-//                                ForEach(1..<10) { i in
-//                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-//                                        .fill(Color.red)
-//                                        .frame(width: 50, height: 50)
-//                                        
-//                                }
-//                            }
-//                                
-//                        }
-//                        .border(.red)
-//                        .overlay {
-//                            FormulaView(cursorKey: formulaViewModel.cursorKey, elementDisplay: formulaViewModel.elementsDisplay, updateCursor: formulaViewModel.updateCursor)
-//                                .padding(contentPadding)
-//                                .frame(width: formulaViewModel.wholeWidth + contentPadding * 2)
-//                                .offset(x: -scrollOffset.x, y: formulaViewModel.wholeOffsetY)
-//                        }
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            FormulaView(cursorKey: formulaViewModel.cursorKey, elementDisplay: formulaViewModel.elementsDisplay, updateCursor: formulaViewModel.updateCursor)
-                                .padding(contentPadding)
-                                .frame(width: formulaViewModel.wholeWidth + contentPadding * 2)
-                                .offset(x: 0, y: formulaViewModel.wholeOffsetY)
-                                
-                        }
+                        FormulaScrollView(formulaViewModel: formulaViewModel, fieldWidth: fieldWidth, contentPadding: contentPadding)
                     }
                     Spacer()
-                }
-                .onAppear {
-                    formulaViewModel.updateParams()
                 }
                 
                 // Answer block
@@ -105,21 +87,21 @@ struct InputField: View {
             .clipShape(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
             )
-            .scaleEffect(inputFieldLooks.redBorder ? 0.97 : 1)
+            .scaleEffect(inputFieldLooks.redBorder ? shrinkRatio : 1)
         }
         .background(
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .fill(inputFieldLooks.redBorder ? Color("AccentRed") : .clear)
         )
-        .padding(.horizontal, 12)
+        .padding(.horizontal, fieldPadding)
         
         
     }
 }
 
-struct InputField_Previews: PreviewProvider {
-    static var previews: some View {
-        InputField(formulaViewModel: FormulaViewModel())
-            .environmentObject(InputFieldLooks())
-    }
-}
+//struct InputField_Previews: PreviewProvider {
+//    static var previews: some View {
+//        InputField(formulaViewModel: FormulaViewModel.example)
+//            .environmentObject(InputFieldLooks())
+//    }
+//}
