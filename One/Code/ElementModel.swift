@@ -16,9 +16,10 @@ class Element: Equatable, Identifiable {
     
     let functionGap: (left: CGFloat, right: CGFloat)
     let hyperParams: [CGFloat]
+    
+    let getSubScales:         (Int, CGFloat) -> CGFloat
     private let getOverallDimensions: (inout [ExpressionDim], CGFloat, [CGFloat]) -> ExpressionDim
     private let getSubPositions:      (inout [ExpressionDim], CGFloat, [CGFloat]) -> [CGPoint]
-    let getSubScales:         (Int, CGFloat) -> CGFloat
     private let getFuncViewParams:    (inout [ExpressionDim], CGFloat, [CGFloat]) -> [CGFloat]
     let functionView:         ([CGFloat], CGFloat) -> AnyView
     
@@ -28,9 +29,9 @@ class Element: Equatable, Identifiable {
         dimension: ExpressionDim = ExpressionDim(),
         functionGap: (left: CGFloat, right: CGFloat) = (left: 0, right: 0),
         hyperParams: [CGFloat] = [],
+        getSubScales:         @escaping (Int, CGFloat) -> CGFloat = { _, _ in return 1 },
         getOverallDimensions: @escaping (inout [ExpressionDim], CGFloat, [CGFloat]) -> ExpressionDim = { _, _, _ in return ExpressionDim() },
         getSubPositions:      @escaping (inout [ExpressionDim], CGFloat, [CGFloat]) -> [CGPoint] = { _, _, _ in return [] },
-        getSubScales:         @escaping (Int, CGFloat) -> CGFloat = { _, _ in return 1 },
         getFuncViewParams:    @escaping (inout [ExpressionDim], CGFloat, [CGFloat]) -> [CGFloat] = { _, _, _ in return [] },
         functionView:         @escaping ([CGFloat], CGFloat) -> AnyView = { _, _ in AnyView(EmptyView()) }
     ) {
@@ -40,9 +41,9 @@ class Element: Equatable, Identifiable {
         self.dimension = dimension
         self.functionGap = functionGap
         self.hyperParams = hyperParams
+        self.getSubScales = getSubScales
         self.getOverallDimensions = getOverallDimensions
         self.getSubPositions = getSubPositions
-        self.getSubScales = getSubScales
         self.getFuncViewParams = getFuncViewParams
         self.functionView = functionView
     }
@@ -105,50 +106,6 @@ class Element: Equatable, Identifiable {
     Element(type: .character, string: "(", dimension: ExpressionDim(width: 15, height: 30))
     static let paren_r =
     Element(type: paren_l.type, string: ")", dimension: paren_l.dimension)
-    
-    static let S_radical
-    = Element(
-        type: .func_start,
-        string: "S_radical",
-        functionGap: (left: 0, right: 4),
-        getOverallDimensions: { dims, scale, params in
-            // 0: index
-            // 1: radicand
-            let coef: CGFloat = 0.25
-            let h = (dims[0].height * (1 - coef) * 2 < dims[1].height) ? dims[0].height * coef + dims[1].height : dims[1].height / 2.0 + dims[0].height
-            return ExpressionDim(
-                width: dims[0].width + dims[1].width + 8,
-                height: h,
-                minY: dims[1].maxY - h,
-                maxY: dims[1].maxY
-            )
-        },
-        getSubPositions: { dims, scale, params in
-            let coef: CGFloat = 0.25
-            let tmp = dims[0].maxY - dims[1].minY
-            return [
-                CGPoint(
-                    x: 0,
-                    y: (dims[0].height * (1 - coef) * 2 < dims[1].height) ? (dims[0].height * (1 - coef) - tmp) : (dims[1].height / 2.0 - tmp)
-                ),
-                CGPoint(x: dims[0].width + 8, y: 0)
-            ]
-        },
-        getSubScales: { index, scale in
-            return (index == 0 ? scaleIteration(scale, coef: 0.6) : scale)
-        },
-        getFuncViewParams: { dims, scale, params in
-            // 0: width
-            // 1: height
-            // 2: x offset
-            // 3: y offset
-            return [dims[1].width + 4, dims[1].height, dims[0].width + 4, dims[1].maxY - dims[1].height / 2.0]
-        },
-        functionView: { params, scale in
-            AnyView(RadicalView(leftGap: 0, width: params[0], height: params[1], xOffset: params[2], yOffset: params[3], scale: scale))
-        }
-    )
-    static let E_radical = Element(type: .func_end, string: "E_radical")
     
     static let pi =
     Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30))

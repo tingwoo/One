@@ -48,13 +48,9 @@ struct FormulaView: View {
                                     .frame(width: 0, height: 0)
                                     .id(key)
                                 
-//                                VStack {
-                                    Color.clear.frame(width: 0, height: 0)
-                                        .overlay(content: {displayProps.element.functionView(displayProps.params, scale)} )
-                                        .modifier(CursorModifier(show: show, scale: scale))
-                                        .modifier(AnimationModifier(value: elementDisplayDict))
-//                                }
-//                                .frame(width: displayProps. * scale, height: dim.height * scale)
+                                displayProps.element.functionView(displayProps.params, scale)
+                                    .modifier(CursorModifier(show: show, scale: scale))
+                                    .modifier(AnimationModifier(value: elementDisplayDict))
                                 
                             }
     //

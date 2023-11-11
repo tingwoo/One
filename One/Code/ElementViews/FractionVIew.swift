@@ -13,9 +13,12 @@ extension Element {
         type: .func_start,
         string: "S_frac",
         functionGap: (left: 3, right: 3),
-        hyperParams: [5, 5], // 0: extended Length, 1: gap between number and line
+        hyperParams: [5, 3], // 0: extended Length, 1: gap between number and line
 //        functionGap: (left: 20, right: 20),
 //        hyperParams: [20, 20], // 0: extended Length, 1: gap between number and line
+        getSubScales: { index, scale in
+            return scaleIteration(scale, coef: 0.9)
+        },
         getOverallDimensions: { dims, scale, params in
             let extendedLength: CGFloat = params[0] * scale
             let gap: CGFloat = params[1] * scale
@@ -41,9 +44,6 @@ extension Element {
                 CGPoint(x: tmp ? diff : extendedLength, y: -dims[1].minY + gap)
             ]
         },
-        getSubScales: { index, scale in
-            return scaleIteration(scale, coef: 0.9)
-        },
         getFuncViewParams: { dims, scale, params in
             let extendedLength: CGFloat = params[0] * scale
             
@@ -65,7 +65,7 @@ struct FractionView: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            Color.clear.frame(width: length, height: 0)
+//            Color.clear.frame(width: length, height: 0)
             Rectangle().frame(width: length, height: 2 * scale)
         }
     }

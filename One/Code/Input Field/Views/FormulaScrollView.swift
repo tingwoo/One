@@ -15,6 +15,7 @@ private struct OffsetPreferenceKey: PreferenceKey {
 struct FormulaScrollView: View {
     @ObservedObject var formulaViewModel: FormulaViewModel
     @State var scrollOffset: CGFloat = 0
+    @State var time: Date = Date()
     
     var fieldWidth: CGFloat
     var contentPadding: CGFloat
@@ -68,18 +69,20 @@ struct FormulaScrollView: View {
                     let actualPosX = cursorPosX + scrollOffset
                     let scrollAnchor = 0.5
                     
-//                    print(cursorKey)
-//                    print()
-                    
                     withAnimation {
                         if(actualPosX < 0) {
+                            time = Date()
                             scrollProxy.scrollTo(cursorKey, anchor: UnitPoint(x: scrollAnchor, y: 0))
-//                            print("scroll left")
+                            print("scroll left")
                         } else if(actualPosX > fieldWidth - contentPadding * 2) {
+                            time = Date()
                             scrollProxy.scrollTo(cursorKey, anchor: UnitPoint(x: 1 - scrollAnchor, y: 0))
-//                            print("scroll right")
+                            print("scroll right")
                         } else {
-                            scrollProxy.scrollTo(-1, anchor: UnitPoint(x: scrollOffset / fieldWidth , y: 0))
+                            if(-time.timeIntervalSinceNow > 0.35) {
+                                scrollProxy.scrollTo(-1, anchor: UnitPoint(x: scrollOffset / fieldWidth , y: 0))
+                                print("fixed")
+                            }
                         }
                     }
                 }

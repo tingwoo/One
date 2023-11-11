@@ -50,7 +50,8 @@ struct InputField: View {
                 VStack {
                     if (formulaViewModel.elements.count == 1){
                         HStack(spacing: 0) {
-                            Text("Enter problem")
+//                            Text("Enter problem")
+                            Text("輸入問題")
                                 .font(.system(size: 30, weight: .medium))
                                 .foregroundColor(.secondary)
                             Spacer()
