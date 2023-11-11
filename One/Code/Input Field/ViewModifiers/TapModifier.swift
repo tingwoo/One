@@ -22,18 +22,30 @@ extension FormulaView {
                         Color.clear
                             .contentShape(Rectangle())
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .onTapGesture {
-                                updateCursor(index)
-                            }
+                            .onTapGesture { updateCursor(index) }
                         
                         Color.clear
                             .contentShape(Rectangle())
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .onTapGesture {
-                                updateCursor(index + 1)
-                            }
+                            .onTapGesture { updateCursor(index + 1) }
+                        
+//                        Color.red
+//                            .contentShape(Rectangle())
+//                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                            .onTapGesture {
+//                                updateCursor(index)
+//                            }
+//                            .opacity(0.2)
+//                        
+//                        Color.blue
+//                            .contentShape(Rectangle())
+//                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                            .onTapGesture {
+//                                updateCursor(index + 1)
+//                            }
+//                            .opacity(0.2)
                     }
-                        .frame(width: dimension.width * scale, height: dimension.height * scale)
+                    .frame(width: dimension.width * scale, height: dimension.height * scale)
 //                        .opacity(0.1)
 //                        .hidden()
                 )

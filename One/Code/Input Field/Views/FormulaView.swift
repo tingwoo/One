@@ -42,25 +42,20 @@ struct FormulaView: View {
 //                                .border(.indigo)
                             
                             // change to switch statement in the future
+                            
                             if(type == .func_start){
                                 
                                 Color.clear
                                     .frame(width: 0, height: 0)
                                     .id(key)
                                 
-                                displayProps.element.functionView(displayProps.params, scale)
-                                    .modifier(CursorModifier(show: show, scale: scale))
-                                    .modifier(AnimationModifier(value: elementDisplayDict))
+                                if let params = displayProps.params {
+                                    displayProps.element.functionView(params, scale)
+                                        .modifier(AnimationModifier(value: elementDisplayDict))
+                                        .modifier(CursorModifier(show: show, scale: scale))
+                                }
                                 
                             }
-    //
-    ////                    } else if(type == .bracket) {
-    ////                        displayProps.element.functionView(displayProps.params, displayProps.scale)
-    ////                            .modifier(CursorModifier(show: show, scale: displayProps.scale))
-    ////                            .modifier(ElementAnimation(value: elementDisplay))
-    ////                            .position(displayProps.pos)
-    //
-    //                    } else
                             else if(type == .character) {
                                 
                                 Color.clear
@@ -93,6 +88,25 @@ struct FormulaView: View {
                                 .frame(width: dim.width * scale, height: dim.height * scale)
                                 .modifier(CursorModifier(show: show, scale: scale))
                                 .modifier(TapModifier(index: displayProps.index, dimension: dim, scale: scale, updateCursor: updateCursor))
+                                
+                            }
+                            else if(type == .bracket) {
+                                Color.clear
+                                    .frame(width: 0, height: 0)
+                                    .id(key)
+                                
+                                let minmax = displayProps.params ?? [-15 * scale, 15 * scale]
+                                let h = minmax[1] - minmax[0]
+                                
+                                BracketView(
+                                    side: displayProps.element == .S_bracket ? .left : .right,
+                                    params: minmax,
+                                    scale: scale
+                                )
+                                .frame(width: 15 * scale, height: h)
+                                .modifier(AnimationModifier(value: elementDisplayDict))
+                                .modifier(CursorModifier(show: show, scale: scale))
+                                .modifier(TapModifier(index: displayProps.index, dimension: ExpressionDim(width: 15, height: h / scale), scale: scale, updateCursor: updateCursor))
                                 
                             }
                             else if(type == .placeholder) {

@@ -102,10 +102,10 @@ class Element: Equatable, Identifiable {
     static let divide =
     Element(type: plus.type, string: "divide",   dimension: plus.dimension)
     
-    static let paren_l =
-    Element(type: .character, string: "(", dimension: ExpressionDim(width: 15, height: 30))
-    static let paren_r =
-    Element(type: paren_l.type, string: ")", dimension: paren_l.dimension)
+    static let S_bracket =
+    Element(type: .bracket, string: "(", dimension: ExpressionDim(width: 15, height: 30))
+    static let E_bracket =
+    Element(type: S_bracket.type, string: ")", dimension: S_bracket.dimension)
     
     static let pi =
     Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30))

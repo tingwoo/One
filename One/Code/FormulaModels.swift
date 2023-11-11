@@ -9,13 +9,14 @@ import Foundation
 
 struct ElementWithID: Identifiable {
     var id: Int? = nil
+    var pair: Int? = nil
     var element: Element
 }
 
 struct ElementDisplay: Equatable {
     var index: Int
     var element: Element
-    var pos: CGPoint
-    var scale: CGFloat
-    var params: [CGFloat] = []
+    var pos: CGPoint = CGPoint()
+    var scale: CGFloat = 1
+    var params: [CGFloat]? = nil
 }

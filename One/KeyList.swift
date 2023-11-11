@@ -46,15 +46,18 @@ var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(image: "minus", command: [.minus]),
                           KeyAttr(image: "multiply", command: [.multiply]),
                           KeyAttr(image: "divide", command: [.divide]),
-                          KeyAttr(text: "(", command: [.paren_l]),
-                          KeyAttr(text: ")", command: [.paren_r]),
-                          KeyAttr(text: "( )", command: [.paren_l, .paren_r]),
-                          KeyAttr(text: "frac", command: [.S_frac, .PLH, .SEP, .PLH, .E_frac]),
-                          KeyAttr(image: "x.squareroot", command: [.S_radical, .PLH, .SEP, .PLH, .E_radical]),
-                          KeyAttr(text: "sqrt", command: [.S_radical, .two, .SEP, .PLH, .E_radical], cursorShift: 3),
-                          KeyAttr(text: "cbrt", command: [.S_radical, .three, .SEP, .PLH, .E_radical], cursorShift: 3),
+                          KeyAttr(text: "(", command: [.S_bracket]),
+                          KeyAttr(text: ")", command: [.E_bracket]),
+                          KeyAttr(text: "( )", command: [.S_bracket, .E_bracket]),
+                          
+                          KeyAttr(text: "frac", command: [.S_frac, .PLH, .SEP, .PLH, .E_frac], segments: [2, 4]),
+                          KeyAttr(image: "x.squareroot", command: [.S_radical, .PLH, .SEP, .PLH, .E_radical], segments: [2, 4]),
+                          KeyAttr(text: "sqrt", command: [.S_radical, .two, .SEP, .PLH, .E_radical], segments: [2, 4], cursorShift: 3),
+                          KeyAttr(text: "cbrt", command: [.S_radical, .three, .SEP, .PLH, .E_radical], segments: [2, 4], cursorShift: 3),
+                          
                           KeyAttr(text: "π", command: [.pi]),
                           KeyAttr(image: "percent", command: [.percent]),
+                          
                           //test
 //                          KeyAttr(text: "sin", command: [], cursorShift: 0), //21
                           KeyAttr(text: "asin", command: [], cursorShift: 0),

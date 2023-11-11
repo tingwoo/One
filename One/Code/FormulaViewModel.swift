@@ -57,6 +57,23 @@ class FormulaViewModel: ObservableObject {
             }
             elements.insert(contentsOf: command.map({ElementWithID(element: $0)}), at: cursorLocation)
             
+            // give each element an ID
+            for i in cursorLocation..<(cursorLocation + command.count) {
+                elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element))
+            }
+            
+            // if inserted a function, determine pair ID
+            if !keyList[index].segments.isEmpty {
+                
+                // head
+                elements[cursorLocation].pair = elements[cursorLocation + keyList[index].segments.last!].id
+                
+                // seps and tail
+                for i in keyList[index].segments.indices {
+                    elements[cursorLocation + keyList[index].segments[i]].pair = elements[cursorLocation].id
+                }
+            }
+            
             updateParams()
             
             cursorLocation += shift
@@ -187,9 +204,17 @@ class FormulaViewModel: ObservableObject {
     }
     
     func updateParams() {
+        pairBrackets()
         let tmp = self.parse(start: 0, end: elements.count, scale: 1)
         self.wholeOffsetY = -tmp.minY
         self.wholeWidth = tmp.width
+        
+        // print elements
+//        for e in elements {
+//            print("(\(e.element.string), \tid: \(e.id!), \tpair: \(e.pair == nil ? -1 : e.pair!))")
+//            
+//        }
+//        print("")
         
         // print dictionary
 //        let list = elementsDisplayDict.array.map({
@@ -207,6 +232,51 @@ class FormulaViewModel: ObservableObject {
 //        print("")
     }
     
+    func pairBrackets() {
+        var stack = Stack<BracketStackItem>()
+        
+        for i in elements.indices {
+            if (elements[i].element.type == .func_start) {
+                stack.push(BracketStackItem(type: .function, index: i))
+                
+            } else if (elements[i].element == .S_bracket) {
+                elements[i].pair = nil
+                stack.push(BracketStackItem(type: .normal, index: i))
+                
+            } else if (elements[i].element.type == .func_end) {
+                while (stack.peek()?.type != .function) {
+                    var _ = stack.pop()
+                }
+                var _ = stack.pop()
+                
+            } else if (elements[i].element == .E_bracket) {
+                elements[i].pair = nil
+                if (stack.peek()?.type == .normal) {
+                    let leftIndex = stack.pop()!.index
+                    elements[i].pair = elements[leftIndex].id
+                    elements[leftIndex].pair = elements[i].id
+                }
+            }
+        }
+        
+        struct Stack<Item> {
+            private var storage = [Item]()
+            func peek() -> Item? { storage.last }
+            mutating func push(_ item: Item) { storage.append(item)  }
+            mutating func pop() -> Item? { storage.popLast() }
+        }
+        
+        struct BracketStackItem {
+            var type: BracketType
+            var index: Int
+        }
+        
+        enum BracketType {
+            case normal
+            case function
+        }
+    }
+    
     // Input:
     // Parse section                     -- start: Int, end: Int
     // Font scale                        -- scale: CGFloat
@@ -214,39 +284,60 @@ class FormulaViewModel: ObservableObject {
     // Output:
     // Dimensions of the expression in the segment -- _: ExpressionDim
     func parse(start: Int, end: Int, startPos: CGPoint = CGPoint(x: 0, y: 0), scale: CGFloat) -> ExpressionDim {
+        
         var i = start
         var pos = startPos
         var minY: CGFloat = 0
         var maxY: CGFloat = 0
         
         while(i < end) {
-            if(elements[i].element.type != .func_start){
-                /* If the element is a character */
+            if(elements[i].element == .S_bracket && elements[i].pair != nil) {
                 
-                // Calculate the position offset of the character
-//                pos.x += elements[i].element.dimension.halfWidth() * scale
                 elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale))
                 pos.x += elements[i].element.dimension.width * scale
                 
-                // Update maxY and minY
-                minY = min(minY, elements[i].element.dimension.minY * scale)
-                maxY = max(maxY, elements[i].element.dimension.maxY * scale)
+                let headID = elements[i].id
+                var j = i + 1
                 
-//                if(textElements.contains(elements[i].name)) {
-//                    pos.x += textGap / 2.0
-//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-//                    pos.x += textGap / 2.0
-//                    
-//                } else if(symbolElements.contains(elements[i].name)) {
-//                    pos.x += symbolGap / 2.0
-//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-//                    pos.x += symbolGap / 2.0
-//                    
-//                } else if(elements[i].name == .END) {
-//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+                while (true) {
+                    if (elements[j].pair == headID) { break }
+                    j += 1
+                }
+                
+                let innerDimension: ExpressionDim = parse(start: i+1, end: j, startPos: CGPoint(x: pos.x, y: 0), scale: scale)
+                let bracketMinY = (i + 1 == j) ? -15 * scale : innerDimension.minY
+                let bracketMaxY = (i + 1 == j) ?  15 * scale : innerDimension.maxY
+                
+                minY = min(minY, bracketMinY)
+                maxY = max(maxY, bracketMaxY)
+                pos.x += innerDimension.width
+            
+                elementsDisplayDict.write(&elements[j].id, ElementDisplay(index: j, element: elements[j].element, pos: pos, scale: scale))
+                pos.x += elements[j].element.dimension.width * scale
+                
+                elementsDisplayDict.array[elements[i].id!]?.params = [bracketMinY, bracketMaxY]
+                elementsDisplayDict.array[elements[j].id!]?.params = [bracketMinY, bracketMaxY]
+                
+//                let innerDimension: ExpressionDim = parse(start: i+1, end: j, startPos: CGPoint(x: pos.x, y: 0), scale: scale)
+//                
+//                minY = min(minY, innerDimension.minY)
+//                maxY = max(maxY, innerDimension.maxY)
+//                
+//                pos.x += innerDimension.width
+//                
+//                elementsDisplayDict.write(&elements[j].id, ElementDisplay(index: j, element: elements[j].element, pos: pos, scale: scale))
+//                pos.x += elements[j].element.dimension.width * scale
+//                
+//                
+//                if (i + 1 == j) {
+//                    elementsDisplayDict.array[elements[i].id!]?.params = [-15 * scale, 15 * scale]
+//                    elementsDisplayDict.array[elements[j].id!]?.params = [-15 * scale, 15 * scale]
 //                } else {
-//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                    elementsDisplayDict.array[elements[i].id!]?.params = [innerDimension.minY, innerDimension.maxY]
+//                    elementsDisplayDict.array[elements[j].id!]?.params = [innerDimension.minY, innerDimension.maxY]
 //                }
+                
+                i = j
                 
             } else if(elements[i].element.type == .func_start) {
                 /* If the element is the start of a function */
@@ -255,27 +346,22 @@ class FormulaViewModel: ObservableObject {
                 elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale))
                 
                 // Find each sub-expression sections in the function
+                
+                let headID = elements[i].id
+                let tailID = elements[i].pair
                 var j = i + 1
-                var cnt = 0
                 var sepList: [Int] = [i]
                 
-                while(j < end) {
-                    if(elements[j].element.type == .separator && cnt == 0) {
+                while(true) {
+                    if(elements[j].pair == headID) {
                         sepList.append(j)
-                    } else if(elements[j].element.type == .func_start) {
-                        cnt += 1
-                    } else if(elements[j].element.type == .func_end) {
-                        if(cnt == 0) {
-                            sepList.append(j)
-                            break
-                        }
-                        cnt -= 1
+                        if(elements[j].id == tailID){ break }
                     }
                     j += 1
                 }
                 
                 // Calculate the dimensions of each sub-expressions by calling parse() recursively
-                var subDimensions: [ExpressionDim] = Array(0..<(sepList.count - 1)).map(
+                var subDimensions: [ExpressionDim] = Array(sepList.indices.dropLast()).map(
                     { parse(
                         start: sepList[$0] + 1,
                         end: sepList[$0+1] + 1,
@@ -307,6 +393,34 @@ class FormulaViewModel: ObservableObject {
                 
                 // Skip rest of the function
                 i = sepList.last!
+                
+            } else {
+                /* If the element is a character */
+                
+                // Calculate the position offset of the character
+                elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale))
+                pos.x += elements[i].element.dimension.width * scale
+                
+                // Update maxY and minY
+                minY = min(minY, elements[i].element.dimension.minY * scale)
+                maxY = max(maxY, elements[i].element.dimension.maxY * scale)
+                
+//                if(textElements.contains(elements[i].name)) {
+//                    pos.x += textGap / 2.0
+//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                    pos.x += textGap / 2.0
+//
+//                } else if(symbolElements.contains(elements[i].name)) {
+//                    pos.x += symbolGap / 2.0
+//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                    pos.x += symbolGap / 2.0
+//
+//                } else if(elements[i].name == .END) {
+//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                } else {
+//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
+//                }
+                
             }
             
             i += 1
@@ -331,8 +445,9 @@ class ElementDisplayDict: Equatable, ObservableObject {
     }
     
     func write(_ elementID: inout Int?, _ ed: ElementDisplay) {
-        if(elementID == nil){
-            
+        if let id = elementID {
+            array[id] = ed
+        } else {
             elementID = nextID
             array[nextID] = ed
             numberOfElements += 1
@@ -345,11 +460,6 @@ class ElementDisplayDict: Equatable, ObservableObject {
                 while(array[i] != nil) { i += 1 }
                 nextID = i
             }
-            
-        } else {
-            
-            array[elementID!] = ed
-            
         }
     }
     

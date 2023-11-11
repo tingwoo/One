@@ -73,15 +73,15 @@ struct FormulaScrollView: View {
                         if(actualPosX < 0) {
                             time = Date()
                             scrollProxy.scrollTo(cursorKey, anchor: UnitPoint(x: scrollAnchor, y: 0))
-                            print("scroll left")
+//                            print("scroll left")
                         } else if(actualPosX > fieldWidth - contentPadding * 2) {
                             time = Date()
                             scrollProxy.scrollTo(cursorKey, anchor: UnitPoint(x: 1 - scrollAnchor, y: 0))
-                            print("scroll right")
+//                            print("scroll right")
                         } else {
                             if(-time.timeIntervalSinceNow > 0.35) {
                                 scrollProxy.scrollTo(-1, anchor: UnitPoint(x: scrollOffset / fieldWidth , y: 0))
-                                print("fixed")
+//                                print("fixed")
                             }
                         }
                     }
