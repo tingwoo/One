@@ -292,9 +292,11 @@ class FormulaViewModel: ObservableObject {
         
         while(i < end) {
             if(elements[i].element == .S_bracket && elements[i].pair != nil) {
+                let w = elements[i].element.dimension.width * scale
+                let h = elements[i].element.dimension.height * scale
                 
                 elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element, pos: pos, scale: scale))
-                pos.x += elements[i].element.dimension.width * scale
+                pos.x += w
                 
                 let headID = elements[i].id
                 var j = i + 1
@@ -305,37 +307,18 @@ class FormulaViewModel: ObservableObject {
                 }
                 
                 let innerDimension: ExpressionDim = parse(start: i+1, end: j, startPos: CGPoint(x: pos.x, y: 0), scale: scale)
-                let bracketMinY = (i + 1 == j) ? -15 * scale : innerDimension.minY
-                let bracketMaxY = (i + 1 == j) ?  15 * scale : innerDimension.maxY
+                let bracketMinY = (i + 1 == j) ? -h * 0.5 : innerDimension.minY
+                let bracketMaxY = (i + 1 == j) ?  h * 0.5 : innerDimension.maxY
                 
                 minY = min(minY, bracketMinY)
                 maxY = max(maxY, bracketMaxY)
                 pos.x += innerDimension.width
             
                 elementsDisplayDict.write(&elements[j].id, ElementDisplay(index: j, element: elements[j].element, pos: pos, scale: scale))
-                pos.x += elements[j].element.dimension.width * scale
+                pos.x += w
                 
-                elementsDisplayDict.array[elements[i].id!]?.params = [bracketMinY, bracketMaxY]
-                elementsDisplayDict.array[elements[j].id!]?.params = [bracketMinY, bracketMaxY]
-                
-//                let innerDimension: ExpressionDim = parse(start: i+1, end: j, startPos: CGPoint(x: pos.x, y: 0), scale: scale)
-//                
-//                minY = min(minY, innerDimension.minY)
-//                maxY = max(maxY, innerDimension.maxY)
-//                
-//                pos.x += innerDimension.width
-//                
-//                elementsDisplayDict.write(&elements[j].id, ElementDisplay(index: j, element: elements[j].element, pos: pos, scale: scale))
-//                pos.x += elements[j].element.dimension.width * scale
-//                
-//                
-//                if (i + 1 == j) {
-//                    elementsDisplayDict.array[elements[i].id!]?.params = [-15 * scale, 15 * scale]
-//                    elementsDisplayDict.array[elements[j].id!]?.params = [-15 * scale, 15 * scale]
-//                } else {
-//                    elementsDisplayDict.array[elements[i].id!]?.params = [innerDimension.minY, innerDimension.maxY]
-//                    elementsDisplayDict.array[elements[j].id!]?.params = [innerDimension.minY, innerDimension.maxY]
-//                }
+                elementsDisplayDict.array[elements[i].id!]?.params = [w, bracketMaxY - bracketMinY, bracketMinY, bracketMaxY] // 0: width, 1: height, 2: minY, 3: maxY
+                elementsDisplayDict.array[elements[j].id!]?.params = [w, bracketMaxY - bracketMinY, bracketMinY, bracketMaxY]
                 
                 i = j
                 

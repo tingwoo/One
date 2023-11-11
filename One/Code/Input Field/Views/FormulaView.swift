@@ -95,18 +95,17 @@ struct FormulaView: View {
                                     .frame(width: 0, height: 0)
                                     .id(key)
                                 
-                                let minmax = displayProps.params ?? [-15 * scale, 15 * scale]
-                                let h = minmax[1] - minmax[0]
+                                let params = displayProps.params ?? [dim.width * scale, dim.height * scale, -dim.height * 0.5 * scale, dim.height * 0.5 * scale]
                                 
                                 BracketView(
                                     side: displayProps.element == .S_bracket ? .left : .right,
-                                    params: minmax,
+                                    params: params,
                                     scale: scale
                                 )
-                                .frame(width: 15 * scale, height: h)
                                 .modifier(AnimationModifier(value: elementDisplayDict))
                                 .modifier(CursorModifier(show: show, scale: scale))
-                                .modifier(TapModifier(index: displayProps.index, dimension: ExpressionDim(width: 15, height: h / scale), scale: scale, updateCursor: updateCursor))
+                                .modifier(TapModifier(index: displayProps.index, dimension: ExpressionDim(width: params[0] / scale, height: params[1] / scale), scale: scale, updateCursor: updateCursor))
+                                .offset(y: params[3] - params[1] / 2)
                                 
                             }
                             else if(type == .placeholder) {
