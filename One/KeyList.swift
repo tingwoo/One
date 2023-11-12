@@ -58,7 +58,7 @@ var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(text: "π", command: [.pi]),
                           KeyAttr(image: "percent", command: [.percent]),
                           
-                          //test
+                          // test
 //                          KeyAttr(text: "sin", command: [], cursorShift: 0), //21
                           KeyAttr(text: "asin", command: [], cursorShift: 0),
                           KeyAttr(text: "sinh", command: [], cursorShift: 0),
@@ -79,24 +79,24 @@ var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(text: "coth", command: [], cursorShift: 0),]
 
 
-//0 NULL
-//1 1
-//2 2
-//3 3
-//4 4
-//5 5
-//6 6
-//7 7
-//8 8
-//9 9
-//10 0
-//11 .
-//12 ANS
-//13 PLUS
-//14 MINUS
-//15 TIMES
-//16 DIVIDE
-//17 LEFT BRACKET
-//18 RIGHT BRACKET
-//19 BOTH BRACKETS
-//20 FRACTION
+// 0 NULL
+// 1 1
+// 2 2
+// 3 3
+// 4 4
+// 5 5
+// 6 6
+// 7 7
+// 8 8
+// 9 9
+// 10 0
+// 11 .
+// 12 ANS
+// 13 PLUS
+// 14 MINUS
+// 15 TIMES
+// 16 DIVIDE
+// 17 LEFT BRACKET
+// 18 RIGHT BRACKET
+// 19 BOTH BRACKETS
+// 20 FRACTION

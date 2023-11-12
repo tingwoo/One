@@ -50,7 +50,7 @@ extension Element {
             AnyView(RadicalView(leftGap: 0, width: params[0], height: params[1], xOffset: params[2], yOffset: params[3], scale: scale))
         }
     )
-    
+
     static let E_radical = Element(type: .func_end, string: "E_radical")
 }
 
@@ -61,7 +61,7 @@ struct RadicalView: View {
     var xOffset: CGFloat
     var yOffset: CGFloat
     var scale: CGFloat
-    
+
     var body: some View {
         VStack(spacing: 0) {
             if(yOffset > 0) {
@@ -72,11 +72,11 @@ struct RadicalView: View {
 //                Color.clear
 //                    .frame(width: leftGap * 2 + width + xOffset, height: height)
 //                    .border(.blue)
-                
+
                 Color.clear
                     .frame(width: xOffset, height: height)
 //                    .border(.blue)
-                
+
                 RadicalShape()
                 .stroke(style: StrokeStyle(lineWidth: 2 * scale, lineCap: .round))
                 .frame(width: width, height: height - 4 * scale)
@@ -85,12 +85,12 @@ struct RadicalView: View {
                 Color.clear.frame(width: 1, height: -yOffset * 2)
 //                    .border(.black)
             }
-                
+
         }
 //        .border(.blue)
     }
-    
-    
+
+
     struct RadicalShape: Shape {
         func path(in rect: CGRect) -> Path {
             return Path { path in
@@ -111,3 +111,4 @@ struct RadicalView: View {
 #Preview {
     RadicalView(leftGap: 0, width: 70, height: 30, xOffset: 50, yOffset: 0, scale: 1)
 }
+

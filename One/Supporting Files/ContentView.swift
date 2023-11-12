@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var formulaViewModel = FormulaViewModel()
     @StateObject var inputFieldLooks = InputFieldLooks()
-    
+
     var body: some View {
         ZStack {
             Color("AccentBackground").ignoresSafeArea()
@@ -29,3 +29,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+

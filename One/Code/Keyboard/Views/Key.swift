@@ -10,7 +10,7 @@ import SwiftUI
 struct Key<Content: View, Background: Shape>: View {
     @State private var pressed = false
     @Environment(\.colorScheme) var colorScheme
-    
+
     var action: () -> () = {}
     var width: CGFloat? = nil
     var height: CGFloat? = nil
@@ -18,10 +18,10 @@ struct Key<Content: View, Background: Shape>: View {
     var darkAdjust: CGFloat = 0.06
     var defaultAdjust: CGFloat = -0.06
 //    var pressedColor: Color = .primary
-    
+
     @ViewBuilder let content: Content
     @ViewBuilder let shape: Background
-    
+
     var body: some View {
         ZStack {
             shape
@@ -49,3 +49,4 @@ struct Key<Content: View, Background: Shape>: View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
     }
 }
+

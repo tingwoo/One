@@ -13,7 +13,7 @@ extension FormulaView {
         @State private var isOn: Bool = true
         var show: Bool
         var scale: CGFloat
-        
+
         func body(content: Content) -> some View {
             if(show) {
                 content
@@ -37,3 +37,4 @@ extension FormulaView {
         }
     }
 }
+

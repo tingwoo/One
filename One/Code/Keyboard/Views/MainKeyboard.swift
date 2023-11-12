@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MainKeyboard: View {
     var selection: Int = 0
-    
+
     var typeIn: (Int) -> () = {i in}
     var keySpacing: CGFloat = 8.0
     var keyH: CGFloat = 45
     var keyW: CGFloat = 60
-    
+
     var body: some View {
 //        Grid(horizontalSpacing: keySpacing, verticalSpacing: keySpacing) {
         Grid(horizontalSpacing: 0, verticalSpacing: 0) {
@@ -41,3 +41,4 @@ struct MainKeyboard: View {
 #Preview {
     MainKeyboard()
 }
+

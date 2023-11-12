@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct funtionBar: View {
-    
+
     @Binding var keyboardSelection: Int
-    
+
     var keyboardCount: Int = 3
     var clearAction: () -> ()
     var height: CGFloat = 40
     var moduleWidth: CGFloat = 90
-    
+
     var moduleGap: CGFloat { moduleWidth - 2 * height}
-    
+
     var body: some View {
         HStack(spacing: moduleGap * 1.5) {
             HStack {
@@ -25,9 +25,9 @@ struct funtionBar: View {
                     Image(systemName: "gearshape")
                         .font(.system(size: 20, weight: .medium))
                 } shape: { Circle() }
-                
+
                 Spacer()
-                
+
                 Key(action: {}, color: Color("AccentKeys1")) {
                     Image(systemName: "clock")
                         .font(.system(size: 20, weight: .medium))
@@ -35,7 +35,7 @@ struct funtionBar: View {
             }
             .frame(width: moduleWidth, height: height)
 
-            
+
             KeyboardPicker(
                 selection: $keyboardSelection,
                 numOfSegments: keyboardCount,
@@ -44,7 +44,7 @@ struct funtionBar: View {
                 spacing: 7.0
             )
 
-            
+
             ClearSwitch(action: clearAction)
                 .frame(width: moduleWidth, height: height)
         }
@@ -61,3 +61,4 @@ struct funtionBar: View {
     funtionBar(keyboardSelection: .constant(0), clearAction: {})
         .environmentObject(InputFieldLooks())
 }
+

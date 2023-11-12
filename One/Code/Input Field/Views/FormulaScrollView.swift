@@ -16,10 +16,10 @@ struct FormulaScrollView: View {
     @ObservedObject var formulaViewModel: FormulaViewModel
     @State var scrollOffset: CGFloat = 0
     @State var time: Date = Date()
-    
+
     var fieldWidth: CGFloat
     var contentPadding: CGFloat
-    
+
     var body: some View {
         ScrollViewReader { scrollProxy in
             ScrollView(.horizontal, showsIndicators: false) {
@@ -34,10 +34,10 @@ struct FormulaScrollView: View {
                         }
                         .frame(width: 0, height: 0)
                         .id(-1)
-                        
+
                         Spacer()
                     }
-                    
+
                     FormulaView(
                         cursorKey: formulaViewModel.cursorKey,
                         elementDisplayDict: formulaViewModel.elementsDisplayDict.array,
@@ -48,7 +48,7 @@ struct FormulaScrollView: View {
                     .frame(width: formulaViewModel.wholeWidth + contentPadding * 2)
 //                    .border(.black)
                     .offset(x: 0, y: formulaViewModel.wholeOffsetY)
-                    
+
                     Spacer()
                 }
 //                .border(.orange)
@@ -63,12 +63,12 @@ struct FormulaScrollView: View {
                 // Get cursor position
                 // Determine whether the view should shift (+/-n elements)
                 // Consider: (1) cursor position and (2) scroll offset
-                
+
                 if let cursorKey = formulaViewModel.cursorKey, let cursorPosX = formulaViewModel.elementsDisplayDict.array[cursorKey]?.pos.x {
-                    
+
                     let actualPosX = cursorPosX + scrollOffset
                     let scrollAnchor = 0.5
-                    
+
                     withAnimation {
                         if(actualPosX < 0) {
                             time = Date()
@@ -95,3 +95,4 @@ struct FormulaScrollView: View {
 //#Preview {
 //    FormulaScrollView(formulaViewModel: FormulaViewModel.example, contentPadding: 20)
 //}
+

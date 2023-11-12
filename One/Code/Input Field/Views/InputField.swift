@@ -10,23 +10,23 @@ import SwiftUI
 struct InputField: View {
     @ObservedObject var formulaViewModel: FormulaViewModel
     @EnvironmentObject var inputFieldLooks: InputFieldLooks
-    
+
     let cornerRadius: CGFloat = 16
     let fieldPadding: CGFloat = 12
     let shrinkGap: CGFloat = 6
     let contentPadding: CGFloat = 20
-    
+
     var fieldWidth: CGFloat {
         UIScreen.main.bounds.width - fieldPadding * 2
     }
-    
+
     var shrinkRatio: CGFloat {
         return (fieldWidth - shrinkGap * 2) / fieldWidth
     }
-    
+
     var body: some View {
         ZStack {
-            
+
             // Inner shadow background
             VStack(spacing: 0) {
                 HStack { Spacer() }
@@ -43,8 +43,8 @@ struct InputField: View {
                 )
             )
             .padding(inputFieldLooks.redBorder ? shrinkGap : 0)
-            
-            
+
+
             ZStack {
                 // Formula
                 VStack {
@@ -58,11 +58,15 @@ struct InputField: View {
                         }
                         .padding(contentPadding)
                     }else{
-                        FormulaScrollView(formulaViewModel: formulaViewModel, fieldWidth: fieldWidth, contentPadding: contentPadding)
+                        FormulaScrollView(
+                            formulaViewModel: formulaViewModel,
+                            fieldWidth: fieldWidth,
+                            contentPadding: contentPadding
+                        )
                     }
                     Spacer()
                 }
-                
+
                 // Answer block
                 if(inputFieldLooks.answerFieldExists) {
                     VStack {
@@ -81,7 +85,10 @@ struct InputField: View {
                         )
                     }
                     .padding(10)
-                    .rotation3DEffect(.degrees(inputFieldLooks.answerFieldRotateAngle), axis: (x: -1 , y: 0, z: 0), perspective: 0.5)
+                    .rotation3DEffect(.degrees(inputFieldLooks.answerFieldRotateAngle),
+                                      axis: (x: -1 , y: 0, z: 0),
+                                      perspective: 0.5
+                    )
                     .offset(x: 0, y: (inputFieldLooks.answerFieldAppears ? 0 : 150))
                 }
             }
@@ -95,8 +102,7 @@ struct InputField: View {
                 .fill(inputFieldLooks.redBorder ? Color("AccentRed") : .clear)
         )
         .padding(.horizontal, fieldPadding)
-        
-        
+
     }
 }
 
@@ -106,3 +112,4 @@ struct InputField: View {
 //            .environmentObject(InputFieldLooks())
 //    }
 //}
+

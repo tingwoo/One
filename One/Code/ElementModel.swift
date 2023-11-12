@@ -13,16 +13,16 @@ class Element: Equatable, Identifiable {
     let type: ElementType
     let string: String
     let dimension: ExpressionDim
-    
+
     let functionGap: (left: CGFloat, right: CGFloat)
     let hyperParams: [CGFloat]
-    
+
     let getSubScales:         (Int, CGFloat) -> CGFloat
     private let getOverallDimensions: (inout [ExpressionDim], CGFloat, [CGFloat]) -> ExpressionDim
     private let getSubPositions:      (inout [ExpressionDim], CGFloat, [CGFloat]) -> [CGPoint]
     private let getFuncViewParams:    (inout [ExpressionDim], CGFloat, [CGFloat]) -> [CGFloat]
     let functionView:         ([CGFloat], CGFloat) -> AnyView
-    
+
     init(
         type: ElementType,
         string: String = "",
@@ -47,52 +47,52 @@ class Element: Equatable, Identifiable {
         self.getFuncViewParams = getFuncViewParams
         self.functionView = functionView
     }
-    
+
     static func ==(lhs: Element, rhs: Element) -> Bool {
         return lhs.id == rhs.id
     }
-    
+
     func getOverallDimensions(dims: inout [ExpressionDim], scale: CGFloat) -> ExpressionDim {
         return self.getOverallDimensions(&dims, scale, self.hyperParams)
     }
-    
+
     func getSubPositions(dims: inout [ExpressionDim], scale: CGFloat) -> [CGPoint] {
         return self.getSubPositions(&dims, scale, self.hyperParams)
     }
-    
+
     func getFuncViewParams(dims: inout [ExpressionDim], scale: CGFloat) -> [CGFloat] {
         return self.getFuncViewParams(&dims, scale, self.hyperParams)
     }
-    
+
     static let null = Element(type: .other)
-    
-    static let one = 
+
+    static let one =
     Element(type: .character, string: "1", dimension: ExpressionDim(width: 15, height: 30))
     static let two =
     Element(type: one.type, string: "2", dimension: one.dimension)
-    static let three = 
+    static let three =
     Element(type: one.type, string: "3", dimension: one.dimension)
-    static let four = 
+    static let four =
     Element(type: one.type, string: "4", dimension: one.dimension)
-    static let five = 
+    static let five =
     Element(type: one.type, string: "5", dimension: one.dimension)
-    static let six = 
+    static let six =
     Element(type: one.type, string: "6", dimension: one.dimension)
-    static let seven = 
+    static let seven =
     Element(type: one.type, string: "7", dimension: one.dimension)
-    static let eight = 
+    static let eight =
     Element(type: one.type, string: "8", dimension: one.dimension)
-    static let nine = 
+    static let nine =
     Element(type: one.type, string: "9", dimension: one.dimension)
-    static let zero = 
+    static let zero =
     Element(type: one.type, string: "0", dimension: one.dimension)
-    
+
     static let point =
     Element(type: .character, string: ".", dimension: ExpressionDim(width: 10, height: 30))
-    
+
     static let answer =
     Element(type: .character, string: "Ans", dimension: ExpressionDim(width: 52, height: 30))
-    
+
     static let plus =
     Element(type: .symbol, string: "plus", dimension: ExpressionDim(width: 25, height: 30))
     static let minus =
@@ -101,18 +101,18 @@ class Element: Equatable, Identifiable {
     Element(type: plus.type, string: "multiply", dimension: plus.dimension)
     static let divide =
     Element(type: plus.type, string: "divide",   dimension: plus.dimension)
-    
+
     static let S_bracket =
     Element(type: .bracket, string: "(", dimension: ExpressionDim(width: 15, height: 30))
     static let E_bracket =
     Element(type: S_bracket.type, string: ")", dimension: S_bracket.dimension)
-    
+
     static let pi =
     Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30))
-    
+
     static let percent =
     Element(type: .character, string: "%", dimension: ExpressionDim(width: 25, height: 30))
-    
+
     static let PLH = Element(type: .placeholder, string: "PLH", dimension: ExpressionDim(width: 25, height: 30))
     static let SEP = Element(type: .separator, string: "SEP")
     static let END = Element(type: .other, string: "END", dimension: ExpressionDim(width: 150, height: 30))
@@ -124,5 +124,6 @@ func scaleIteration(_ value: CGFloat, coef: CGFloat, convergeTo: CGFloat = 0.4) 
     let b = coef - a
     return a * value + b
 }
+
 
 

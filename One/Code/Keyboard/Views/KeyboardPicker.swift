@@ -10,25 +10,25 @@ import SwiftUI
 struct KeyboardPicker: View {
     @Binding var selection: Int
     @Environment(\.colorScheme) var colorScheme
-    
+
     var numOfSegments: Int = 4
 //    var width: CGFloat = 200.0
     var touchAreaH: CGFloat = 40.0
     var spacing: CGFloat = 10.0
     var bgNormal: Color = Color("AccentKeys1")
     var bgHighlight: Color = Color("AccentYellow")
-    
+
 //    var segmentW: CGFloat { (width - spacing * CGFloat(numOfSegments - 1)) / CGFloat(numOfSegments) }
-    
+
     let hapticManager = HapticManager.instance
-    
+
     var body: some View {
         HStack (spacing: spacing) {
             ForEach(0..<numOfSegments, id: \.self) { i in
                 ZStack {
                     Color("AccentInputField")
                         .frame(height: touchAreaH)
-                    
+
                     (selection == i ? bgHighlight : bgNormal)
                         .clipShape(
                             RoundedRectangle(
@@ -45,7 +45,7 @@ struct KeyboardPicker: View {
                         selection = i
                         hapticManager.wheel()
                     }
-                    
+
                 }
 //                .border(.gray)
             }
@@ -62,3 +62,4 @@ struct KeyboardPicker: View {
 #Preview {
     KeyboardPicker(selection: .constant(0))
 }
+

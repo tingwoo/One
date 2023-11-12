@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ControlBar: View {
-    
+
     var shiftCursorFunc: (Int, Bool) -> ()
     var keyW: (CGFloat) -> CGFloat
     var keyH: CGFloat
     var keySpacing: CGFloat
     var background: Color = Color("AccentKeys1")
-    
+
     var body: some View {
         HStack(spacing: keySpacing) {
             Key(action: {}, width: keyW(1), height: keyH) {
@@ -23,21 +23,21 @@ struct ControlBar: View {
             } shape: {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
-            
+
             Key(action: {shiftCursorFunc(-1, true)}, width: keyW(1), height: keyH) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 25))
             } shape: {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
-            
+
             Key(action: {shiftCursorFunc(1, true)}, width: keyW(1), height: keyH) {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 25))
             } shape: {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
-            
+
             CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
         }
     }
@@ -48,3 +48,4 @@ struct ControlBar_Previews: PreviewProvider {
         ControlBar(shiftCursorFunc: {i, b in}, keyW: {i in i * 55}, keyH: 50, keySpacing: 8)
     }
 }
+

@@ -9,25 +9,25 @@
 import SwiftUI
 
 struct ClearSwitch: View {
-    
+
     var action: () -> ()
 
     @GestureState var gestureState: (switchOn: Bool, moveWidth: CGFloat) = (false, 0)
     @State var tapAnimDist: CGFloat = 0
     @State var backColor = "AccentKeys2"
     @State var pullTime: Date = Date()
-    
+
     @EnvironmentObject var inputFieldLooks: InputFieldLooks
-    
+
 //    var switchW: CGFloat = 100
 //    var switchH: CGFloat = 150
 //    var innerH: CGFloat = 38
     var gap: CGFloat = 0
-    
+
     func limit(_ proxy: GeometryProxy) -> CGFloat{
         return (proxy.size.width - proxy.size.height) / 2.0
     }
-    
+
     let hapticManager = HapticManager.instance
 
     var body: some View {
@@ -81,7 +81,7 @@ struct ClearSwitch: View {
                 })
                 .animation(.spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0), value: gestureState.switchOn)
 //                .animation(.easeInOut(duration: 0.5), value: gestureState.switchOn)
-                
+
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -110,3 +110,4 @@ struct ClearSwitch_Previews: PreviewProvider {
         .environmentObject(InputFieldLooks())
     }
 }
+

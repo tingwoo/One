@@ -12,7 +12,7 @@ struct KeyWithMenu: View {
         case inactive
         case pressing
         case dragging(translation: CGSize)
-        
+
         var translation: CGSize {
             switch self {
             case .inactive, .pressing:
@@ -21,7 +21,7 @@ struct KeyWithMenu: View {
                 return translation
             }
         }
-        
+
         var isActive: Bool {
             switch self {
             case .inactive:
@@ -30,7 +30,7 @@ struct KeyWithMenu: View {
                 return true
             }
         }
-        
+
         var isDragging: Bool {
             switch self {
             case .inactive, .pressing:
@@ -40,45 +40,45 @@ struct KeyWithMenu: View {
             }
         }
     }
-    
+
     enum DisplayType {
         case text
         case image
         case nothing
     }
-    
+
     struct DisplayContent {
         var type: DisplayType
         var string: String
-        
+
         init(_ type: DisplayType, _ string: String) {
             self.type = type
             self.string = string
         }
     }
-        
+
     @GestureState private var dragState = DragState.inactive
     @State private var selectionRecord: Int? = nil
     @Environment(\.colorScheme) var colorScheme
-    
+
     var typeIn: (Int) -> () = {i in}
-    
+
     var gap: CGFloat = 10
     var keyW: CGFloat = 70
     var keyH: CGFloat = 45
     var coef: CGFloat = 1.3
     var cornerRadius: CGFloat = 10
-    
+
     var main: Int = 3
     var optionsL: [Int] = [12, 13]
     var optionsR: [Int] = [17]
-    
+
     var numOfoptions: Int { optionsL.count + optionsR.count + 1 }
     var mainIndex: Int { optionsL.count }
     var isSingleKey: Bool { optionsL.isEmpty && optionsR.isEmpty }
-    
+
     let hapticManager = HapticManager.instance
-    
+
     func indexToKeyId(_ index: Int) -> Int {
         if(index < optionsL.count) {
             return optionsL[index]
@@ -88,10 +88,10 @@ struct KeyWithMenu: View {
             return optionsR[index - optionsL.count - 1]
         }
     }
-    
+
     func combinedOptions(_ index: Int) -> DisplayContent {
         let key: KeyAttr = keyList[indexToKeyId(index)]
-        
+
         if let string = key.text {
             return DisplayContent(DisplayType.text, string)
         } else if let string = key.image {
@@ -100,11 +100,11 @@ struct KeyWithMenu: View {
             return DisplayContent(DisplayType.text, "")
         }
     }
-    
+
     func dragWidthToSelection(_ w: CGFloat) -> Int {
         return max(0, min(numOfoptions - 1, Int((w / (keyW + gap)) + CGFloat(mainIndex) + 0.5)))
     }
-    
+
     var selection: Int {
         get {
             switch dragState {
@@ -115,7 +115,7 @@ struct KeyWithMenu: View {
             }
         }
     }
-    
+
     // Unified interface for text and symbols
     @ViewBuilder func Content(displayContent: DisplayContent) -> some View {
         switch displayContent.type {
@@ -127,7 +127,7 @@ struct KeyWithMenu: View {
             EmptyView()
         }
     }
-    
+
     // Long-press menu
     @ViewBuilder func MenuView() -> some View {
         let expandAnimationTime = 0.15
@@ -143,14 +143,14 @@ struct KeyWithMenu: View {
                                 .fill((!isSingleKey && i == selection && dragState.isDragging) ? Color("AccentKeys2") : Color("AccentKeys1"))
                                 .animation(.easeInOut(duration: 0.1), value: dragState.isDragging)
                                 .animation(.easeInOut(duration: 0.1), value: selection)
-                                
+
                         )
                 }
             }
         }
         .animation(.easeInOut(duration: 0.1).delay(expandAnimationTime), value: dragState.isDragging)
         .padding(gap / 2.0)
-        
+
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(Color("AccentKeys1"))
@@ -162,13 +162,13 @@ struct KeyWithMenu: View {
             hapticManager.wheel()
         }
     }
-    
+
     var body: some View {
         let minimumLongPressDuration = 0.2
         let longPressDrag = LongPressGesture(minimumDuration: minimumLongPressDuration)
             .sequenced(before: DragGesture())
             .updating($dragState) { value, state, transaction in
-            
+
                 switch value {
                 // Long press begins.
                 case .first(true):
@@ -186,16 +186,16 @@ struct KeyWithMenu: View {
                 guard case .second(true, let drag?) = value else {
                     return
                 }
-                
+
                 self.selectionRecord = dragWidthToSelection(drag.translation.width)
             }
-        
+
         ZStack {
             // Background
             Rectangle()
                 .fill(Color("AccentInputField"))
                 .frame(width: keyW + gap, height: keyH + gap)
-            
+
             // Connector
             if(dragState.isActive) {
                 Rectangle()
@@ -204,7 +204,7 @@ struct KeyWithMenu: View {
                     .offset(y: -keyH / 2.0)
                     .brightness(dragState.isActive ? (colorScheme == .dark ? 0.06 : -0.06) : 0)
             }
-            
+
             // Main part
             Content(displayContent: combinedOptions(mainIndex))
                 .font(.system(size: 25))
@@ -213,8 +213,8 @@ struct KeyWithMenu: View {
                 .background(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous).fill(Color("AccentKeys1")))
                 .overlay(dragState.isActive ? MenuView() : nil)
                 .brightness(dragState.isActive ? (colorScheme == .dark ? 0.06 : -0.06) : 0)
-                
-            
+
+
             // Menu indicator
             if(!dragState.isActive && !isSingleKey) {
                 Circle()
@@ -243,3 +243,4 @@ struct KeyWithMenu: View {
 #Preview {
     KeyWithMenu()
 }
+

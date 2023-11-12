@@ -169,6 +169,7 @@
 		6CC4DDE52AE189F3007E4625 /* Old */ = {
 			isa = PBXGroup;
 			children = (
+				6C3A77142AF8FD37004E823D /* ScrollableView.swift */,
 				6C5F6A662AC8975900BF75FA /* MainKeyboard_old.swift */,
 				6C4A78E62AB1E07300CD776C /* ClearAllSwitch.swift */,
 				6C15B4B82AFE577800F02283 /* Test.swift */,
@@ -255,7 +256,6 @@
 		6CCED0682AC46D7A008A96C8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				6C3A77142AF8FD37004E823D /* ScrollableView.swift */,
 				6C4A78E82AB310E400CD776C /* HapticManager.swift */,
 				6CCCA68C2AD8487800111EA4 /* Extensions.swift */,
 			);

@@ -14,7 +14,7 @@ extension FormulaView {
         var dimension: ExpressionDim
         var scale: CGFloat
         var updateCursor: (Int) -> ()
-        
+
         func body(content: Content) -> some View {
             content
                 .overlay(
@@ -23,12 +23,12 @@ extension FormulaView {
                             .contentShape(Rectangle())
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .onTapGesture { updateCursor(index) }
-                        
+
                         Color.clear
                             .contentShape(Rectangle())
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .onTapGesture { updateCursor(index + 1) }
-                        
+
 //                        Color.red
 //                            .contentShape(Rectangle())
 //                            .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -36,7 +36,7 @@ extension FormulaView {
 //                                updateCursor(index)
 //                            }
 //                            .opacity(0.2)
-//                        
+//
 //                        Color.blue
 //                            .contentShape(Rectangle())
 //                            .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -52,3 +52,5 @@ extension FormulaView {
         }
     }
 }
+
+
