@@ -19,15 +19,15 @@ struct keySet {
     }
 }
 
-var keyboardLayout: [[[keySet]]] = [[[keySet(19, optionsR: [17, 18]), keySet(7),  keySet(8),  keySet(9),  keySet(20, optionsL: [16])],
+var keyboardLayout: [[[keySet]]] = [[[keySet(19, optionsR: [17, 18]), keySet(7),  keySet(8), keySet(9), keySet(20, optionsL: [16])],
                                      [keySet(18), keySet(4),  keySet(5),  keySet(6),  keySet(15)],
-                                     [keySet(21, optionsR: [22, 23]), keySet(1),  keySet(2),  keySet(3),  keySet(14)],
+                                     [keySet(21, optionsR: [22, 23]), keySet(1), keySet(2), keySet(3), keySet(14)],
                                      [keySet(24), keySet(10), keySet(11, optionsR: [25]), keySet(12), keySet(13)]],
                                     
-                                    [[keySet(), keySet(),  keySet(),  keySet(),  keySet()],
-                                     [keySet(), keySet(),  keySet(),  keySet(),  keySet()],
-                                     [keySet(), keySet(),  keySet(),  keySet(),  keySet()],
-                                     [keySet(), keySet(),  keySet(),  keySet(),  keySet()]]]
+                                    [[keySet(), keySet(), keySet(), keySet(), keySet()],
+                                     [keySet(), keySet(), keySet(), keySet(), keySet()],
+                                     [keySet(), keySet(), keySet(), keySet(), keySet()],
+                                     [keySet(), keySet(), keySet(), keySet(), keySet()]]]
 
 var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(text: "1", command: [.one]),
