@@ -11,6 +11,6 @@ struct KeyAttr {
     var text: String?
     var image: String?
     var command: [Element]
-    var segments: [Int] = []
+    var pairList: [Int?] = []
     var cursorShift: Int = 1
 }

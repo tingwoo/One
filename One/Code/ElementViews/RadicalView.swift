@@ -8,10 +8,10 @@
 import SwiftUI
 
 extension Element {
-    static let S_radical
+    static let radical_start
     = Element(
         type: .func_start,
-        string: "S_radical",
+        string: "radical_start",
         functionGap: (left: 0, right: 4),
         getSubScales: { index, scale in
             return (index == 0 ? scaleIteration(scale, coef: 0.6) : scale)
@@ -51,7 +51,7 @@ extension Element {
         }
     )
 
-    static let E_radical = Element(type: .func_end, string: "E_radical")
+    static let radical_end = Element(type: .func_end, string: "radical_end")
 }
 
 struct RadicalView: View {

@@ -8,10 +8,10 @@
 import SwiftUI
 
 extension Element {
-    static let S_frac
+    static let frac_start
     = Element(
         type: .func_start,
-        string: "S_frac",
+        string: "frac_start",
         functionGap: (left: 3, right: 3),
         hyperParams: [5, 3], // 0: extended Length, 1: gap between number and line
 //        functionGap: (left: 20, right: 20),
@@ -55,7 +55,7 @@ extension Element {
         }
     )
 
-    static let E_frac = Element(type: .func_end, string: "E_frac")
+    static let frac_end = Element(type: .func_end, string: "frac_end")
 }
 
 struct FractionView: View {

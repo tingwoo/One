@@ -41,7 +41,7 @@ struct FormulaScrollView: View {
                     FormulaView(
                         cursorKey: formulaViewModel.cursorKey,
                         elementDisplayDict: formulaViewModel.elementsDisplayDict.array,
-                        updateCursor: formulaViewModel.updateCursor
+                        setCursor: formulaViewModel.setCursor
                     )
                     .padding(contentPadding)
 //                    .frame(width: 3000)

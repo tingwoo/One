@@ -18,8 +18,6 @@ class FormulaViewModel: ObservableObject {
     @Published var cursorLocation: Int = 0
     @Published var cursorKey: Int? = nil
 
-    var fractionGap: CGFloat = 4 //
-
     var hapticManager = HapticManager.instance
 
 //    static let example = FormulaViewModel(elements: [ElementWithID(element: .one), ElementWithID(element: .END)])
@@ -28,16 +26,17 @@ class FormulaViewModel: ObservableObject {
 //                                                     ElementWithID(element: .plus),
 //                                                     ElementWithID(element: .two),
 //                                                     ElementWithID(element: .multiply),
-//                                                     ElementWithID(element: .S_frac),
+//                                                     ElementWithID(element: .frac_start),
 //                                                     ElementWithID(element: .five),
 //                                                     ElementWithID(element: .SEP),
 //                                                     ElementWithID(element: .seven),
-//                                                     ElementWithID(element: .E_frac),
+//                                                     ElementWithID(element: .frac_end),
 //                                                     ElementWithID(element: .END)])
 
     init() {
         let firstElement = ElementWithID(element: .END)
         elements = [firstElement]
+        elementsDisplayDict.write(&elements[0].id, ElementDisplay(index: 0, element: elements[0].element))
         cursorLocation = 0
     }
 
@@ -49,41 +48,52 @@ class FormulaViewModel: ObservableObject {
 
     func typeIn(_ index: Int) {
         let command = keyList[index].command
-        let shift = keyList[index].cursorShift
 
         if !command.isEmpty {
             if elements[cursorLocation].element == .PLH {
                 removeElement(at: cursorLocation)
             }
-            elements.insert(contentsOf: command.map({ElementWithID(element: $0)}), at: cursorLocation)
 
-            // give each element an ID
-            for i in cursorLocation..<(cursorLocation + command.count) {
-                elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element))
-            }
+            insertElement(command, at: cursorLocation)
 
-            // if inserted a function, determine pair ID
-            if !keyList[index].segments.isEmpty {
-
-                // head
-                elements[cursorLocation].pair = elements[cursorLocation + keyList[index].segments.last!].id
-
-                // seps and tail
-                for i in keyList[index].segments.indices {
-                    elements[cursorLocation + keyList[index].segments[i]].pair = elements[cursorLocation].id
+            // determine pair ID
+            for i in keyList[index].pairList.indices {
+                if let p = keyList[index].pairList[i] {
+                    elements[cursorLocation + i].pair = elements[cursorLocation + p].id
                 }
             }
 
-            updateParams()
-
-            cursorLocation += shift
+            cursorLocation += keyList[index].cursorShift
             updateCursorKey()
+            updateParams()
         }
     }
 
     private func insertElement(_ element: Element, at: Int) {
-        if (0...elements.count).contains(at) {
-            elements.insert(ElementWithID(element: element), at: at)
+        if (0...elements.count).contains(at) == false {
+            return
+        }
+
+        elements.insert(ElementWithID(element: element), at: at)
+        elementsDisplayDict.write(&elements[at].id, ElementDisplay(index: at, element: elements[at].element))
+    }
+
+    private func insertElement(_ elementList: [Element], at: Int) {
+        if (0...elements.count).contains(at) == false {
+            return
+        }
+        
+        // 1. insert one at a time
+        // for i in elementList.indices {
+        //     elements.insert(ElementWithID(element: elementList[i]), at: at + i)
+        // }
+
+        // 2. insert all at once
+        elements.insert(contentsOf: elementList.map({ElementWithID(element: $0)}), at: at)
+
+        // give each element an ID
+        for i in at..<(at + elementList.count) {
+            elementsDisplayDict.write(&elements[i].id, ElementDisplay(index: i, element: elements[i].element))
         }
     }
 
@@ -99,7 +109,15 @@ class FormulaViewModel: ObservableObject {
     func backspace() {
         func insertPlh(at: Int) {
             if at > 0 {
-                let needPlhCases: [(ElementType, ElementType)] = [(.func_start, .separator), (.separator, .separator), (.separator, .func_end), (.func_start, .func_end)]
+                let needPlhCases: [(ElementType, ElementType)] = [
+                    (.separator, .separator),
+                    (.func_start, .separator),
+                    (.separator, .func_end),
+                    (.func_start, .func_end),
+                    (.semi_start, .separator),
+                    (.separator, .semi_end),
+                    (.semi_start, .semi_end)
+                ]
                 let currentCase: (ElementType, ElementType) = (elements[at - 1].element.type, elements[at].element.type)
                 if needPlhCases.contains(where: { pair in return pair == currentCase }) {
                     insertElement(.PLH, at: at)
@@ -114,11 +132,11 @@ class FormulaViewModel: ObservableObject {
                 return
             }
 
-            self.shiftCursor(-1, withHaptics: false)
+            self.shiftCursor(-1, withHaptics: false, skipInvisible: false)
 
             switch elements[cursorLocation].element.type {
 
-            case .placeholder, .separator, .func_end:
+            case .placeholder, .separator, .func_end, .semi_end:
                 break
 
             case .func_start:
@@ -142,6 +160,27 @@ class FormulaViewModel: ObservableObject {
                     insertPlh(at: cursorLocation)
                 }
 
+            case .semi_start:
+                var i: Int = cursorLocation + 1
+                var isEmpty: Bool = true
+
+                while elements[i].element.type != .semi_end {
+                    if elements[i].element.type != .placeholder && elements[i].element.type != .separator {
+                        isEmpty = false
+                        break
+                    }
+                    i += 1
+                }
+
+                if isEmpty { // function is empty
+                    while elements[cursorLocation].element.type != .semi_end {
+                        removeElement(at: cursorLocation)
+                    }
+                    removeElement(at: cursorLocation)
+                    deletedSomething = true
+                    insertPlh(at: cursorLocation)
+                }
+
             default:
                 removeElement(at: cursorLocation)
                 deletedSomething = true
@@ -158,44 +197,64 @@ class FormulaViewModel: ObservableObject {
         elementsDisplayDict.eraseAll()
 
         elements.append(ElementWithID(element: .END))
+        elementsDisplayDict.write(&elements[0].id, ElementDisplay(index: 0, element: elements[0].element))
         cursorLocation = 0
-        updateCursorKey()
         updateParams()
     }
 
-    func shiftCursor(_ step: Int, withHaptics: Bool) {
-        step > 0 ? shiftR(withHaptics) : shiftL(withHaptics)
+    func shiftCursor(_ direction: Int, withHaptics: Bool, skipInvisible: Bool) {
+        let step = direction > 0 ? 1 : -1
+        let originalLocation = cursorLocation
+
+        if elements.indices.contains(cursorLocation + step) {
+            cursorLocation += step
+            if !skipInvisible { 
+                updateCursorKey()
+                return
+            }
+            skipInvisibleElement()
+            if cursorLocation == originalLocation && elements.indices.contains(cursorLocation + 2 * step) {
+                cursorLocation += 2 * step
+            }
+        }
+
         updateCursorKey()
     }
 
-    private func shiftL(_ withHaptics: Bool) {
-        if cursorLocation - 1 >= 0 {
-            cursorLocation -= 1
-            if cursorLocation - 1 >= 0 && elements[cursorLocation - 1].element == .PLH {
-                cursorLocation -= 1
-            }
-            if withHaptics {
-                cursorLocation == 0 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
-            }
-        }
-    }
+//    private func shiftL(_ withHaptics: Bool) {
+//        if cursorLocation - 1 >= 0 {
+//            cursorLocation -= 1
+//            if cursorLocation - 1 >= 0 && elements[cursorLocation - 1].element == .PLH {
+//                cursorLocation -= 1
+//            }
+//            if withHaptics {
+//                cursorLocation == 0 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
+//            }
+//        }
+//    }
+//
+//    private func shiftR(_ withHaptics: Bool) {
+//        if cursorLocation + 1 < elements.count {
+//            cursorLocation += 1
+//            if elements[cursorLocation - 1].element == .PLH {
+//                cursorLocation += 1
+//            }
+//            if withHaptics {
+//                cursorLocation == elements.count - 1 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
+//            }
+//        }
+//    }
 
-    private func shiftR(_ withHaptics: Bool) {
-        if cursorLocation + 1 < elements.count {
-            cursorLocation += 1
-            if elements[cursorLocation - 1].element == .PLH {
-                cursorLocation += 1
-            }
-            if withHaptics {
-                cursorLocation == elements.count - 1 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
-            }
-        }
-    }
-
-    func updateCursor(index: Int) {
+    func setCursor(index: Int) {
         if index >= 0 && index < elements.count {
             cursorLocation = index
             updateCursorKey()
+        }
+    }
+
+    func updateCursorLocation() {
+        if let newLocation = elements.firstIndex(where: { $0.id == cursorKey }) {
+            cursorLocation = newLocation
         }
     }
 
@@ -203,18 +262,41 @@ class FormulaViewModel: ObservableObject {
         cursorKey = elements[cursorLocation].id
     }
 
+    func skipInvisibleElement() {
+        if cursorLocation >= 1 && elements[cursorLocation - 1].element == .PLH {
+            cursorLocation -= 1
+            print("skip PLH")
+        }
+
+        if elements[cursorLocation].element.type == .semi_start {
+            cursorLocation += 1
+            print("skip semi_start")
+        }
+
+    }
+
     func updateParams() {
         pairBrackets()
+
+        handleSemiFunctions()
+
+        skipInvisibleElement()
+
+        updateCursorKey()
+
         let tmp = self.parse(start: 0, end: elements.count, scale: 1)
         self.wholeOffsetY = -tmp.minY
         self.wholeWidth = tmp.width
 
         // print elements
-//        for e in elements {
+        for e in elements {
 //            print("(\(e.element.string), \tid: \(e.id!), \tpair: \(e.pair == nil ? -1 : e.pair!))")
-//
-//        }
-//        print("")
+            print("\(e.element.string),\t\tid: \(e.id ?? 0),\t\tpair: \(e.pair ?? 0)")
+
+        }
+        print("Cursor Location: \(cursorLocation)")
+        print("Cursor Key:      \(cursorKey ?? -1)")
+        print("")
 
         // print dictionary
 //        let list = elementsDisplayDict.array.map({
@@ -232,30 +314,149 @@ class FormulaViewModel: ObservableObject {
 //        print("")
     }
 
+    func handleSemiFunctions() {
+        var i = 0
+        var originalStartIndex: [Int: Int] = [:]
+
+        // remove all semi_start
+        var cnt = 0
+        while i < elements.count {
+            if elements[i].element.type == .semi_start {
+                originalStartIndex[elements[i].pair!] = i + cnt
+                cnt += 1
+                removeElement(at: i)
+                if elements[i].element == .PLH {
+                    removeElement(at: i)
+                    cursorLocation -= 1
+                }
+                continue
+            }
+            i += 1
+        }
+
+        // enclose the previous number / function / paired brackets
+        i = 0
+        while i < elements.count {
+            if elements[i].element == .SEP2 {
+                let tmpIdentifier: Int? = elements[i].pair
+                var newHeadIndex: Int = 0
+
+                if i == 0 {
+                    insertElement([.power_start, .PLH], at: 0)
+                    cursorLocation += 1
+                    newHeadIndex = 0
+                    i = 2
+                } else {
+                    switch elements[i-1].element.type {
+                    case .number:
+                        var j = i - 2
+                        while j >= 0 && elements[j].element.type == .number {
+                            j -= 1
+                        }
+                        insertElement(.power_start, at: j+1)
+                        newHeadIndex = j+1
+                        i += 1
+
+                    case .character:
+                        insertElement(.power_start, at: i-1)
+                        newHeadIndex = i-1
+                        i += 1
+
+                    case .func_end:
+                        let pair = elements[i-1].pair
+                        if let j = elements.firstIndex(where: { $0.id == pair }) {
+                            insertElement(.power_start, at: j)
+                            newHeadIndex = j
+                            i += 1
+                        } else {
+                            fatalError("func_end pair can't be found.")
+                        }
+
+                    case .bracket_end:
+                        if let pair = elements[i-1].pair {
+                            if let j = elements.firstIndex(where: { $0.id == pair }) {
+                                insertElement(.power_start, at: j)
+                                newHeadIndex = j
+                                i += 1
+                            } else {
+                                fatalError("bracket_end pair can't be found.")
+                            }
+                        } else {
+                            insertElement([.power_start, .PLH], at: i)
+                            cursorLocation += 1
+                            newHeadIndex = i
+                            i += 2
+                        }
+
+                    default:
+                        insertElement([.power_start, .PLH], at: i)
+                        cursorLocation += 1
+                        newHeadIndex = i
+                        i += 2
+                    }
+                }
+
+                var k = i
+                while true {
+                    if elements[k].pair == tmpIdentifier {
+                        elements[k].pair = elements[newHeadIndex].id
+                        if elements[k].element.type == .semi_end {
+                            elements[newHeadIndex].pair = elements[k].id
+                            break
+                        }
+                    }
+                    k += 1
+                }
+
+            }
+            i += 1
+        }
+
+        // check if any semi_start move past the cursor location
+        i = 0
+        while i < elements.count {
+            if elements[i].element == .power_start {
+                if (i - cursorLocation) < 0 && originalStartIndex[elements[i].pair!]! >= cursorLocation {
+                    cursorLocation += 1
+                    print("plus 1")
+                } else if (i - cursorLocation) >= 0 && originalStartIndex[elements[i].pair!]! < cursorLocation {
+                    cursorLocation -= 1
+                    print("minus 1")
+                }
+            }
+            i += 1
+        }
+    }
+
     func pairBrackets() {
         var stack = Stack<BracketStackItem>()
 
         for i in elements.indices {
-            if elements[i].element.type == .func_start {
+            switch elements[i].element.type {
+            case .func_start:
                 stack.push(BracketStackItem(type: .function, index: i))
 
-            } else if elements[i].element == .S_bracket {
+            case .bracket_start:
                 elements[i].pair = nil
                 stack.push(BracketStackItem(type: .normal, index: i))
 
-            } else if elements[i].element.type == .func_end {
+            case .func_end:
+                // pop all the elements pushed within the function
                 while stack.peek()?.type != .function {
                     var _ = stack.pop()
                 }
                 var _ = stack.pop()
 
-            } else if elements[i].element == .E_bracket {
+            case .bracket_end:
                 elements[i].pair = nil
                 if stack.peek()?.type == .normal {
                     let leftIndex = stack.pop()!.index
                     elements[i].pair = elements[leftIndex].id
                     elements[leftIndex].pair = elements[i].id
                 }
+
+            default:
+                break
             }
         }
 
@@ -291,7 +492,7 @@ class FormulaViewModel: ObservableObject {
         var maxY: CGFloat = 0
 
         while i < end {
-            if elements[i].element == .S_bracket && elements[i].pair != nil {
+            if elements[i].element == .bracket_start && elements[i].pair != nil {
                 let w = elements[i].element.dimension.width * scale
                 let h = elements[i].element.dimension.height * scale
 
@@ -322,7 +523,7 @@ class FormulaViewModel: ObservableObject {
 
                 i = j
 
-            } else if elements[i].element.type == .func_start {
+            } else if elements[i].element.type == .func_start || elements[i].element.type == .semi_start {
                 /* If the element is the start of a function */
 
                 pos.x += elements[i].element.functionGap.left * scale
@@ -387,22 +588,6 @@ class FormulaViewModel: ObservableObject {
                 // Update maxY and minY
                 minY = min(minY, elements[i].element.dimension.minY * scale)
                 maxY = max(maxY, elements[i].element.dimension.maxY * scale)
-
-//                if(textElements.contains(elements[i].name)) {
-//                    pos.x += textGap / 2.0
-//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-//                    pos.x += textGap / 2.0
-//
-//                } else if(symbolElements.contains(elements[i].name)) {
-//                    pos.x += symbolGap / 2.0
-//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-//                    pos.x += symbolGap / 2.0
-//
-//                } else if(elements[i].name == .END) {
-//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-//                } else {
-//                    elementsParams[elements[i].id] = ElementParamsModel(name: elements[i].name, pos: pos)
-//                }
 
             }
 

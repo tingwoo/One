@@ -20,7 +20,7 @@ struct keySet {
 }
 
 var keyboardLayout: [[[keySet]]] = [[[keySet(19, optionsR: [17, 18]), keySet(7),  keySet(8), keySet(9), keySet(20, optionsL: [16])],
-                                     [keySet(18), keySet(4),  keySet(5),  keySet(6),  keySet(15)],
+                                     [keySet(26, optionsR: [27, 28]), keySet(4),  keySet(5),  keySet(6),  keySet(15)],
                                      [keySet(21, optionsR: [22, 23]), keySet(1), keySet(2), keySet(3), keySet(14)],
                                      [keySet(24), keySet(10), keySet(11, optionsR: [25]), keySet(12), keySet(13)]],
                                     
@@ -46,18 +46,22 @@ var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(image: "minus", command: [.minus]),
                           KeyAttr(image: "multiply", command: [.multiply]),
                           KeyAttr(image: "divide", command: [.divide]),
-                          KeyAttr(text: "(", command: [.S_bracket]),
-                          KeyAttr(text: ")", command: [.E_bracket]),
-                          KeyAttr(text: "( )", command: [.S_bracket, .E_bracket]),
-                          
-                          KeyAttr(text: "frac", command: [.S_frac, .PLH, .SEP, .PLH, .E_frac], segments: [2, 4]),
-                          KeyAttr(image: "x.squareroot", command: [.S_radical, .PLH, .SEP, .PLH, .E_radical], segments: [2, 4]),
-                          KeyAttr(text: "sqrt", command: [.S_radical, .two, .SEP, .PLH, .E_radical], segments: [2, 4], cursorShift: 3),
-                          KeyAttr(text: "cbrt", command: [.S_radical, .three, .SEP, .PLH, .E_radical], segments: [2, 4], cursorShift: 3),
-                          
+                          KeyAttr(text: "(", command: [.bracket_start]),
+                          KeyAttr(text: ")", command: [.bracket_end]),
+                          KeyAttr(text: "( )", command: [.bracket_start, .bracket_end]),
+
+                          KeyAttr(text: "frac", command: [.frac_start, .PLH, .SEP, .PLH, .frac_end], pairList: [4, nil, 0, nil, 0]),
+                          KeyAttr(image: "x.squareroot", command: [.radical_start, .PLH, .SEP, .PLH, .radical_end], pairList: [4, nil, 0, nil, 0]),
+                          KeyAttr(text: "sqrt", command: [.radical_start, .two, .SEP, .PLH, .radical_end], pairList: [4, nil, 0, nil, 0], cursorShift: 3),
+                          KeyAttr(text: "cbrt", command: [.radical_start, .three, .SEP, .PLH, .radical_end], pairList: [4, nil, 0, nil, 0], cursorShift: 3),
+
                           KeyAttr(text: "π", command: [.pi]),
                           KeyAttr(image: "percent", command: [.percent]),
-                          
+
+                          KeyAttr(text: "pow", command: [.power_start, .PLH, .SEP2, .PLH, .power_end], pairList: [4, nil, 0, nil, 0], cursorShift: 3),
+                          KeyAttr(text: "p2", command: [.power_start, .PLH, .SEP2, .two, .power_end], pairList: [4, nil, 0, nil, 0], cursorShift: 5),
+                          KeyAttr(text: "p3", command: [.power_start, .PLH, .SEP2, .three, .power_end], pairList: [4, nil, 0, nil, 0], cursorShift: 5),
+
                           // test
 //                          KeyAttr(text: "sin", command: [], cursorShift: 0), //21
                           KeyAttr(text: "asin", command: [], cursorShift: 0),

@@ -11,7 +11,7 @@ struct FormulaView: View {
 
     var cursorKey: Int?
     var elementDisplayDict: [ElementDisplay?]
-    var updateCursor: (Int) -> ()
+    var setCursor: (Int) -> ()
 
 //    let baseTextSize
 
@@ -54,7 +54,7 @@ struct FormulaView: View {
                             }
 
                         }
-                        else if(type == .character) {
+                        else if(type == .character || type == .number) {
 
                             Color.clear
                                 .frame(width: 0, height: 0)
@@ -68,7 +68,7 @@ struct FormulaView: View {
                             }
                             .frame(width: dim.width * scale, height: dim.height * scale)
                             .modifier(CursorModifier(show: show, scale: scale))
-                            .modifier(TapModifier(index: displayProps.index, dimension: dim, scale: scale, updateCursor: updateCursor))
+                            .modifier(TapModifier(index: displayProps.index, dimension: dim, scale: scale, setCursor: setCursor))
 
                         }
                         else if(type == .symbol) {
@@ -85,10 +85,10 @@ struct FormulaView: View {
                             }
                             .frame(width: dim.width * scale, height: dim.height * scale)
                             .modifier(CursorModifier(show: show, scale: scale))
-                            .modifier(TapModifier(index: displayProps.index, dimension: dim, scale: scale, updateCursor: updateCursor))
+                            .modifier(TapModifier(index: displayProps.index, dimension: dim, scale: scale, setCursor: setCursor))
 
                         }
-                        else if(type == .bracket) {
+                        else if(type == .bracket_start || type == .bracket_end) {
                             Color.clear
                                 .frame(width: 0, height: 0)
                                 .id(key)
@@ -96,13 +96,13 @@ struct FormulaView: View {
                             let params = displayProps.params ?? [dim.width * scale, dim.height * scale, -dim.height * 0.5 * scale, dim.height * 0.5 * scale]
 
                             BracketView(
-                                side: displayProps.element == .S_bracket ? .left : .right,
+                                side: displayProps.element == .bracket_start ? .left : .right,
                                 params: params,
                                 scale: scale
                             )
                             .modifier(AnimationModifier(value: elementDisplayDict))
 
-                            .modifier(TapModifier(index: displayProps.index, dimension: ExpressionDim(width: params[0] / scale, height: params[1] / scale), scale: scale, updateCursor: updateCursor))
+                            .modifier(TapModifier(index: displayProps.index, dimension: ExpressionDim(width: params[0] / scale, height: params[1] / scale), scale: scale, setCursor: setCursor))
                             .offset(y: params[3] - params[1] / 2)
                             .modifier(CursorModifier(show: show, scale: scale))
 
@@ -119,7 +119,7 @@ struct FormulaView: View {
                             .frame(width: dim.width * scale, height: dim.height * scale)
                             .id(key)
                             .onTapGesture {
-                                updateCursor(displayProps.index)
+                                setCursor(displayProps.index)
                             }
 
                         } else if(displayProps.element == .END) {
@@ -131,7 +131,7 @@ struct FormulaView: View {
                             Color.clear
                                 .frame(width: dim.width * scale, height: dim.height * scale)
                                 .modifier(CursorModifier(show: show, scale: scale))
-                                .modifier(TapModifier(index: displayProps.index, dimension: dim, scale: scale, updateCursor: updateCursor))
+                                .modifier(TapModifier(index: displayProps.index, dimension: dim, scale: scale, setCursor: setCursor))
 
 
                         } else {

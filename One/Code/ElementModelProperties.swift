@@ -8,13 +8,17 @@
 import Foundation
 
 enum ElementType {
+    case number
     case character
     case symbol
     case func_start
     case func_end
+    case semi_start
+    case semi_end
     case separator
     case placeholder
-    case bracket
+    case bracket_start
+    case bracket_end
     case other
 }
 

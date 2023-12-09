@@ -67,7 +67,7 @@ class Element: Equatable, Identifiable {
     static let null = Element(type: .other)
 
     static let one =
-    Element(type: .character, string: "1", dimension: ExpressionDim(width: 15, height: 30))
+    Element(type: .number, string: "1", dimension: ExpressionDim(width: 15, height: 30))
     static let two =
     Element(type: one.type, string: "2", dimension: one.dimension)
     static let three =
@@ -88,7 +88,7 @@ class Element: Equatable, Identifiable {
     Element(type: one.type, string: "0", dimension: one.dimension)
 
     static let point =
-    Element(type: .character, string: ".", dimension: ExpressionDim(width: 10, height: 30))
+    Element(type: .number, string: ".", dimension: ExpressionDim(width: 10, height: 30))
 
     static let answer =
     Element(type: .character, string: "Ans", dimension: ExpressionDim(width: 52, height: 30))
@@ -102,10 +102,10 @@ class Element: Equatable, Identifiable {
     static let divide =
     Element(type: plus.type, string: "divide",   dimension: plus.dimension)
 
-    static let S_bracket =
-    Element(type: .bracket, string: "(", dimension: ExpressionDim(width: 15, height: 30))
-    static let E_bracket =
-    Element(type: S_bracket.type, string: ")", dimension: S_bracket.dimension)
+    static let bracket_start =
+    Element(type: .bracket_start, string: "(", dimension: ExpressionDim(width: 15, height: 30))
+    static let bracket_end =
+    Element(type: .bracket_end, string: ")", dimension: bracket_start.dimension)
 
     static let pi =
     Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30))
@@ -113,8 +113,47 @@ class Element: Equatable, Identifiable {
     static let percent =
     Element(type: .character, string: "%", dimension: ExpressionDim(width: 25, height: 30))
 
+    static let power_start =
+    Element(
+        type: .semi_start,
+        string: "power_start",
+        functionGap: (left: 0, right: 2),
+        getSubScales: { index, scale in
+            return (index == 0 ? scale : scaleIteration(scale, coef: 0.6))
+        },
+        getOverallDimensions: { dims, scale, params in
+            // 0: base
+            // 1: exponent
+            let coef: CGFloat = 0.25
+            let h = (dims[1].height * (1 - coef) < dims[0].height / 2.0) ? dims[0].height + dims[1].height * coef : dims[0].height / 2.0 + dims[1].height
+            return ExpressionDim(
+                width: dims[0].width + dims[1].width + 2 * scale,
+                height: h,
+                minY: dims[0].maxY - h,
+                maxY: dims[0].maxY
+            )
+        },
+        getSubPositions: { dims, scale, params in
+            let coef: CGFloat = 0.25
+            let h = (dims[1].height * (1 - coef) < dims[0].height / 2.0) ? dims[0].height + dims[1].height * coef : dims[0].height / 2.0 + dims[1].height
+            return [
+                CGPoint(x: 0, y: 0),
+                CGPoint(x: dims[0].width + 2 * scale, y: -(h - dims[0].maxY + dims[1].minY))
+            ]
+        },
+        getFuncViewParams: { dims, scale, params in
+            return []
+        },
+        functionView: { params, scale in
+            AnyView(EmptyView())
+        }
+    )
+
+    static let power_end = Element(type: .semi_end, string: "power_end")
+
     static let PLH = Element(type: .placeholder, string: "PLH", dimension: ExpressionDim(width: 25, height: 30))
     static let SEP = Element(type: .separator, string: "SEP")
+    static let SEP2 = Element(type: .separator, string: "SEP2")
     static let END = Element(type: .other, string: "END", dimension: ExpressionDim(width: 150, height: 30))
 
 }

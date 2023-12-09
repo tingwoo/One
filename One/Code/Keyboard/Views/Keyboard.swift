@@ -83,7 +83,7 @@ struct Keyboard: View {
                 .offset(x: -keySpacing / 4.0) // because of the expanded touch area of keys
 
                 ControlBar(
-                    shiftCursorFunc: formulaViewModel.shiftCursor,
+                    shiftCursorFunc: { i, b in formulaViewModel.shiftCursor(i, withHaptics: b, skipInvisible: true)},
                     keyW: keyW,
                     keyH: keyHeight * ctrlBarCoef,
                     keySpacing: keySpacing

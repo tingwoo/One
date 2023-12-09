@@ -10,6 +10,7 @@ import Foundation
 struct ElementWithID: Identifiable {
     var id: Int? = nil
     var pair: Int? = nil
+    var partners: [Int?]? = nil
     var element: Element
 }
 

@@ -13,7 +13,7 @@ extension FormulaView {
         var index: Int
         var dimension: ExpressionDim
         var scale: CGFloat
-        var updateCursor: (Int) -> ()
+        var setCursor: (Int) -> ()
 
         func body(content: Content) -> some View {
             content
@@ -22,18 +22,18 @@ extension FormulaView {
                         Color.clear
                             .contentShape(Rectangle())
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .onTapGesture { updateCursor(index) }
+                            .onTapGesture { setCursor(index) }
 
                         Color.clear
                             .contentShape(Rectangle())
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .onTapGesture { updateCursor(index + 1) }
+                            .onTapGesture { setCursor(index + 1) }
 
 //                        Color.red
 //                            .contentShape(Rectangle())
 //                            .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                            .onTapGesture {
-//                                updateCursor(index)
+//                                setCursor(index)
 //                            }
 //                            .opacity(0.2)
 //
@@ -41,7 +41,7 @@ extension FormulaView {
 //                            .contentShape(Rectangle())
 //                            .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                            .onTapGesture {
-//                                updateCursor(index + 1)
+//                                setCursor(index + 1)
 //                            }
 //                            .opacity(0.2)
                     }
