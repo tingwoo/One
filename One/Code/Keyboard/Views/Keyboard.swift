@@ -65,8 +65,7 @@ struct Keyboard: View {
 
                         Key(
                             action: {
-                                inputFieldViewModel.showAnswerField(true)
-//                                inputFieldViewModel.bounceAnswerField()
+                                inputFieldViewModel.setAnswerFieldExistence(true)
                             },
                             color: Color("AccentYellow"),
                             darkAdjust: -0.1,

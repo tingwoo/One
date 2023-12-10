@@ -13,11 +13,11 @@ class InputFieldViewModel: ObservableObject {
     @Published var answerFieldExists: Bool = false
     @Published var answerFieldRotateAngle: CGFloat = 0
 
-    func showRedBorder(_ show: Bool){
+    func setRedBorder(_ show: Bool){
         redBorder = show
     }
 
-    func showAnswerField(_ show: Bool){
+    func setAnswerFieldExistence(_ show: Bool){
         if answerFieldExists && show {
             bounceAnswerField()
         }
