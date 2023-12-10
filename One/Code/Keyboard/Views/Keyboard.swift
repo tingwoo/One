@@ -65,7 +65,18 @@ struct Keyboard: View {
 
                         Key(
                             action: {
-                                inputFieldViewModel.setAnswerFieldExistence(true)
+                                if formulaViewModel.elements.count > 1 {
+                                    var result = ""
+                                    do {
+                                        result = try Calculator.evaluate(expression: formulaViewModel.elements)
+                                        inputFieldViewModel.setAnswerFieldColor(Color("AccentAnswerField"))
+                                    } catch {
+                                        result = "錯誤"
+                                        inputFieldViewModel.setAnswerFieldColor(Color("AccentAnswerFieldRed"))
+                                    }
+                                    inputFieldViewModel.setAnswerFieldContent(result)
+                                    inputFieldViewModel.setAnswerFieldExistence(true)
+                                }
                             },
                             color: Color("AccentYellow"),
                             darkAdjust: -0.1,

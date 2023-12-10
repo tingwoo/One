@@ -13,6 +13,10 @@ extension Element {
         type: .func_start,
         string: "radical_start",
         functionGap: (left: 0, right: 4),
+        numOfParams: 2,
+        evaluate: { params in
+            return try BPow(params[1], BComplex(re: 1) / params[0])
+        },
         getSubScales: { index, scale in
             return (index == 0 ? scaleIteration(scale, coef: 0.6) : scale)
         },

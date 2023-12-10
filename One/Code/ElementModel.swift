@@ -17,6 +17,10 @@ class Element: Equatable, Identifiable {
     let functionGap: (left: CGFloat, right: CGFloat)
     let hyperParams: [CGFloat]
 
+    let characterValue: BComplex
+    let numOfParams: Int
+    let evaluate: ([BComplex]) throws -> BComplex
+
     let getSubScales:         (Int, CGFloat) -> CGFloat
     private let getOverallDimensions: (inout [ExpressionDim], CGFloat, [CGFloat]) -> ExpressionDim
     private let getSubPositions:      (inout [ExpressionDim], CGFloat, [CGFloat]) -> [CGPoint]
@@ -29,6 +33,9 @@ class Element: Equatable, Identifiable {
         dimension: ExpressionDim = ExpressionDim(),
         functionGap: (left: CGFloat, right: CGFloat) = (left: 0, right: 0),
         hyperParams: [CGFloat] = [],
+        characterValue: BComplex = BComplex(),
+        numOfParams: Int = 0,
+        evaluate:             @escaping ([BComplex]) throws -> BComplex = {_ in return BComplex()},
         getSubScales:         @escaping (Int, CGFloat) -> CGFloat = { _, _ in return 1 },
         getOverallDimensions: @escaping (inout [ExpressionDim], CGFloat, [CGFloat]) -> ExpressionDim = { _, _, _ in return ExpressionDim() },
         getSubPositions:      @escaping (inout [ExpressionDim], CGFloat, [CGFloat]) -> [CGPoint] = { _, _, _ in return [] },
@@ -41,6 +48,9 @@ class Element: Equatable, Identifiable {
         self.dimension = dimension
         self.functionGap = functionGap
         self.hyperParams = hyperParams
+        self.characterValue = characterValue
+        self.numOfParams = numOfParams
+        self.evaluate = evaluate
         self.getSubScales = getSubScales
         self.getOverallDimensions = getOverallDimensions
         self.getSubPositions = getSubPositions
@@ -108,16 +118,20 @@ class Element: Equatable, Identifiable {
     Element(type: .bracket_end, string: ")", dimension: bracket_start.dimension)
 
     static let pi =
-    Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30))
+    Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30), characterValue: BComplex(re: BDouble("3.14159265358979323846")!))
 
     static let percent =
-    Element(type: .character, string: "%", dimension: ExpressionDim(width: 25, height: 30))
+    Element(type: .character, string: "%", dimension: ExpressionDim(width: 25, height: 30), characterValue: BComplex(re: BDouble("0.01")!))
 
     static let power_start =
     Element(
         type: .semi_start,
         string: "power_start",
         functionGap: (left: 0, right: 2),
+        numOfParams: 2,
+        evaluate: { params in
+            return try BPow(params[0], params[1])
+        },
         getSubScales: { index, scale in
             return (index == 0 ? scale : scaleIteration(scale, coef: 0.6))
         },

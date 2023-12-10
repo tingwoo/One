@@ -41,7 +41,7 @@ struct FormulaView: View {
 
                         // change to switch statement in the future
 
-                        if(type == .func_start){
+                        if(type == .func_start){ // remember to add semi
 
                             Color.clear
                                 .frame(width: 0, height: 0)
@@ -108,7 +108,6 @@ struct FormulaView: View {
 
                         }
                         else if(type == .placeholder) {
-
 
                             VStack {
                                 Image(systemName: show ? "square.fill" : "square.dashed")

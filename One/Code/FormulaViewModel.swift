@@ -208,13 +208,16 @@ class FormulaViewModel: ObservableObject {
 
         if elements.indices.contains(cursorLocation + step) {
             cursorLocation += step
-            if !skipInvisible { 
+            if !skipInvisible {
                 updateCursorKey()
                 return
             }
             skipInvisibleElement()
             if cursorLocation == originalLocation && elements.indices.contains(cursorLocation + 2 * step) {
                 cursorLocation += 2 * step
+            }
+            if withHaptics && cursorLocation != originalLocation {
+                (cursorLocation == 0 || (cursorLocation == 1 && elements[0].element.type == .semi_start) || cursorLocation == elements.count - 1) ? hapticManager.impact(style: .soft) : hapticManager.wheel()
             }
         }
 

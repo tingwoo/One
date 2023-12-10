@@ -12,6 +12,9 @@ class InputFieldViewModel: ObservableObject {
     @Published var redBorder: Bool = false
     @Published var answerFieldExists: Bool = false
     @Published var answerFieldRotateAngle: CGFloat = 0
+    @Published var answerFieldContent: String = ""
+    @Published var answerFieldColor: Color = Color("AccentAnswerField")
+
 
     func setRedBorder(_ show: Bool){
         redBorder = show
@@ -22,6 +25,14 @@ class InputFieldViewModel: ObservableObject {
             bounceAnswerField()
         }
         answerFieldExists = show
+    }
+
+    func setAnswerFieldContent(_ content: String){
+        answerFieldContent = content
+    }
+
+    func setAnswerFieldColor(_ color: Color){
+        answerFieldColor = color
     }
 
     func bounceAnswerField() {

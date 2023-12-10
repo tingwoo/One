@@ -14,8 +14,10 @@ extension Element {
         string: "frac_start",
         functionGap: (left: 3, right: 3),
         hyperParams: [5, 3], // 0: extended Length, 1: gap between number and line
-//        functionGap: (left: 20, right: 20),
-//        hyperParams: [20, 20], // 0: extended Length, 1: gap between number and line
+        numOfParams: 2,
+        evaluate: { params in
+            return try params[0] / params[1]
+        },
         getSubScales: { index, scale in
             return scaleIteration(scale, coef: 0.9)
         },

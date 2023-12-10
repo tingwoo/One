@@ -92,7 +92,7 @@ struct BComplex: CustomStringConvertible {
 
     static func /(left: BComplex, right: BComplex) throws -> BComplex {
         if right == BComplex() {
-            throw BComplexErrors.divisionByZero
+            throw CalculationError.divisionByZero
         }
 
         return left * right.conjugate() *
@@ -115,7 +115,7 @@ struct BComplex: CustomStringConvertible {
 
 func BPow(_ base: BComplex, _ exponent: BComplex) throws -> BComplex {
     // special cases
-    if base == BComplex() && exponent == BComplex() { throw BComplexErrors.wrongFormat }
+    if base == BComplex() && exponent == BComplex() { throw CalculationError.wrongFormat }
     if base == BComplex(re: 1, im: 0) { return base }
     if exponent == BComplex() { return BComplex(re: 1, im: 0) }
     if exponent == BComplex(re: 1, im: 0) { return base }
@@ -139,7 +139,7 @@ func BPow(_ base: BComplex, _ exponent: BComplex) throws -> BComplex {
             return result
         } else {
             if base.re < 0 {
-                throw BComplexErrors.wrongFormat
+                throw CalculationError.wrongFormat
             }
 
             let de = exponent.re.denominatorBInt
@@ -168,11 +168,5 @@ func BPow(_ base: BComplex, _ exponent: BComplex) throws -> BComplex {
 
     }
 
-    throw BComplexErrors.wrongFormat
-}
-
-enum BComplexErrors: Error {
-    case divisionByZero
-    case nonRealExponent
-    case wrongFormat
+    throw CalculationError.wrongFormat
 }
