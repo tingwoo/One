@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Keyboard: View {
 
-    @EnvironmentObject var inputFieldLooks: InputFieldLooks
+    @EnvironmentObject var inputFieldViewModel: InputFieldViewModel
     @State var keyboardSelection = 0
 
     var formulaViewModel: FormulaViewModel
@@ -65,8 +65,8 @@ struct Keyboard: View {
 
                         Key(
                             action: {
-                                inputFieldLooks.showAnswerField(true)
-                                inputFieldLooks.bounceAnswerField()
+                                inputFieldViewModel.showAnswerField(true)
+//                                inputFieldViewModel.bounceAnswerField()
                             },
                             color: Color("AccentYellow"),
                             darkAdjust: -0.1,
@@ -123,7 +123,7 @@ struct Keyboard: View {
 struct Keyboard_Previews: PreviewProvider {
 
     static var previews: some View {
-        Keyboard(formulaViewModel: FormulaViewModel()).environmentObject(InputFieldLooks())
+        Keyboard(formulaViewModel: FormulaViewModel()).environmentObject(InputFieldViewModel())
     }
 }
 

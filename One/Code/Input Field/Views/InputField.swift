@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InputField: View {
     @ObservedObject var formulaViewModel: FormulaViewModel
-    @EnvironmentObject var inputFieldLooks: InputFieldLooks
+    @EnvironmentObject var inputFieldViewModel: InputFieldViewModel
 
     let cornerRadius: CGFloat = 16
     let fieldPadding: CGFloat = 12
@@ -34,7 +34,7 @@ struct InputField: View {
             }
             .background(
                 RoundedRectangle(
-                    cornerRadius: inputFieldLooks.redBorder ? cornerRadius - shrinkGap : cornerRadius,
+                    cornerRadius: inputFieldViewModel.redBorder ? cornerRadius - shrinkGap : cornerRadius,
                     style: .continuous
                 )
                 .fill(
@@ -42,7 +42,7 @@ struct InputField: View {
                     .shadow(.inner(color: Color(white: 0, opacity: 0.2), radius: 4))
                 )
             )
-            .padding(inputFieldLooks.redBorder ? shrinkGap : 0)
+            .padding(inputFieldViewModel.redBorder ? shrinkGap : 0)
 
 
             ZStack {
@@ -68,40 +68,19 @@ struct InputField: View {
                 }
 
                 // Answer block
-                if(inputFieldLooks.answerFieldExists) {
-                    VStack {
-                        Spacer()
-                        HStack {
-                            Spacer()
-                        }
-                        .frame(width: nil, height: 100)
-                        .background(
-                            RoundedRectangle(
-                                cornerRadius: cornerRadius - 10,
-                                style: .continuous
-                            )
-                            .fill(Color("AccentAnswerField"))
-                            .shadow(color: Color(white: 0, opacity: 0.1), radius: 2, y: 2)
-                        )
-                    }
-                    .padding(10)
-                    .rotation3DEffect(.degrees(inputFieldLooks.answerFieldRotateAngle),
-                                      axis: (x: -1 , y: 0, z: 0),
-                                      perspective: 0.5
-                    )
-                    .offset(x: 0, y: (inputFieldLooks.answerFieldAppears ? 0 : 150))
-                }
+                AnswerField(inputFieldViewModel: inputFieldViewModel, cornerRadius: cornerRadius - 10)
             }
             .clipShape(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
             )
-            .scaleEffect(inputFieldLooks.redBorder ? shrinkRatio : 1)
+            .scaleEffect(inputFieldViewModel.redBorder ? shrinkRatio : 1)
         }
         .background(
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .fill(inputFieldLooks.redBorder ? Color("AccentRed") : .clear)
+                .fill(inputFieldViewModel.redBorder ? Color("AccentRed") : .clear)
         )
         .padding(.horizontal, fieldPadding)
+        .animation(.spring(duration: 0.2, bounce: 0.5), value: inputFieldViewModel.redBorder)
 
     }
 }
@@ -109,7 +88,7 @@ struct InputField: View {
 //struct InputField_Previews: PreviewProvider {
 //    static var previews: some View {
 //        InputField(formulaViewModel: FormulaViewModel.example)
-//            .environmentObject(InputFieldLooks())
+//            .environmentObject(InputFieldViewModel())
 //    }
 //}
 

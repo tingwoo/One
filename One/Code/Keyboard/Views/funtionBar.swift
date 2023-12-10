@@ -59,6 +59,6 @@ struct funtionBar: View {
 
 #Preview {
     funtionBar(keyboardSelection: .constant(0), clearAction: {})
-        .environmentObject(InputFieldLooks())
+        .environmentObject(InputFieldViewModel())
 }
 

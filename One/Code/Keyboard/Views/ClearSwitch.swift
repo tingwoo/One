@@ -17,7 +17,7 @@ struct ClearSwitch: View {
     @State var backColor = "AccentKeys2"
     @State var pullTime: Date = Date()
 
-    @EnvironmentObject var inputFieldLooks: InputFieldLooks
+    @EnvironmentObject var inputFieldViewModel: InputFieldViewModel
 
 //    var switchW: CGFloat = 100
 //    var switchH: CGFloat = 150
@@ -66,7 +66,7 @@ struct ClearSwitch: View {
                         backColor = "AccentRed"
                         hapticManager.impact(style: .soft)
                         pullTime = Date()
-                        inputFieldLooks.showRedBorder(true)
+                        inputFieldViewModel.showRedBorder(true)
                     } else {
                         backColor = "AccentKeys2"
                         if(gestureState.moveWidth != 0 || -pullTime.timeIntervalSinceNow < 0.1) {
@@ -74,9 +74,9 @@ struct ClearSwitch: View {
                         } else {
                             hapticManager.notification(type: .success)
                             action()
-                            inputFieldLooks.showAnswerField(false)
+                            inputFieldViewModel.showAnswerField(false)
                         }
-                        inputFieldLooks.showRedBorder(false)
+                        inputFieldViewModel.showRedBorder(false)
                     }
                 })
                 .animation(.spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0), value: gestureState.switchOn)
@@ -107,7 +107,7 @@ struct ClearSwitch_Previews: PreviewProvider {
             ClearSwitch(action: {})
         }
         .frame(width: 200, height: 80)
-        .environmentObject(InputFieldLooks())
+        .environmentObject(InputFieldViewModel())
     }
 }
 

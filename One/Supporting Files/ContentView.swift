@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var formulaViewModel = FormulaViewModel()
-    @StateObject var inputFieldLooks = InputFieldLooks()
+    @StateObject var inputFieldViewModel = InputFieldViewModel()
 
     var body: some View {
         ZStack {
@@ -20,7 +20,7 @@ struct ContentView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
         }
-        .environmentObject(inputFieldLooks)
+        .environmentObject(inputFieldViewModel)
     }
 }
 
