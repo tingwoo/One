@@ -56,6 +56,43 @@ extension Element {
     )
 
     static let radical_end = Element(type: .func_end, string: "radical_end")
+
+    static let radical2_start
+    = Element(
+        type: .func_start,
+        string: "radical2_start",
+        functionGap: (left: 4, right: 4),
+        numOfParams: 1,
+        evaluate: { params in
+            return try BPow(params[0], BComplex(re: 0.5))
+        },
+        getSubScales: { index, scale in
+            return scale
+        },
+        getOverallDimensions: { dims, scale, params in
+            return ExpressionDim(
+                width: dims[0].width + 8,
+                height: dims[0].height,
+                minY: dims[0].minY,
+                maxY: dims[0].maxY
+            )
+        },
+        getSubPositions: { dims, scale, params in
+            return [CGPoint(x: 8, y: 0)]
+        },
+        getFuncViewParams: { dims, scale, params in
+            // 0: width
+            // 1: height
+            // 2: x offset
+            // 3: y offset
+            return [dims[0].width + 4, dims[0].height, 4, dims[0].maxY - dims[0].height / 2.0]
+        },
+        functionView: { params, scale in
+            AnyView(RadicalView(leftGap: 0, width: params[0], height: params[1], xOffset: params[2], yOffset: params[3], scale: scale))
+        }
+    )
+
+    static let radical2_end = Element(type: .func_end, string: "radical2_end")
 }
 
 struct RadicalView: View {

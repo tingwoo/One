@@ -68,7 +68,10 @@ struct InputField: View {
                 }
 
                 // Answer block
-                AnswerField(inputFieldViewModel: inputFieldViewModel, cornerRadius: cornerRadius - 10)
+                VStack {
+                    Spacer()
+                    AnswerField(inputFieldViewModel: inputFieldViewModel, cornerRadius: cornerRadius - 10)
+                }
             }
             .clipShape(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)

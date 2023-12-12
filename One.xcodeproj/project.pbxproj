@@ -200,12 +200,12 @@
 		6CCED0602AC4405D008A96C8 /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				6CEA33102B25A0D300CB6951 /* Calculator.swift */,
 				6CDF76D62ADED981000654AE /* InputFieldViewModel.swift */,
 				6CCED06F2AC56801008A96C8 /* FormulaViewModel.swift */,
 				6CCED0712AC568DB008A96C8 /* FormulaModels.swift */,
 				6C64BE232AD5411800D27401 /* ElementModel.swift */,
 				6CC9D2292AD42CBB00EB108B /* ElementModelProperties.swift */,
+				6CEA33102B25A0D300CB6951 /* Calculator.swift */,
 				6CDF76D52ADECA81000654AE /* ElementViews */,
 				6CCED0612AC4408C008A96C8 /* Input Field */,
 				6C17ADE72AB76102009B74AD /* Keyboard */,

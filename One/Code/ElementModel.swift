@@ -120,6 +120,9 @@ class Element: Equatable, Identifiable {
     static let pi =
     Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30), characterValue: BComplex(re: BDouble("3.14159265358979323846")!))
 
+    static let img =
+    Element(type: .character, string: "i", dimension: ExpressionDim(width: 15, height: 30), characterValue: BComplex(re: 0, im: 1))
+
     static let percent =
     Element(type: .character, string: "%", dimension: ExpressionDim(width: 25, height: 30), characterValue: BComplex(re: BDouble("0.01")!))
 

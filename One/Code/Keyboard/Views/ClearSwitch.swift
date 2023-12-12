@@ -75,6 +75,7 @@ struct ClearSwitch: View {
                             hapticManager.notification(type: .success)
                             action()
                             inputFieldViewModel.setAnswerFieldExistence(false)
+                            inputFieldViewModel.setAnswerFieldContent("")
                         }
                         inputFieldViewModel.setRedBorder(false)
                     }

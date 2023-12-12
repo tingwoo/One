@@ -9,6 +9,9 @@ import Foundation
 
 class Calculator {
 
+    static var lastAnswer: BComplex? = nil
+    static let operatorPrecedence: [String: Int] = ["plus": 0, "minus": 0, "multiply": 1, "divide": 1]
+
     static func evaluate(expression: [ElementWithID]) throws -> String {
         // Check brackets are all paired
         // Check no placeholder
@@ -28,8 +31,8 @@ class Calculator {
         }
 
         // Transform
-        //   - From: (  2  +  3  )  *  4  +  fracS    1  +  4  ,  2  fracE
-        //   - To:   (  2  +  3  )  *  4  +  frac  (  1  +  4  ,  2  )
+        //   - From: (  2  +  pi   )  *  4  +  fracS    1  3  +  4  ,  2  fracE
+        //   - To:   (  2  +  3.14 )  *  4  +  frac  (  13    +  4  ,  2  )
         var newArray: [ElementWithNumber] = []
         i = 0
         while i < expression.count - 1 {
@@ -46,7 +49,13 @@ class Calculator {
             case .func_end, .semi_end:
                 newArray.append(ElementWithNumber(Element.bracket_end))
             case .character:
-                newArray.append(ElementWithNumber(expression[i].element.characterValue))
+                if expression[i].element != .answer {
+                    newArray.append(ElementWithNumber(expression[i].element.characterValue))
+                } else if let ans = lastAnswer {
+                    newArray.append(ElementWithNumber(ans))
+                } else {
+                    throw CalculationError.noLastAnswer
+                }
             default:
                 newArray.append(ElementWithNumber(expression[i].element))
             }
@@ -68,7 +77,6 @@ class Calculator {
         }
         
         // Shunting yard
-        let operatorPrecedence: [String: Int] = ["plus": 0, "minus": 0, "multiply": 1, "divide": 1]
         var outputQueue: [ElementWithNumber] = []
         var operatorStack = Stack<Element>()
         i = 0
@@ -82,8 +90,8 @@ class Calculator {
                         operatorStack.push(element)
 
                     case .symbol:
-                        let currentOpPrecedence = operatorPrecedence[element.string]!
-                        while let topOp = operatorStack.peek(), topOp.type == .symbol, currentOpPrecedence <= operatorPrecedence[topOp.string]! {
+                        let currentOpPrecedence = self.operatorPrecedence[element.string]!
+                        while let topOp = operatorStack.peek(), topOp.type == .symbol, currentOpPrecedence <= self.operatorPrecedence[topOp.string]! {
                             outputQueue.append(ElementWithNumber(operatorStack.pop()!))
                         }
                         operatorStack.push(element)
@@ -132,22 +140,28 @@ class Calculator {
             }
             let newOperator = outputQueue[i].element!
             if newOperator.type == .symbol {
-                let n2 = resultStack.pop()!.number!
-                let n1 = resultStack.pop()!.number!
-                switch newOperator {
-                case .plus:
-                    resultStack.push(ElementWithNumber(n1 + n2))
-                case .minus:
-                    resultStack.push(ElementWithNumber(n1 - n2))
-                case .multiply:
-                    resultStack.push(ElementWithNumber(n1 * n2))
-                default:
-                    resultStack.push(try ElementWithNumber(n1 / n2))
+                if let n2 = resultStack.pop()?.number, let n1 = resultStack.pop()?.number  {
+                    switch newOperator {
+                    case .plus:
+                        resultStack.push(ElementWithNumber(n1 + n2))
+                    case .minus:
+                        resultStack.push(ElementWithNumber(n1 - n2))
+                    case .multiply:
+                        resultStack.push(ElementWithNumber(n1 * n2))
+                    default:
+                        resultStack.push(try ElementWithNumber(n1 / n2))
+                    }
+                } else {
+                    throw CalculationError.wrongOperatorPlacement
                 }
             } else if newOperator.type == .func_start || newOperator.type == .semi_start {
                 var paramArray: [BComplex] = []
                 for _ in 0..<newOperator.numOfParams {
-                    paramArray.append(resultStack.pop()!.number!)
+                    if let n = resultStack.pop()?.number {
+                        paramArray.append(n)
+                    } else {
+                        throw CalculationError.unknown
+                    }
                 }
                 paramArray.reverse()
                 resultStack.push(ElementWithNumber(try newOperator.evaluate(paramArray)))
@@ -155,17 +169,47 @@ class Calculator {
             i += 1
         }
 
+        self.lastAnswer = resultStack.peek()!.number!
+
         let evaluationResult: BComplex = resultStack.peek()!.number!
 
         // Transform result
-        var resultStr = evaluationResult.re.decimalExpansion(precisionAfterDecimalPoint: 5)
-        while resultStr[resultStr.index(before: resultStr.endIndex)] == "0" {
-            resultStr = String(resultStr.dropLast())
+        var reStr = evaluationResult.re.decimalExpansion(precisionAfterDecimalPoint: 5)
+        var imStr = evaluationResult.im.decimalExpansion(precisionAfterDecimalPoint: 5)
+
+        while reStr[reStr.index(before: reStr.endIndex)] == "0" {
+            reStr = String(reStr.dropLast())
         }
-        if resultStr[resultStr.index(before: resultStr.endIndex)] == "." {
-            resultStr = String(resultStr.dropLast())
+        if reStr[reStr.index(before: reStr.endIndex)] == "." {
+            reStr = String(reStr.dropLast())
         }
-        return resultStr
+
+        while imStr[imStr.index(before: imStr.endIndex)] == "0" {
+            imStr = String(imStr.dropLast())
+        }
+        if imStr[imStr.index(before: imStr.endIndex)] == "." {
+            imStr = String(imStr.dropLast())
+        }
+
+        if evaluationResult.re == 0 && evaluationResult.im == 0 {
+            return "0"
+        } else if evaluationResult.im == 0 {
+            return reStr
+        } else if evaluationResult.re == 0 {
+            if evaluationResult.im > 0 {
+                return (imStr == "1" ? "" : imStr) + "i"
+            }
+            return "-" + (imStr == "-1" ? "" : imStr.dropFirst()) + "i"
+        } else {
+            if evaluationResult.im > 0 {
+                return reStr + " + " + (imStr == "1" ? "" : imStr) + "i"
+            }
+            return reStr + " - " + (imStr == "-1" ? "" : imStr.dropFirst()) + "i"
+        }
+    }
+
+    static func numberToString(number: BDouble) -> String {
+        return ""
     }
 
     static func getNumber(expression: [ElementWithID], index: Int) throws -> (number: BComplex, nextIndex: Int) {

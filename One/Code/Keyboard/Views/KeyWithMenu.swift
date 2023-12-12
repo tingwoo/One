@@ -44,6 +44,7 @@ struct KeyWithMenu: View {
     enum DisplayType {
         case text
         case image
+        case customImage
         case nothing
     }
 
@@ -96,6 +97,8 @@ struct KeyWithMenu: View {
             return DisplayContent(DisplayType.text, string)
         } else if let string = key.image {
             return DisplayContent(DisplayType.image, string)
+        } else if let string = key.customImage {
+            return DisplayContent(DisplayType.customImage, string)
         } else {
             return DisplayContent(DisplayType.text, "")
         }
@@ -123,6 +126,8 @@ struct KeyWithMenu: View {
             Text(displayContent.string)
         case .image:
             Image(systemName: displayContent.string)
+        case .customImage:
+            Image(displayContent.string)
         case .nothing:
             EmptyView()
         }
@@ -218,7 +223,7 @@ struct KeyWithMenu: View {
             // Menu indicator
             if(!dragState.isActive && !isSingleKey) {
                 Circle()
-                    .fill(Color("AccentKeys2"))
+                    .fill(Color("AccentKeysIndicator"))
                     .frame(width: 6, height: 6)
                     .offset(x: keyW / 2.0 - 8, y: -keyH / 2.0 + 8)
             }
