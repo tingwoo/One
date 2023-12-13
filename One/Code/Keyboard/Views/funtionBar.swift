@@ -10,6 +10,7 @@ import SwiftUI
 struct funtionBar: View {
 
     @Binding var keyboardSelection: Int
+    @State private var showSettings = false
 
     var keyboardCount: Int = 3
     var clearAction: () -> ()
@@ -21,10 +22,19 @@ struct funtionBar: View {
     var body: some View {
         HStack(spacing: moduleGap * 1.5) {
             HStack {
-                Key(action: {}, color: Color("AccentKeys1")) {
+                Key(action: { showSettings.toggle() }, color: Color("AccentKeys1")) {
                     Image(systemName: "gearshape")
                         .font(.system(size: 20, weight: .medium))
-                } shape: { Circle() }
+                } shape: {
+                    Circle()
+                }
+                .sheet(isPresented: $showSettings) {
+                    SettingsPage()
+                        .presentationDetents([.height(340)])
+//                        .presentationBackground(.thinMaterial) // iOS 16.4 up
+//                        .presentationCornerRadius(16)
+                }
+
 
                 Spacer()
 

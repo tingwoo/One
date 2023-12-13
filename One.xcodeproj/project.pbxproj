@@ -43,6 +43,7 @@
 		6CDF76D42ADEBC36000654AE /* BracketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D32ADEBC36000654AE /* BracketView.swift */; };
 		6CDF76D72ADED981000654AE /* InputFieldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D62ADED981000654AE /* InputFieldViewModel.swift */; };
 		6CDF76D92AE02CEC000654AE /* KeyWithMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF76D82AE02CEC000654AE /* KeyWithMenu.swift */; };
+		6CE839332B29D7F6005A05DB /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE839322B29D7F6005A05DB /* SettingsPage.swift */; };
 		6CEA330F2B2597EC00CB6951 /* AnswerField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEA330E2B2597EC00CB6951 /* AnswerField.swift */; };
 		6CEA33112B25A0D300CB6951 /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEA33102B25A0D300CB6951 /* Calculator.swift */; };
 		6CF06CD62AF6B5FF007341D3 /* TapModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF06CD52AF6B5FF007341D3 /* TapModifier.swift */; };
@@ -90,6 +91,7 @@
 		6CDF76D32ADEBC36000654AE /* BracketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BracketView.swift; sourceTree = "<group>"; };
 		6CDF76D62ADED981000654AE /* InputFieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFieldViewModel.swift; sourceTree = "<group>"; };
 		6CDF76D82AE02CEC000654AE /* KeyWithMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWithMenu.swift; sourceTree = "<group>"; };
+		6CE839322B29D7F6005A05DB /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		6CEA330E2B2597EC00CB6951 /* AnswerField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerField.swift; sourceTree = "<group>"; };
 		6CEA33102B25A0D300CB6951 /* Calculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
 		6CF06CD52AF6B5FF007341D3 /* TapModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapModifier.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				6CB5D51C2AD2FDE800E098A2 /* Key.swift */,
 				6C4A78E22AB08BCF00CD776C /* Keyboard.swift */,
 				6CB5D51A2AD2DFCD00E098A2 /* funtionBar.swift */,
+				6CE839322B29D7F6005A05DB /* SettingsPage.swift */,
 				6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */,
 				6C1BA2E82ACDADC00071BA1B /* ClearSwitch.swift */,
 				6CC4DDE32AE0FD60007E4625 /* MainKeyboard.swift */,
@@ -402,6 +405,7 @@
 				6CEA33112B25A0D300CB6951 /* Calculator.swift in Sources */,
 				6CC4DDE42AE0FD60007E4625 /* MainKeyboard.swift in Sources */,
 				6C4A78E72AB1E07300CD776C /* ClearAllSwitch.swift in Sources */,
+				6CE839332B29D7F6005A05DB /* SettingsPage.swift in Sources */,
 				6C17ADE92AB761ED009B74AD /* CursorWheel.swift in Sources */,
 				6CB5D51D2AD2FDE800E098A2 /* Key.swift in Sources */,
 				6CF8AC6F2B25D8D7004581AA /* CustomArithmetic.swift in Sources */,
