@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ControlBar: View {
 
+    @AppStorage("rightHanded") private var rightHanded = true
+
     var shiftCursorFunc: (Int, Bool) -> ()
     var keyW: (CGFloat) -> CGFloat
     var keyH: CGFloat
@@ -17,11 +19,10 @@ struct ControlBar: View {
 
     var body: some View {
         HStack(spacing: keySpacing) {
-            Key(action: {}, width: keyW(1), height: keyH) {
-                Image(systemName: "rectangle.grid.2x2")
-                    .font(.system(size: 25))
-            } shape: {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
+            if rightHanded {
+                moreKeysButton(keyW: keyW(1), keyH: keyH)
+            } else {
+                CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
             }
 
             Key(action: {shiftCursorFunc(-1, true)}, width: keyW(1), height: keyH) {
@@ -38,7 +39,25 @@ struct ControlBar: View {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
 
-            CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
+            if rightHanded {
+                CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
+            } else {
+                moreKeysButton(keyW: keyW(1), keyH: keyH)
+            }
+        }
+    }
+
+    private struct moreKeysButton: View {
+        var keyW: CGFloat
+        var keyH: CGFloat
+
+        var body: some View {
+            Key(action: {}, width: keyW, height: keyH) {
+                Image(systemName: "rectangle.grid.2x2")
+                    .font(.system(size: 25))
+            } shape: {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+            }
         }
     }
 }

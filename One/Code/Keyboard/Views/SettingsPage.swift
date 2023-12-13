@@ -18,9 +18,9 @@ struct SettingsPage: View {
                                                              ("bubble.left", "意見回饋"),
                                                              ("info.circle", "關於") ]
 
-//    @State private var PageTitle: String = []
     @State private var path: [String] = []
-//    @Environment(\.dismiss) private var dismiss
+    @AppStorage("rightHanded") private var rightHanded = true
+    @AppStorage("clearButtonInsteadOfSwitch") private var clearButton = false
 
     var body: some View {
 
@@ -39,7 +39,9 @@ struct SettingsPage: View {
                 Text(path.last ?? "設定").bold()
 
             }
-            .frame(height: 50)
+            .frame(maxWidth: .infinity, minHeight: 50, maxHeight: 50)
+//            .frame(width: nil, height: 50)
+            .background(Color("AccentSettingsBackground"))
             .animation(.easeInOut(duration: 0.1), value: path)
 
             NavigationStack(path: $path) {
@@ -53,27 +55,42 @@ struct SettingsPage: View {
                         }
                     }
                 }
+                .background(Color("AccentSettingsBackground"))
+                .scrollContentBackground(.hidden)
                 .scrollIndicators(.hidden)
-                .listRowSpacing(13)
-    //            .toolbar {
-    //                ToolbarItem(placement: .principal) {
-    //                    Text("設定").bold()
-    //                }
-    //            }
+                .listRowSpacing(12)
                 .navigationDestination(for: String.self) { item in
-                    Text(item)
+                    if (item == "操作") {
+                        List {
+                            Toggle(isOn: $rightHanded) {
+                                Text("右手操作")
+                            }
+                            .tint(Color("AccentYellow"))
+                        }
+                        .background(Color("AccentSettingsBackground"))
+                        .scrollContentBackground(.hidden)
                         .navigationBarBackButtonHidden(true)
-    //                    .toolbar {
-    //                        ToolbarItem(placement: .topBarLeading) {
-    //                            Button(action: { path = .init() }) {
-    //                                Image(systemName: "arrow.left.circle.fill")
-    //                            }
-    //                        }
-    //
-    //                        ToolbarItem(placement: .principal) {
-    //                            Text(item).bold()
-    //                        }
-    //                    }
+
+                    } else if (item == "輔助使用") {
+                        List {
+                            Section {
+                                Toggle(isOn: $clearButton) {
+                                    Text("將清除拉桿替換為按鈕")
+                                }
+                                .tint(Color("AccentYellow"))
+                            } footer: {
+                                Text("說明文字")
+                            }
+
+                        }
+                        .background(Color("AccentSettingsBackground"))
+                        .scrollContentBackground(.hidden)
+                        .navigationBarBackButtonHidden(true)
+
+                    } else {
+                        Text(item)
+                            .navigationBarBackButtonHidden(true)
+                    }
                 }
 
             }
