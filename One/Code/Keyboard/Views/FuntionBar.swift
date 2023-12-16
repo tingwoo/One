@@ -29,7 +29,11 @@ struct funtionBar: View {
                 }
                 .frame(width: moduleWidth, height: height)
             } else {
-                ClearSwitch(action: clearAction).frame(width: moduleWidth, height: height)
+                if useClearButton {
+                    clearButton(clearAction: clearAction).frame(width: moduleWidth, height: height)
+                } else {
+                    ClearSwitch(action: clearAction).frame(width: moduleWidth, height: height)
+                }
             }
 
             KeyboardPicker(
