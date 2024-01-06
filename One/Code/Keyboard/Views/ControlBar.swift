@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ControlBar: View {
 
-    @AppStorage("rightHanded") private var rightHanded = true
+    @AppStorage("rightHanded") private var rightHanded = 1
 
     var shiftCursorFunc: (Int, Bool) -> ()
     var keyW: (CGFloat) -> CGFloat
@@ -19,7 +19,7 @@ struct ControlBar: View {
 
     var body: some View {
         HStack(spacing: keySpacing) {
-            if rightHanded {
+            if rightHanded == 1 {
                 moreKeysButton(keyW: keyW(1), keyH: keyH)
             } else {
                 CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
@@ -39,7 +39,7 @@ struct ControlBar: View {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
 
-            if rightHanded {
+            if rightHanded == 1 {
                 CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
             } else {
                 moreKeysButton(keyW: keyW(1), keyH: keyH)

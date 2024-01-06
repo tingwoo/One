@@ -7,6 +7,44 @@
 
 import SwiftUI
 
+struct SettingsPagePicker: View {
+    struct TextImagePair {
+        var text: String? = nil
+        var image: Image? = nil
+    }
+
+    @Binding var selectedIndex: Int
+
+    var title: String = "慣用手"
+    var options: [String] = ["左", "右"]
+
+    var hapticManager = HapticManager.instance
+
+
+    var body: some View {
+        HStack {
+            Text(title)
+
+            Spacer()
+
+            HStack(spacing: 0) {
+                ForEach(options.indices, id: \.self) { i in
+                    Text(options[i]).font(.system(size: 15))
+                        .frame(maxWidth: 70, maxHeight: .infinity)
+                        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(selectedIndex == i ? Color("AccentKeys2") : Color("AccentKeys2").opacity(0.0001)))
+                        .onTapGesture {
+                            selectedIndex = i
+                            hapticManager.impact(style: .light)
+                        }
+                        .animation(.easeInOut(duration: 0.15), value: selectedIndex)
+                }
+            }
+            .padding(2)
+            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color("AccentKeys1")))
+        }
+    }
+}
+
 struct SettingsPage: View {
     private var icons: [(symbol: String, title: String)] = [ ("rectangle.grid.2x2", "鍵盤排列"), 
                                                              ("number", "常數"),
@@ -24,10 +62,20 @@ struct SettingsPage: View {
 //                                                                      ("heart", "鳴謝與版權資訊") ]
 
     @State private var path: [String] = []
-    @AppStorage("rightHanded") private var rightHanded = true
+    @AppStorage("rightHanded") private var rightHanded = 1
     @AppStorage("clearButtonInsteadOfSwitch") private var clearButton = false
 
     let keySpacing: CGFloat = 7.0
+
+//    var rightHandedOption: Binding<Int> {
+//        get {
+//            return rightHanded ? 1 : 0
+//        }
+//        set {
+//            rightHanded = (newValue == 1)
+//        }
+//    }
+
     func keyW(_ cnt: CGFloat = 1.0) -> CGFloat {
         return ((UIScreen.main.bounds.width - keySpacing * 7) / 6) * cnt + keySpacing * (cnt - 1)
     }
@@ -35,100 +83,97 @@ struct SettingsPage: View {
     var body: some View {
 
         VStack(spacing: 0) {
-            Text(path.last ?? "設定")
-                .bold()
-                .frame(maxWidth: .infinity, minHeight: 45, maxHeight: 45)
-                .background(Color("AccentSettingsBackground"))
-                .animation(.easeInOut(duration: 0.2), value: path)
+//            Text(path.last ?? "設定")
+//                .bold()
+//                .frame(maxWidth: .infinity, minHeight: 45, maxHeight: 45)
+//                .background(Color("AccentSettingsBackground"))
+//                .animation(.easeInOut(duration: 0.2), value: path)
 
-            ZStack(alignment: .bottom) {
-                NavigationStack(path: $path) {
-                    List(icons, id: \.title) { item in
-                        //                Section {
-                        NavigationLink(value: item.title) {
-                            HStack(spacing: 15) {
-                                Image(systemName: item.symbol)
-                                    .frame(width: 20)
-                                Text(item.title)
-                            }
+            ZStack {
+                if !path.isEmpty {
+                    HStack {
+                        Button(action: { path = .init() }) {
+                            Image(systemName: "arrow.left")
+                                .font(.system(size: 22, weight: .medium))
+                                .padding()
+                        }
+                        Spacer()
+                    }
+                }
+                Text(path.last ?? "設定").bold()
+
+            }
+            .frame(maxWidth: .infinity, minHeight: 45, maxHeight: 45)
+            .background(Color("AccentSettingsBackground"))
+            .animation(.easeInOut(duration: 0.1), value: path)
+
+            NavigationStack(path: $path) {
+                List(icons, id: \.title) { item in
+                    //                Section {
+                    NavigationLink(value: item.title) {
+                        HStack(spacing: 15) {
+                            Image(systemName: item.symbol)
+                                .frame(width: 20)
+                            Text(item.title)
                         }
                     }
-                    .background(Color("AccentSettingsBackground"))
-                    .scrollContentBackground(.hidden)
-                    .scrollIndicators(.hidden)
-                    .listRowSpacing(12)
-                    .navigationDestination(for: String.self) { item in
-                        if (item == "操作") {
+                }
+                .background(Color("AccentSettingsBackground"))
+                .scrollContentBackground(.hidden)
+                .scrollIndicators(.hidden)
+                .listRowSpacing(12)
+                .navigationDestination(for: String.self) { item in
+                    if (item == "操作") {
+                        Section {
                             List {
-                                Toggle(isOn: $rightHanded) {
-                                    Text("右手操作")
-                                }
-                                .tint(Color("AccentYellow"))
-                            }
-                            .background(Color("AccentSettingsBackground"))
-                            .scrollContentBackground(.hidden)
-                            .navigationBarBackButtonHidden(true)
+//                                Toggle(isOn: $rightHanded) {
+//                                    Text("右手操作")
+//                                }
+//                                .tint(Color("AccentYellow"))
+                                SettingsPagePicker(selectedIndex: $rightHanded, title: "慣用手", options: ["左", "右"])
 
-                        } else if (item == "輔助使用") {
-                            List {
-                                Toggle(isOn: $clearButton) {
-                                    Text("將清除拉桿替換為按鈕")
-                                }
-                                .tint(Color("AccentYellow"))
-
-                            }
-                            .background(Color("AccentSettingsBackground"))
-                            .scrollContentBackground(.hidden)
-                            .navigationBarBackButtonHidden(true)
-
-                        } else if (item == "關於") {
-                            List(aboutPageItems, id: \.title) { item in
-                                //                Section {
-                                NavigationLink(value: item.title) {
-                                    HStack(spacing: 15) {
-                                        Image(systemName: item.symbol)
-                                            .frame(width: 20)
-                                        Text(item.title)
-                                    }
-                                }
                             }
                             .background(Color("AccentSettingsBackground"))
                             .scrollContentBackground(.hidden)
                             .navigationBarBackButtonHidden(true)
                             .listRowSpacing(12)
-
-                        } else {
-                            Text(item)
-                                .navigationBarBackButtonHidden(true)
                         }
+
+//                        SettingsPagePicker()
+
+                    } else if (item == "輔助使用") {
+                        List {
+                            Toggle(isOn: $clearButton) {
+                                Text("將清除拉桿替換為按鈕")
+                            }
+                            .tint(Color("AccentYellow"))
+
+                        }
+                        .background(Color("AccentSettingsBackground"))
+                        .scrollContentBackground(.hidden)
+                        .navigationBarBackButtonHidden(true)
+
+                    } else if (item == "關於") {
+                        List(aboutPageItems, id: \.title) { item in
+                            //                Section {
+                            NavigationLink(value: item.title) {
+                                HStack(spacing: 15) {
+                                    Image(systemName: item.symbol)
+                                        .frame(width: 20)
+                                    Text(item.title)
+                                }
+                            }
+                        }
+                        .background(Color("AccentSettingsBackground"))
+                        .scrollContentBackground(.hidden)
+                        .navigationBarBackButtonHidden(true)
+                        .listRowSpacing(12)
+
+                    } else {
+                        Text(item)
+                            .navigationBarBackButtonHidden(true)
                     }
-
                 }
-
-
-                HStack {
-                    Key(
-                        action: { if path.count != 0 { path.remove(at: path.count - 1) }  },
-                        color: Color("AccentKeys2"),
-                        darkAdjust: -0.1,
-                        defaultAdjust: -0.1
-                    ) {
-                        Image(systemName: "arrow.left")
-                            .font(.system(size: 22, weight: .medium))
-                    } shape: {
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    }
-                    .frame(width: keyW(1), height: 50)
-
-                    VStack { }
-                    .frame(width: 1, height: 50)
-
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity)
-                .padding(8)
-                .opacity(path.isEmpty ? 0 : 1)
-                .animation(.easeInOut(duration: 0.2), value: path)
             }
         }
     }
@@ -149,4 +194,8 @@ extension UINavigationController: UIGestureRecognizerDelegate {
 
 #Preview {
     SettingsPage()
+//    ZStack{
+//        Color.gray.opacity(0.2)
+//        SettingsPagePicker()
+//    }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct funtionBar: View {
     @State private var showSettings = false
     @Binding var keyboardSelection: Int
-    @AppStorage("rightHanded") private var rightHanded = true
+    @AppStorage("rightHanded") private var rightHanded = 1
     @AppStorage("clearButtonInsteadOfSwitch") private var useClearButton = false
 
     var keyboardCount: Int = 3
@@ -21,7 +21,7 @@ struct funtionBar: View {
 
     var body: some View {
         HStack(spacing: moduleGap * 1.5) {
-            if rightHanded {
+            if rightHanded == 1 {
                 HStack {
                     settingsButton(showSettings: $showSettings)
                     Spacer()
@@ -43,7 +43,7 @@ struct funtionBar: View {
                 spacing: 7.0
             )
 
-            if rightHanded {
+            if rightHanded == 1 {
                 if useClearButton {
                     clearButton(clearAction: clearAction).frame(width: moduleWidth, height: height)
                 } else {
