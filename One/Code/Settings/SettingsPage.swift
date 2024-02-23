@@ -123,23 +123,22 @@ struct SettingsPage: View {
                 .scrollIndicators(.hidden)
                 .listRowSpacing(12)
                 .navigationDestination(for: String.self) { item in
-                    if (item == "操作") {
-                        Section {
-                            List {
+                    if (item == "常數") {
+                        
+
+                    } else if (item == "操作") {
+                        List {
 //                                Toggle(isOn: $rightHanded) {
 //                                    Text("右手操作")
 //                                }
 //                                .tint(Color("AccentYellow"))
-                                SettingsPagePicker(selectedIndex: $rightHanded, title: "慣用手", options: ["左", "右"])
+                            SettingsPagePicker(selectedIndex: $rightHanded, title: "慣用手", options: ["左", "右"])
 
-                            }
-                            .background(Color("AccentSettingsBackground"))
-                            .scrollContentBackground(.hidden)
-                            .navigationBarBackButtonHidden(true)
-                            .listRowSpacing(12)
                         }
-
-//                        SettingsPagePicker()
+                        .background(Color("AccentSettingsBackground"))
+                        .scrollContentBackground(.hidden)
+                        .navigationBarBackButtonHidden(true)
+                        .listRowSpacing(12)
 
                     } else if (item == "輔助使用") {
                         List {
