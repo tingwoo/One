@@ -115,26 +115,24 @@ struct ConstantEditPage: View {
             .frame(maxWidth: .infinity, minHeight: 100, idealHeight: 100, maxHeight: 100)
             .background(RoundedRectangle(cornerRadius: 5, style: .continuous).fill(tmpGray))
 
-            Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 5) {
+            Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 8) {
                 GridRow {
                     Text("Name").font(.custom("CMUConcrete-Roman", size: 20))
-                    TextField("Speed of light in vacuum", text: $nameField).font(.custom("CMUConcrete-Roman", size: 20))
+                    TextField("Speed of light in vacuum", text: $nameField)
+                        .font(.custom("CMUConcrete-Roman", size: 20))
+                        .padding([.horizontal], 8)
+                        .padding([.vertical], 5)
+                        .background(RoundedRectangle(cornerRadius: 3, style: .continuous).fill(tmpGray))
 
-                }
-
-                GridRow {
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(Color.black)
-                        .gridCellColumns(2)
-                        .padding([.bottom])
                 }
 
                 GridRow {
                     Text("Coefficient").font(.custom("CMUConcrete-Roman", size: 20))
                     TextField("2.99792458", text: $coefField)
                         .font(.custom("CMUConcrete-Roman", size: 20))
-//                        .foregroundColor(isValidCoef(coefField) ? .primary : Color("AccentRed"))
+                        .padding([.horizontal], 8)
+                        .padding([.vertical], 5)
+                        .background(RoundedRectangle(cornerRadius: 3, style: .continuous).fill(tmpGray))
                         .keyboardType(.numbersAndPunctuation)
                         .focused($coefFocus)
                         .onChange(of: coefFocus) { focused in
@@ -156,18 +154,12 @@ struct ConstantEditPage: View {
                 }
 
                 GridRow {
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(Color.black)
-                        .gridCellColumns(2)
-                        .padding([.bottom])
-                }
-
-                GridRow {
                     Text("Exponent").font(.custom("CMUConcrete-Roman", size: 20))
                     TextField("8", text: $expoField)
                         .font(.custom("CMUConcrete-Roman", size: 20))
-//                        .foregroundColor(isValidExpo(expoField) ? .primary : .red)
+                        .padding([.horizontal], 8)
+                        .padding([.vertical], 5)
+                        .background(RoundedRectangle(cornerRadius: 3, style: .continuous).fill(tmpGray))
                         .keyboardType(.numbersAndPunctuation)
                         .focused($expoFocus)
                         .onChange(of: expoFocus) { focused in
@@ -189,13 +181,13 @@ struct ConstantEditPage: View {
                         }
                 }
 
-                GridRow {
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(Color.black)
-                        .gridCellColumns(2)
-                        .padding([.bottom])
-                }
+//                GridRow {
+//                    Rectangle()
+//                        .frame(height: 1)
+//                        .foregroundColor(Color.black)
+//                        .gridCellColumns(2)
+//                        .padding([.bottom])
+//                }
             }
 
 //            Picker("s", selection: $pickerSelection) {
@@ -206,10 +198,22 @@ struct ConstantEditPage: View {
 
             SettingsPagePicker(selectedIndex: $pickerSelection, options: ["Symbol", "Subscript"], withHaptics: false).frame(height: 35)
 
-            let columns = Array(repeating: GridItem(.flexible(), spacing: 3), count: 5)
+            let columns = Array(repeating: GridItem(.flexible(), spacing: 3), count: 6)
             let charList = (pickerSelection == 0 ? [] : numberCharList) + latinCharList + greekCharList
+
             ScrollView(.vertical) {
                 LazyVGrid(columns: columns, spacing: 3) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 20))
+                        .frame(maxWidth: .infinity, minHeight: 50)
+                        .background(
+                            RoundedRectangle(cornerRadius: 3, style: .continuous)
+                                .fill(symbolIsSelected(nil) ? Color("AccentYellow") : tmpGray)
+                        )
+                        .onTapGesture {
+                            if(pickerSelection == 0) { selectedSymbol = nil }
+                            else { selectedSubscript = nil }
+                        }
                     ForEach(charList.indices, id: \.self) { index in
                         Text(charList[index])
                             .font(.custom("CMUConcrete-Roman", size: 25).italic())
@@ -220,17 +224,13 @@ struct ConstantEditPage: View {
                                     .fill(symbolIsSelected(charList[index]) ? Color("AccentYellow") : tmpGray)
                             )
                             .onTapGesture {
-                                if(symbolIsSelected(charList[index])) {
-                                    if(pickerSelection == 0) { selectedSymbol = nil }
-                                    else { selectedSubscript = nil }
-                                } else {
-                                    if(pickerSelection == 0) { selectedSymbol = charList[index] }
-                                    else { selectedSubscript = charList[index] }
-                                }
+                                if(pickerSelection == 0) { selectedSymbol = charList[index] }
+                                else { selectedSubscript = charList[index] }
                             }
                     }
                 }
             }
+            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
             .scrollIndicators(.hidden)
         }
     }
