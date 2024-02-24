@@ -8,40 +8,32 @@
 import SwiftUI
 
 struct SettingsPagePicker: View {
-    struct TextImagePair {
-        var text: String? = nil
-        var image: Image? = nil
-    }
-
     @Binding var selectedIndex: Int
-
-    var title: String = "慣用手"
     var options: [String] = ["左", "右"]
+    var withHaptics: Bool = true
 
-    var hapticManager = HapticManager.instance
+    private let hapticManager = HapticManager.instance
 
 
     var body: some View {
-        HStack {
-            Text(title)
-
-            Spacer()
-
-            HStack(spacing: 0) {
-                ForEach(options.indices, id: \.self) { i in
-                    Text(options[i]).font(.system(size: 15))
-                        .frame(maxWidth: 70, maxHeight: .infinity)
-                        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(selectedIndex == i ? Color("AccentKeys2") : Color("AccentKeys2").opacity(0.0001)))
-                        .onTapGesture {
-                            selectedIndex = i
-                            hapticManager.impact(style: .light)
-                        }
-                        .animation(.easeInOut(duration: 0.15), value: selectedIndex)
-                }
+        HStack(spacing: 0) {
+            ForEach(options.indices, id: \.self) { i in
+                Text(options[i])
+                    .font(.system(size: 15))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 3, style: .continuous)
+                            .fill(selectedIndex == i ? Color("AccentKeysBackground") : Color("AccentKeysBackground").opacity(0.0001))
+                    )
+                    .onTapGesture {
+                        selectedIndex = i
+                        if withHaptics { hapticManager.impact(style: .light) }
+                    }
+                    .animation(.easeInOut(duration: 0.15), value: selectedIndex)
             }
-            .padding(2)
-            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color("AccentKeys1")))
         }
+        .padding(3)
+        .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color("AccentKeys1")))
     }
 }
 
@@ -55,6 +47,7 @@ struct SettingsPage: View {
                                                              ("figure.child.circle", "輔助使用"),
                                                              ("bubble.left", "意見回饋"),
                                                              ("info.circle", "關於") ]
+//                                                             ("questionmark.diamond", "測試") ]
 
     private var aboutPageItems: [(symbol: String, title: String)] = [ ("person", "開發者"),
                                                                       ("star", "評分"),
@@ -132,7 +125,12 @@ struct SettingsPage: View {
 //                                    Text("右手操作")
 //                                }
 //                                .tint(Color("AccentYellow"))
-                            SettingsPagePicker(selectedIndex: $rightHanded, title: "慣用手", options: ["左", "右"])
+
+                            HStack {
+                                Text("慣用手")
+                                Spacer()
+                                SettingsPagePicker(selectedIndex: $rightHanded, options: ["左", "右"]).frame(width: 150)
+                            }
 
                         }
                         .background(Color("AccentSettingsBackground"))
