@@ -27,6 +27,12 @@ extension BDouble {
         }
         return result
     }
+
+    // Decimal expansion, but with trailing zeros cut off.
+    func decExpansionCutZeros(precision: Int) -> String {
+        let str = self.decimalExpansion(precisionAfterDecimalPoint: precision, rounded: true)
+        return str.trimmingCharacters(in: ["0", "."])
+    }
 }
 
 struct BComplex: CustomStringConvertible {

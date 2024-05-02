@@ -16,6 +16,9 @@
 		6C17ADE92AB761ED009B74AD /* CursorWheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C17ADE82AB761ED009B74AD /* CursorWheel.swift */; };
 		6C17ADEB2ABA093A009B74AD /* cmunorm.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C17ADEA2ABA0939009B74AD /* cmunorm.ttf */; };
 		6C1BA2E92ACDADC00071BA1B /* ClearSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C1BA2E82ACDADC00071BA1B /* ClearSwitch.swift */; };
+		6C2E93472BE37FA300C2B5A8 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2E93462BE37FA300C2B5A8 /* Constant.swift */; };
+		6C2E935A2BE3D37600C2B5A8 /* ConstantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2E93592BE3D37600C2B5A8 /* ConstantView.swift */; };
+		6C2E935C2BE412E900C2B5A8 /* ConstantListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2E935B2BE412E900C2B5A8 /* ConstantListView.swift */; };
 		6C2F0BEB2AFA9FDB00BEC549 /* FormulaScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F0BEA2AFA9FDB00BEC549 /* FormulaScrollView.swift */; };
 		6C3A77152AF8FD37004E823D /* ScrollableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3A77142AF8FD37004E823D /* ScrollableView.swift */; };
 		6C4A78E12AB08B3F00CD776C /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A78E02AB08B3F00CD776C /* InputField.swift */; };
@@ -98,6 +101,9 @@
 		6C17ADEA2ABA0939009B74AD /* cmunorm.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = cmunorm.ttf; sourceTree = "<group>"; };
 		6C17ADEC2ABA0AAF009B74AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C1BA2E82ACDADC00071BA1B /* ClearSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearSwitch.swift; sourceTree = "<group>"; };
+		6C2E93462BE37FA300C2B5A8 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		6C2E93592BE3D37600C2B5A8 /* ConstantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantView.swift; sourceTree = "<group>"; };
+		6C2E935B2BE412E900C2B5A8 /* ConstantListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantListView.swift; sourceTree = "<group>"; };
 		6C2F0BEA2AFA9FDB00BEC549 /* FormulaScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormulaScrollView.swift; sourceTree = "<group>"; };
 		6C3A77142AF8FD37004E823D /* ScrollableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableView.swift; sourceTree = "<group>"; };
 		6C4A78E02AB08B3F00CD776C /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
@@ -314,6 +320,9 @@
 			children = (
 				6CE839322B29D7F6005A05DB /* SettingsPage.swift */,
 				6CE7B1752B890429009340F6 /* ConstantEditPage.swift */,
+				6C2E935B2BE412E900C2B5A8 /* ConstantListView.swift */,
+				6C2E93592BE3D37600C2B5A8 /* ConstantView.swift */,
+				6C2E93462BE37FA300C2B5A8 /* Constant.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -498,6 +507,7 @@
 				6CEA330F2B2597EC00CB6951 /* AnswerField.swift in Sources */,
 				6C2F0BEB2AFA9FDB00BEC549 /* FormulaScrollView.swift in Sources */,
 				6C17ADE62AB752AC009B74AD /* ControlBar.swift in Sources */,
+				6C2E935C2BE412E900C2B5A8 /* ConstantListView.swift in Sources */,
 				6CC9D22A2AD42CBB00EB108B /* ElementModelProperties.swift in Sources */,
 				6CA0DDD22AD9A78F00D26009 /* RadicalView.swift in Sources */,
 				6C68D8E62AAF74B500E8C901 /* KeyAttr.swift in Sources */,
@@ -515,11 +525,13 @@
 				6C0D90E92AA6F60E00C5D0E6 /* OneApp.swift in Sources */,
 				6CEA33112B25A0D300CB6951 /* Calculator.swift in Sources */,
 				6CC4DDE42AE0FD60007E4625 /* MainKeyboard.swift in Sources */,
+				6C2E935A2BE3D37600C2B5A8 /* ConstantView.swift in Sources */,
 				6C4A78E72AB1E07300CD776C /* ClearAllSwitch.swift in Sources */,
 				6CE839332B29D7F6005A05DB /* SettingsPage.swift in Sources */,
 				6C17ADE92AB761ED009B74AD /* CursorWheel.swift in Sources */,
 				6CB5D51D2AD2FDE800E098A2 /* Key.swift in Sources */,
 				6CF8AC6F2B25D8D7004581AA /* CustomArithmetic.swift in Sources */,
+				6C2E93472BE37FA300C2B5A8 /* Constant.swift in Sources */,
 				6C4A78E92AB310E400CD776C /* HapticManager.swift in Sources */,
 				6C1BA2E92ACDADC00071BA1B /* ClearSwitch.swift in Sources */,
 				6CF8AC6D2B25D89B004581AA /* Swift-Big-Number-Core.swift in Sources */,
