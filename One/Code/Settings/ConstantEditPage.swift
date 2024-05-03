@@ -15,8 +15,6 @@ struct ConstantEditPage: View {
     @FocusState private var coefFocus: Bool
     @FocusState private var expoFocus: Bool
 
-    let tmpGray = Color(red: 0.96, green: 0.96, blue: 0.96)
-
     func symbolIsSelected(_ symbol: ConstantSymbol?) -> Bool {
         if pickerSelection == 0 {
             return edittingConst.main == symbol
@@ -34,14 +32,14 @@ struct ConstantEditPage: View {
                 ConstantValueView(
                     constant: edittingConst,
                     scale: 1.0,
-                    bgColorWhenEmpty: tmpGray,
+                    bgColorWhenEmpty: Color("AccentKeys1"),
                     coefFocus: _coefFocus,
                     expoFocus: _expoFocus,
                     touchEnable: true
                 )
             }
             .frame(maxWidth: .infinity, minHeight: 100, idealHeight: 100, maxHeight: 100)
-            .background(RoundedRectangle(cornerRadius: 5, style: .continuous).fill(tmpGray))
+            .background(RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color("AccentKeys1")))
 
             // Input Fields
             Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 8) {
@@ -107,14 +105,14 @@ struct ConstantEditPage: View {
                 .font(.custom("CMUConcrete-Roman", size: 20))
                 .padding([.horizontal], 8)
                 .padding([.vertical], 5)
-                .background(RoundedRectangle(cornerRadius: 3, style: .continuous).fill(tmpGray))
+                .background(RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color("AccentKeys1")))
                 .keyboardType(keyboardType)
                 .focused(focusState)
                 .overlay(alignment: .trailing) {
                     Image(systemName: "xmark.circle.fill")
                         .font(.custom("CMUConcrete-Roman", size: 20))
                         .foregroundColor(Color("AccentRed"))
-                        .background(content: { Circle().fill(tmpGray) })
+                        .background(content: { Circle().fill(Color("AccentKeys1")) })
                         .padding(5)
                         .opacity(isIncorrect ? 1 : 0)
                 }
@@ -123,13 +121,12 @@ struct ConstantEditPage: View {
 
     func symbolSelectButton(text: Text, xOffset: CGFloat = -2.0, fontSize: CGFloat = 25.0, compareTarget: ConstantSymbol?) -> some View {
         text
-            .foregroundStyle(.black)
             .font(.custom("CMUConcrete-Roman", size: fontSize).italic())
             .offset(CGSize(width: xOffset, height: 0))
             .frame(maxWidth: .infinity, minHeight: 50)
             .background(
                 RoundedRectangle(cornerRadius: 3, style: .continuous)
-                    .fill(symbolIsSelected(compareTarget) ? Color("AccentYellow") : tmpGray)
+                    .fill(symbolIsSelected(compareTarget) ? Color("AccentYellow") : Color("AccentKeys1"))
             )
             .onTapGesture {
                 if(pickerSelection == 0) { edittingConst.main = compareTarget }

@@ -12,34 +12,19 @@ struct ConstantListView: View {
     @State var maxWidth: CGFloat = 0
 
     var body: some View {
-        NavigationStack {
-            List {
-                ForEach(constantList, content: constantRow)
-                .onDelete { indexSet in
-                    for ind in indexSet {
-                        constantList.remove(at: ind)
-                    }
-                }.onMove { indices, newOffset in
-                    constantList.move(fromOffsets: indices, toOffset: newOffset)
+        List {
+            ForEach(constantList, content: constantRow)
+            .onDelete { indexSet in
+                for ind in indexSet {
+                    constantList.remove(at: ind)
                 }
-
+            }.onMove { indices, newOffset in
+                constantList.move(fromOffsets: indices, toOffset: newOffset)
             }
-            .navigationTitle("Constants")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: Constant.self) { const in
-                ConstantEditPage(edittingConst: const)
-                    .padding()
-                    .navigationTitle("Edit")
-//                    .toolbar {
-//                        ToolbarItem(placement: .confirmationAction) {
-//                            Button("儲存") {
-//
-//                            }
-//                        }
-//                    }
-            }
-            .listRowSpacing(12)
         }
+        .navigationTitle("常數")
+        .navigationBarTitleDisplayMode(.inline)
+        .listRowSpacing(12)
     }
 
     func constantRow(const: Constant) -> some View {
@@ -53,12 +38,12 @@ struct ConstantListView: View {
                                 maxWidth = max(proxy.size.width, maxWidth)
                             }
                     })
-                    .frame(minWidth: maxWidth, minHeight: maxWidth)
+                    .frame(minWidth: max(38, maxWidth), minHeight: max(38, maxWidth))
                     .padding(6)
 //                    .offset(x: -1)
                     .background {
                         RoundedRectangle(cornerRadius: 4, style: .continuous)
-                            .fill(Color(red: 0.95, green: 0.95, blue: 0.95))
+                            .fill(Color("AccentKeys1"))
                     }
 
                 VStack(alignment: .leading, spacing: 6) {
@@ -84,6 +69,19 @@ struct ConstantListView: View {
     }
 }
 
+private struct ConstantListPreview: View {
+    var body: some View {
+        NavigationStack {
+            ConstantListView()
+                .navigationDestination(for: Constant.self) { const in
+                    ConstantEditPage(edittingConst: const)
+                        .padding()
+                        .navigationTitle("Edit")
+                }
+        }
+    }
+}
+
 #Preview {
-    ConstantListView()
+    ConstantListPreview()
 }

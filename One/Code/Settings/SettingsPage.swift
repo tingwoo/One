@@ -47,27 +47,17 @@ struct SettingsPage: View {
                                                              ("figure.child.circle", "輔助使用"),
                                                              ("bubble.left", "意見回饋"),
                                                              ("info.circle", "關於") ]
-//                                                             ("questionmark.diamond", "測試") ]
 
     private var aboutPageItems: [(symbol: String, title: String)] = [ ("person", "開發者"),
                                                                       ("star", "評分"),
                                                                       ("hand.raised", "隱私權政策") ]
 //                                                                      ("heart", "鳴謝與版權資訊") ]
 
-    @State private var path: [String] = []
+    @State var path: NavigationPath = .init()
     @AppStorage("rightHanded") private var rightHanded = 1
     @AppStorage("clearButtonInsteadOfSwitch") private var clearButton = false
 
     let keySpacing: CGFloat = 7.0
-
-//    var rightHandedOption: Binding<Int> {
-//        get {
-//            return rightHanded ? 1 : 0
-//        }
-//        set {
-//            rightHanded = (newValue == 1)
-//        }
-//    }
 
     func keyW(_ cnt: CGFloat = 1.0) -> CGFloat {
         return ((UIScreen.main.bounds.width - keySpacing * 7) / 6) * cnt + keySpacing * (cnt - 1)
@@ -82,27 +72,26 @@ struct SettingsPage: View {
 //                .background(Color("AccentSettingsBackground"))
 //                .animation(.easeInOut(duration: 0.2), value: path)
 
-            ZStack {
-                if !path.isEmpty {
-                    HStack {
-                        Button(action: { path = .init() }) {
-                            Image(systemName: "arrow.left")
-                                .font(.system(size: 22, weight: .medium))
-                                .padding()
-                        }
-                        Spacer()
-                    }
-                }
-                Text(path.last ?? "設定").bold()
-
-            }
-            .frame(maxWidth: .infinity, minHeight: 45, maxHeight: 45)
-            .background(Color("AccentSettingsBackground"))
-            .animation(.easeInOut(duration: 0.1), value: path)
+//            ZStack {
+//                if !path.isEmpty {
+//                    HStack {
+//                        Button(action: { path = .init() }) {
+//                            Image(systemName: "arrow.left")
+//                                .font(.system(size: 22, weight: .medium))
+//                                .padding()
+//                        }
+//                        Spacer()
+//                    }
+//                }
+//                Text(path.last ?? "設定").bold()
+//
+//            }
+//            .frame(maxWidth: .infinity, minHeight: 45, maxHeight: 45)
+//            .background(Color("AccentSettingsBackground"))
+//            .animation(.easeInOut(duration: 0.1), value: path)
 
             NavigationStack(path: $path) {
                 List(icons, id: \.title) { item in
-                    //                Section {
                     NavigationLink(value: item.title) {
                         HStack(spacing: 15) {
                             Image(systemName: item.symbol)
@@ -112,30 +101,21 @@ struct SettingsPage: View {
                     }
                 }
                 .background(Color("AccentSettingsBackground"))
-                .scrollContentBackground(.hidden)
                 .scrollIndicators(.hidden)
                 .listRowSpacing(12)
+                .navigationTitle("設定")
+                .navigationBarTitleDisplayMode(.inline)
                 .navigationDestination(for: String.self) { item in
                     if (item == "常數") {
-                        
-
+                        ConstantListView()
                     } else if (item == "操作") {
                         List {
-//                                Toggle(isOn: $rightHanded) {
-//                                    Text("右手操作")
-//                                }
-//                                .tint(Color("AccentYellow"))
-
                             HStack {
                                 Text("慣用手")
                                 Spacer()
                                 SettingsPagePicker(selectedIndex: $rightHanded, options: ["左", "右"]).frame(width: 150)
                             }
-
                         }
-                        .background(Color("AccentSettingsBackground"))
-                        .scrollContentBackground(.hidden)
-                        .navigationBarBackButtonHidden(true)
                         .listRowSpacing(12)
 
                     } else if (item == "輔助使用") {
@@ -145,10 +125,23 @@ struct SettingsPage: View {
                             }
                             .tint(Color("AccentYellow"))
 
+                            Toggle(isOn: .constant(false)) {
+                                Text("將游標輪替換為按鈕")
+                            }
+                            .tint(Color("AccentYellow"))
+
+                            Toggle(isOn: .constant(false)) {
+                                Text("顯示朗讀按鈕")
+                            }
+                            .tint(Color("AccentYellow"))
+
+                            Toggle(isOn: .constant(false)) {
+                                Text("簡易模式")
+                            }
+                            .tint(Color("AccentYellow"))
+
                         }
-                        .background(Color("AccentSettingsBackground"))
-                        .scrollContentBackground(.hidden)
-                        .navigationBarBackButtonHidden(true)
+                        .listRowSpacing(12)
 
                     } else if (item == "關於") {
                         List(aboutPageItems, id: \.title) { item in
@@ -161,15 +154,23 @@ struct SettingsPage: View {
                                 }
                             }
                         }
-                        .background(Color("AccentSettingsBackground"))
-                        .scrollContentBackground(.hidden)
-                        .navigationBarBackButtonHidden(true)
                         .listRowSpacing(12)
 
                     } else {
                         Text(item)
-                            .navigationBarBackButtonHidden(true)
                     }
+                }
+                .navigationDestination(for: Constant.self) { const in
+                    ConstantEditPage(edittingConst: const)
+                        .padding()
+                        .navigationTitle("Edit")
+    //                    .toolbar {
+    //                        ToolbarItem(placement: .confirmationAction) {
+    //                            Button("儲存") {
+    //
+    //                            }
+    //                        }
+    //                    }
                 }
             }
         }
@@ -178,21 +179,17 @@ struct SettingsPage: View {
 
 // What wizardry is this?? https://stackoverflow.com/questions/59234958/swiftui-navigationbarbackbuttonhidden-swipe-back-gesture
 
-extension UINavigationController: UIGestureRecognizerDelegate {
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        interactivePopGestureRecognizer?.delegate = self
-    }
-
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return viewControllers.count > 1
-    }
-}
+//extension UINavigationController: UIGestureRecognizerDelegate {
+//    override open func viewDidLoad() {
+//        super.viewDidLoad()
+//        interactivePopGestureRecognizer?.delegate = self
+//    }
+//
+//    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return viewControllers.count > 1
+//    }
+//}
 
 #Preview {
     SettingsPage()
-//    ZStack{
-//        Color.gray.opacity(0.2)
-//        SettingsPagePicker()
-//    }
 }

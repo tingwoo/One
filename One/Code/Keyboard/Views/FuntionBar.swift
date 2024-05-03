@@ -72,7 +72,7 @@ struct funtionBar: View {
             }
             .sheet(isPresented: $showSettings) {
                 SettingsPage()
-                    .presentationDetents([.height(340)])
+                    .presentationDetents([.large])
     //                        .presentationBackground(.thinMaterial) // iOS 16.4 up
     //                        .presentationCornerRadius(16)
             }
