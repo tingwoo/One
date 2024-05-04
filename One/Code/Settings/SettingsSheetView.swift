@@ -12,7 +12,8 @@ struct SettingsSheetView: View {
         SettingsPage()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .clipShape(RoundedCorner(radius: 15, corners: [.topLeft, .topRight]))
-            .background(RoundedCorner(radius: 15, corners: [.topLeft, .topRight]).fill(.white.opacity(0.0001)).shadow(radius: 3))
+            .background(RoundedCorner(radius: 15, corners: [.topLeft, .topRight])
+                .fill(.white.opacity(0.0001)).shadow(radius: 3))
             .transition(.move(edge: .bottom))
     }
 }

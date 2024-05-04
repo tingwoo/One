@@ -11,6 +11,8 @@ struct SettingsPagePicker: View {
     @Binding var selectedIndex: Int
     var options: [String] = ["左", "右"]
     var withHaptics: Bool = true
+    var bgColor: Color = Color("AccentKeys1")
+    var optionColor: Color = Color("AccentKeysBackground")
 
     private let hapticManager = HapticManager.instance
 
@@ -23,7 +25,7 @@ struct SettingsPagePicker: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(
                         RoundedRectangle(cornerRadius: 3, style: .continuous)
-                            .fill(selectedIndex == i ? Color("AccentKeysBackground") : Color("AccentKeysBackground").opacity(0.0001))
+                            .fill(selectedIndex == i ? optionColor : optionColor.opacity(0.0001))
                     )
                     .onTapGesture {
                         selectedIndex = i
@@ -33,7 +35,7 @@ struct SettingsPagePicker: View {
             }
         }
         .padding(3)
-        .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(Color("AccentKeys1")))
+        .background(RoundedRectangle(cornerRadius: 6, style: .continuous).fill(bgColor))
     }
 }
 
@@ -100,7 +102,6 @@ struct SettingsPage: View {
                         }
                     }
                 }
-                .background(Color("AccentSettingsBackground"))
                 .scrollIndicators(.hidden)
                 .listRowSpacing(12)
                 .navigationTitle("設定")
@@ -162,7 +163,6 @@ struct SettingsPage: View {
                 }
                 .navigationDestination(for: Constant.self) { const in
                     ConstantEditPage(edittingConst: const)
-                        .padding()
                         .navigationTitle("Edit")
     //                    .toolbar {
     //                        ToolbarItem(placement: .confirmationAction) {

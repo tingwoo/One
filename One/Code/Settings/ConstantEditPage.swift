@@ -11,7 +11,7 @@ struct ConstantEditPage: View {
     @State var edittingConst: Constant
     @State var pickerSelection: Int = 0
 
-    @FocusState private var nameFocus: Bool
+    @FocusState private var nameFocus: Bool // useless
     @FocusState private var coefFocus: Bool
     @FocusState private var expoFocus: Bool
 
@@ -24,22 +24,24 @@ struct ConstantEditPage: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
+        List {
             // Constant Preview
             HStack {
-                ConstantView(constant: edittingConst, scale: 1.0)
-                Image(systemName: "equal").font(.system(size: 20))
-                ConstantValueView(
-                    constant: edittingConst,
-                    scale: 1.0,
-                    bgColorWhenEmpty: Color("AccentKeys1"),
-                    coefFocus: _coefFocus,
-                    expoFocus: _expoFocus,
-                    touchEnable: true
-                )
+//                ConstantView(constant: edittingConst, scale: 1.0)
+//                Image(systemName: "equal").font(.system(size: 20))
+//                ConstantValueView(
+//                    constant: edittingConst,
+//                    scale: 1.0,
+//                    bgColorWhenEmpty: Color("AccentKeys1"),
+//                    coefFocus: _coefFocus,
+//                    expoFocus: _expoFocus,
+//                    touchEnable: true
+//                )
             }
-            .frame(maxWidth: .infinity, minHeight: 100, idealHeight: 100, maxHeight: 100)
-            .background(RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color("AccentKeys1")))
+            .frame(maxWidth: .infinity, minHeight: 80)
+            .background(.clear)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
 
             // Input Fields
             Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 8) {
@@ -70,6 +72,8 @@ struct ConstantEditPage: View {
                     isIncorrect: edittingConst.expoValue == nil
                 )
             }
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
 
 //            Picker("s", selection: $pickerSelection) {
 //                Text("Symbol").tag(0)
@@ -78,23 +82,52 @@ struct ConstantEditPage: View {
 //            .pickerStyle(.segmented)
             
             // Symbol Options
-            SettingsPagePicker(selectedIndex: $pickerSelection, options: ["Symbol", "Subscript"], withHaptics: false).frame(height: 35)
+            SettingsPagePicker(
+                selectedIndex: $pickerSelection,
+                options: ["Symbol", "Subscript"],
+                withHaptics: false,
+                bgColor: Color("AccentKeys2").opacity(0.5)
+            )
+            .frame(height: 35)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
 
             let columns = Array(repeating: GridItem(.flexible(), spacing: 3), count: 6)
             let symbolList = pickerSelection == 0 ? ConstantSymbol.allCases.filter({ s in s.isValidMain }) : ConstantSymbol.allCases.filter({ s in s.isValidSub })
 
-            ScrollView(.vertical) {
-                LazyVGrid(columns: columns, spacing: 3) {
-                    // X mark
-                    symbolSelectButton(text: Text(Image(systemName: "xmark")), xOffset: 0.0, fontSize: 20.0, compareTarget: nil)
-                    // Symbols
-                    ForEach(symbolList, id: \.self) { symbol in
-                        symbolSelectButton(text: Text(symbol.rawValue), compareTarget: symbol)
-                    }
+            LazyVGrid(columns: columns, spacing: 3) {
+                // X mark
+                symbolSelectButton(text: Text(Image(systemName: "xmark")), xOffset: 0.0, fontSize: 20.0, compareTarget: nil)
+                // Symbols
+                ForEach(symbolList, id: \.self) { symbol in
+                    symbolSelectButton(text: Text(symbol.rawValue), compareTarget: symbol)
                 }
             }
-            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-            .scrollIndicators(.hidden)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        }
+        .listStyle(.grouped)
+        .overlay(alignment: .top) {
+            HStack {
+                ConstantView(constant: edittingConst, scale: 1.0)
+                Image(systemName: "equal").font(.system(size: 20))
+                ConstantValueView(
+                    constant: edittingConst,
+                    scale: 1.0,
+                    bgColorWhenEmpty: Color("AccentKeysBackground"),
+                    coefFocus: _coefFocus,
+                    expoFocus: _expoFocus,
+                    touchEnable: true
+                )
+            }
+            .frame(maxWidth: .infinity, maxHeight: 100)
+            .background(.white.opacity(0.6))
+            .background(.ultraThinMaterial)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+            )
+            .shadow(color: .black.opacity(0.15), radius: 6)
+            .padding()
         }
     }
 
@@ -105,14 +138,14 @@ struct ConstantEditPage: View {
                 .font(.custom("CMUConcrete-Roman", size: 20))
                 .padding([.horizontal], 8)
                 .padding([.vertical], 5)
-                .background(RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color("AccentKeys1")))
+                .background(RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color("AccentKeysBackground")))
                 .keyboardType(keyboardType)
                 .focused(focusState)
                 .overlay(alignment: .trailing) {
                     Image(systemName: "xmark.circle.fill")
                         .font(.custom("CMUConcrete-Roman", size: 20))
                         .foregroundColor(Color("AccentRed"))
-                        .background(content: { Circle().fill(Color("AccentKeys1")) })
+                        .background(content: { Circle().fill(Color("AccentKeysBackground")) })
                         .padding(5)
                         .opacity(isIncorrect ? 1 : 0)
                 }
@@ -126,7 +159,7 @@ struct ConstantEditPage: View {
             .frame(maxWidth: .infinity, minHeight: 50)
             .background(
                 RoundedRectangle(cornerRadius: 3, style: .continuous)
-                    .fill(symbolIsSelected(compareTarget) ? Color("AccentYellow") : Color("AccentKeys1"))
+                    .fill(symbolIsSelected(compareTarget) ? Color("AccentYellow") : Color("AccentKeysBackground"))
             )
             .onTapGesture {
                 if(pickerSelection == 0) { edittingConst.main = compareTarget }
@@ -137,5 +170,4 @@ struct ConstantEditPage: View {
 
 #Preview {
     ConstantEditPage(edittingConst: Constant.example)
-        .padding()
 }

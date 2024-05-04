@@ -30,8 +30,12 @@ extension BDouble {
 
     // Decimal expansion, but with trailing zeros cut off.
     func decExpansionCutZeros(precision: Int) -> String {
-        let str = self.decimalExpansion(precisionAfterDecimalPoint: precision, rounded: true)
-        return str.trimmingCharacters(in: ["0", "."])
+        var str = self.decimalExpansion(precisionAfterDecimalPoint: precision, rounded: true)
+        while ["0", "."].contains(str.last ?? "a") {
+            if str == "0" { return str }
+            str = String(str.dropLast())
+        }
+        return str
     }
 }
 
