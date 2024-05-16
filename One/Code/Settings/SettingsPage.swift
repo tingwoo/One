@@ -40,7 +40,7 @@ struct SettingsPagePicker: View {
 }
 
 struct SettingsPage: View {
-    private var icons: [(symbol: String, title: String)] = [ ("rectangle.grid.2x2", "鍵盤排列"), 
+    private var icons: [(symbol: String, title: String)] = [ ("rectangle.grid.2x2", "鍵盤排列"),
                                                              ("number", "常數"),
                                                              ("textformat.123", "數字樣式"),
                                                              ("circle.righthalf.filled", "外觀"),
@@ -58,12 +58,6 @@ struct SettingsPage: View {
     @State var path: NavigationPath = .init()
     @AppStorage("rightHanded") private var rightHanded = 1
     @AppStorage("clearButtonInsteadOfSwitch") private var clearButton = false
-
-    let keySpacing: CGFloat = 7.0
-
-    func keyW(_ cnt: CGFloat = 1.0) -> CGFloat {
-        return ((UIScreen.main.bounds.width - keySpacing * 7) / 6) * cnt + keySpacing * (cnt - 1)
-    }
 
     var body: some View {
 
@@ -158,7 +152,10 @@ struct SettingsPage: View {
                         .listRowSpacing(12)
 
                     } else {
-                        Text(item)
+                        List {
+                            Text(item)
+                        }
+                        .navigationTitle(item)
                     }
                 }
                 .navigationDestination(for: Constant.self) { const in

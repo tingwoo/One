@@ -22,7 +22,7 @@ struct ConstantView: View {
             }
         } else {
             RoundedRectangle(cornerRadius: 3 * scale, style: .continuous)
-                .strokeBorder(.black, lineWidth: 1 * scale)
+                .strokeBorder(.primary, lineWidth: 1 * scale)
                 .frame(width: 28 * scale, height: 28 * scale)
         }
     }

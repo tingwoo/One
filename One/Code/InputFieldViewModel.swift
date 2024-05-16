@@ -10,10 +10,11 @@ import SwiftUI
 
 class InputFieldViewModel: ObservableObject {
     @Published var redBorder: Bool = false
-    @Published var answerFieldExists: Bool = false
-    @Published var answerFieldRotateAngle: CGFloat = 0
-    @Published var answerFieldContent: String = ""
-    @Published var answerFieldStatus: Status = .answer
+    @Published var afExists: Bool = false
+    @Published var afRotateAngle: CGFloat = 0
+    @Published var afContent: String = ""
+    @Published var afContentStatus: ContentStatus = .answer
+    @Published var afCalcStatus: CalcStatus = .displaying
 
 
     func setRedBorder(_ show: Bool){
@@ -21,33 +22,43 @@ class InputFieldViewModel: ObservableObject {
     }
 
     func setAnswerFieldExistence(_ show: Bool){
-        if answerFieldExists && show {
-            bounceAnswerField()
-        }
-        answerFieldExists = show
+        afExists = show
     }
 
     func setAnswerFieldContent(_ content: String){
-        answerFieldContent = content
+        afContent = content
     }
 
-    func setAnswerFieldStatus(_ stat: Status){
-        answerFieldStatus = stat
+    func setAFContentStatus(_ stat: ContentStatus){
+        if stat == .answer {
+            bounceAnswerField()
+        }
+        afContentStatus = stat
     }
+
+    func setAFCalcStatus(_ stat: CalcStatus){
+        afCalcStatus = stat
+    }
+
 
     func bounceAnswerField() {
         withAnimation(.easeOut(duration: 0.12)) {
-            answerFieldRotateAngle = 15
+            afRotateAngle = 15
         }
 
         withAnimation(.easeIn(duration: 0.12).delay(0.12)) {
-            answerFieldRotateAngle = 0
+            afRotateAngle = 0
         }
     }
 
-    enum Status {
+    enum ContentStatus {
         case answer
         case error
+    }
+
+    enum CalcStatus {
+        case displaying
+        case calculating
     }
 }
 

@@ -33,6 +33,7 @@
 		6C68D8E62AAF74B500E8C901 /* KeyAttr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C68D8E52AAF74B500E8C901 /* KeyAttr.swift */; };
 		6C68D8E92AAF752200E8C901 /* KeyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C68D8E82AAF752200E8C901 /* KeyList.swift */; };
 		6C905FE02AFD503A008319BA /* FractionVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C905FDF2AFD503A008319BA /* FractionVIew.swift */; };
+		6C9B659A2BED13CA0027E735 /* EqualKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9B65992BED13CA0027E735 /* EqualKey.swift */; };
 		6CA0DDD22AD9A78F00D26009 /* RadicalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA0DDD12AD9A78F00D26009 /* RadicalView.swift */; };
 		6CB5D51B2AD2DFCD00E098A2 /* FuntionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB5D51A2AD2DFCD00E098A2 /* FuntionBar.swift */; };
 		6CB5D51D2AD2FDE800E098A2 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB5D51C2AD2FDE800E098A2 /* Key.swift */; };
@@ -120,6 +121,7 @@
 		6C68D8E52AAF74B500E8C901 /* KeyAttr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAttr.swift; sourceTree = "<group>"; };
 		6C68D8E82AAF752200E8C901 /* KeyList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyList.swift; sourceTree = "<group>"; };
 		6C905FDF2AFD503A008319BA /* FractionVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FractionVIew.swift; sourceTree = "<group>"; };
+		6C9B65992BED13CA0027E735 /* EqualKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualKey.swift; sourceTree = "<group>"; };
 		6CA0DDD12AD9A78F00D26009 /* RadicalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadicalView.swift; sourceTree = "<group>"; };
 		6CB5D51A2AD2DFCD00E098A2 /* FuntionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuntionBar.swift; sourceTree = "<group>"; };
 		6CB5D51C2AD2FDE800E098A2 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 			children = (
 				6CB5D51C2AD2FDE800E098A2 /* Key.swift */,
 				6C4A78E22AB08BCF00CD776C /* Keyboard.swift */,
+				6C9B65992BED13CA0027E735 /* EqualKey.swift */,
 				6CB5D51A2AD2DFCD00E098A2 /* FuntionBar.swift */,
 				6C4B9C872AC74D120037A49E /* KeyboardPicker.swift */,
 				6C1BA2E82ACDADC00071BA1B /* ClearSwitch.swift */,
@@ -532,6 +535,7 @@
 				6C0D90E92AA6F60E00C5D0E6 /* OneApp.swift in Sources */,
 				6CEA33112B25A0D300CB6951 /* Calculator.swift in Sources */,
 				6CC4DDE42AE0FD60007E4625 /* MainKeyboard.swift in Sources */,
+				6C9B659A2BED13CA0027E735 /* EqualKey.swift in Sources */,
 				6C2E935A2BE3D37600C2B5A8 /* ConstantView.swift in Sources */,
 				6C4A78E72AB1E07300CD776C /* ClearAllSwitch.swift in Sources */,
 				6CE839332B29D7F6005A05DB /* SettingsPage.swift in Sources */,

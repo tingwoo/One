@@ -70,7 +70,7 @@ struct InputField: View {
                 // Answer block
                 VStack {
                     Spacer()
-                    AnswerField(inputFieldViewModel: inputFieldViewModel, cornerRadius: cornerRadius - 10)
+                    AnswerField(cornerRadius: cornerRadius - 10)
                 }
             }
             .clipShape(

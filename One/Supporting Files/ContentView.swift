@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    var formulaViewModel = FormulaViewModel()
+    @StateObject var formulaViewModel = FormulaViewModel()
     @StateObject var inputFieldViewModel = InputFieldViewModel()
 
     var body: some View {

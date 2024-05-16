@@ -47,7 +47,8 @@ private struct SettingsSheetPreview: View {
                         }
                 }
 
-                // Do NOT put .animation in if statements! https://stackoverflow.com/questions/72370959/swiftui-animation-only-works-with-withanimation-block-and-not-with-animation
+                // Do NOT put .animation in if statements!
+                // https://stackoverflow.com/questions/72370959/swiftui-animation-only-works-with-withanimation-block-and-not-with-animation
                 VStack {
                     if sheetManager.action.isPresent {
                         SettingsSheetView()
@@ -55,7 +56,7 @@ private struct SettingsSheetPreview: View {
                     }
                 }
                 .animation(.smooth(duration: 0.4), value: sheetManager.action)
-                .animation(.smooth(duration: 0.2), value: sheetHeight)
+                .animation(.smooth(duration: 0.4), value: sheetHeight)
             }
         }
         .ignoresSafeArea()

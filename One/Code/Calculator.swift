@@ -7,12 +7,16 @@
 
 import Foundation
 
-class Calculator {
+class CalculatorViewModel: ObservableObject {
 
-    static var lastAnswer: BComplex? = nil
-    static let operatorPrecedence: [String: Int] = ["plus": 0, "minus": 0, "multiply": 1, "divide": 1]
+    var lastAnswer: BComplex? = nil
+    let operatorPrecedence: [String: Int] = ["plus": 0, "minus": 0, "multiply": 1, "divide": 1]
 
-    static func evaluate(expression: [ElementWithID]) throws -> String {
+    func startCalculationTask(expression: [ElementWithID]) async throws {
+
+    }
+
+    func evaluate(expression: [ElementWithID]) async throws -> String {
         // Check brackets are all paired
         // Check no placeholder
         var i = 0
@@ -208,11 +212,11 @@ class Calculator {
         }
     }
 
-    static func numberToString(number: BDouble) -> String {
+    func numberToString(number: BDouble) -> String {
         return ""
     }
 
-    static func getNumber(expression: [ElementWithID], index: Int) throws -> (number: BComplex, nextIndex: Int) {
+    func getNumber(expression: [ElementWithID], index: Int) throws -> (number: BComplex, nextIndex: Int) {
         var i = index
         var str = ""
         while expression[i].element.type == .number {

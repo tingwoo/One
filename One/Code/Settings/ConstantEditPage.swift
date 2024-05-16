@@ -121,7 +121,7 @@ struct ConstantEditPage: View {
                 )
             }
             .frame(maxWidth: .infinity, maxHeight: 100)
-            .background(.white.opacity(0.6))
+            .background(Color("AccentKeysBackground").opacity(0.6))
             .background(.ultraThinMaterial)
             .clipShape(
                 RoundedRectangle(cornerRadius: 5, style: .continuous)
