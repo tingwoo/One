@@ -40,7 +40,11 @@ struct AnswerField: View {
                         .font(inputFieldViewModel.afContentStatus == .answer ? .custom("CMUConcrete-Roman", size: 30) : .system(size: 25, weight: .medium))
 
                 case .calculating:
-                    ProgressView()
+                    if #available(iOS 17.0, *) {
+                        BarLoadingView()
+                    } else {
+                        ProgressView()
+                    }
 
                 }
             }
@@ -65,7 +69,8 @@ struct AnswerField: View {
         )
         .offset(x: 0, y: (inputFieldViewModel.afExists ? 0 : 150))
         .animation(.bouncy, value: inputFieldViewModel.afExists)
-        .animation(.easeInOut(duration: 0.1), value: inputFieldViewModel.afContentStatus)
+        .animation(.easeInOut(duration: 0.15), value: inputFieldViewModel.afContentStatus)
+        .animation(.easeInOut(duration: 0.15), value: inputFieldViewModel.afCalcStatus)
 
     }
 
