@@ -25,9 +25,9 @@ var keyboardLayout: [[[keySet]]] = [[[keySet(19, optionsR: [17, 18]), keySet(7),
                                      [keySet(24), keySet(10), keySet(11, optionsR: [25]), keySet(12), keySet(13)]],
 
                                     [[keySet(), keySet(36), keySet(33), keySet(30), keySet(29)],
-                                     [keySet(), keySet(45), keySet(42), keySet(39), keySet()],
-                                     [keySet(), keySet(), keySet(), keySet(), keySet()],
-                                     [keySet(), keySet(), keySet(), keySet(), keySet()]]]
+                                     [keySet(), keySet(45), keySet(42), keySet(39), keySet(48)],
+                                     [keySet(), keySet(), keySet(), keySet(), keySet(49)],
+                                     [keySet(), keySet(), keySet(), keySet(), keySet(50)]]]
 
 var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(text: "1", command: [.one]),
@@ -82,7 +82,10 @@ var keyList: [KeyAttr] = [KeyAttr(text: "", command: [], cursorShift: 0),
                           KeyAttr(text: "sech", command: [], cursorShift: 0),
                           KeyAttr(text: "cot", command: [], cursorShift: 0),
                           KeyAttr(text: "acot", command: [], cursorShift: 0),
-                          KeyAttr(text: "coth", command: [], cursorShift: 0),]
+                          KeyAttr(text: "coth", command: [], cursorShift: 0),
+                          KeyAttr(text: "h", command: [.h]),
+                          KeyAttr(text: "e", command: [.e]),
+                          KeyAttr(text: "n", command: [.n]),]
 
 
 // 0 NULL

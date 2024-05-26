@@ -217,36 +217,18 @@ class FormulaViewModel: ObservableObject {
                 cursorLocation += 2 * step
             }
             if withHaptics && cursorLocation != originalLocation {
-                (cursorLocation == 0 || (cursorLocation == 1 && elements[0].element.type == .semi_start) || cursorLocation == elements.count - 1) ? hapticManager.impact(style: .soft) : hapticManager.wheel()
+                if cursorLocation == 0 
+                    || (cursorLocation == 1 && elements[0].element.type == .semi_start)
+                    || cursorLocation == elements.count - 1 {
+                        hapticManager.impact(style: .soft)
+                    } else {
+                        hapticManager.wheel()
+                    }
             }
         }
 
         updateCursorKey()
     }
-
-//    private func shiftL(_ withHaptics: Bool) {
-//        if cursorLocation - 1 >= 0 {
-//            cursorLocation -= 1
-//            if cursorLocation - 1 >= 0 && elements[cursorLocation - 1].element == .PLH {
-//                cursorLocation -= 1
-//            }
-//            if withHaptics {
-//                cursorLocation == 0 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
-//            }
-//        }
-//    }
-//
-//    private func shiftR(_ withHaptics: Bool) {
-//        if cursorLocation + 1 < elements.count {
-//            cursorLocation += 1
-//            if elements[cursorLocation - 1].element == .PLH {
-//                cursorLocation += 1
-//            }
-//            if withHaptics {
-//                cursorLocation == elements.count - 1 ? hapticManager.impact(style: .soft) : hapticManager.wheel()
-//            }
-//        }
-//    }
 
     func setCursor(index: Int) {
         if index >= 0 && index < elements.count {

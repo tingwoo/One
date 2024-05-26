@@ -120,6 +120,15 @@ class Element: Equatable, Identifiable {
     static let pi =
     Element(type: .character, string: "π", dimension: ExpressionDim(width: 20, height: 30), characterValue: BComplex(re: BDouble("3.14159265358979323846")!))
 
+    static let e =
+    Element(type: .character, string: "e", dimension: ExpressionDim(width: 20, height: 30), characterValue: BComplex(re: BDouble("2.71828182845904523536")!))
+
+    static let h =
+    Element(type: .character, string: "h", dimension: ExpressionDim(width: 20, height: 30), characterValue: BComplex(re: BDouble("6.62607")! / BDouble("10000000000000000000000000000000000")!))
+
+    static let n =
+    Element(type: .character, string: "n", dimension: ExpressionDim(width: 20, height: 30), characterValue: BComplex(re: BDouble("0.000000001")!))
+
     static let img =
     Element(type: .character, string: "i", dimension: ExpressionDim(width: 15, height: 30), characterValue: BComplex(re: 0, im: 1))
 

@@ -34,7 +34,7 @@ struct Key<Content: View, Background: Shape>: View {
             action()
         }
         .onLongPressGesture(minimumDuration: .infinity) {
-            pressed.toggle()
+//            pressed.toggle()
         } onPressingChanged: { bool in
             if bool { pressed = bool }
             else { withAnimation(.easeOut(duration: 0.15)) { pressed = bool } }

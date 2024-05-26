@@ -17,6 +17,8 @@ struct ControlBar: View {
     var keySpacing: CGFloat
     var background: Color = Color("AccentKeys1")
 
+    let hapticManager = HapticManager.instance
+
     var body: some View {
         HStack(spacing: keySpacing) {
             if rightHanded == 1 {
@@ -31,6 +33,13 @@ struct ControlBar: View {
             } shape: {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
+            .simultaneousGesture(
+                LongPressGesture(minimumDuration: 0.5)
+                    .onEnded { _ in
+                        hapticManager.impact(style: .medium)
+                        // TODO: to front
+                    }
+            )
 
             Key(action: {shiftCursorFunc(1, true)}, width: keyW(1), height: keyH) {
                 Image(systemName: "chevron.right")
@@ -38,6 +47,13 @@ struct ControlBar: View {
             } shape: {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
             }
+            .simultaneousGesture(
+                LongPressGesture(minimumDuration: 0.5)
+                    .onEnded { _ in
+                        hapticManager.impact(style: .medium)
+                        // TODO: to end
+                    }
+            )
 
             if rightHanded == 1 {
                 CursorWheel(shiftCursorFunc: shiftCursorFunc, width: keyW(3), height: keyH)
